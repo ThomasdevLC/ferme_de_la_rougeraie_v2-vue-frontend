@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
-import type { Product } from '@/models/Product.ts';
+import type { Product } from '@/models/Product';
 import type { CartItem } from '@/models/CartItem';
-
 
 export const useCartStore = defineStore('cart', {
   state: () => ({
@@ -35,6 +34,38 @@ export const useCartStore = defineStore('cart', {
           : quantity;
 
         this.items.push({ product, quantity: qty });
+      }
+
+      this.saveCartToStorage();
+    },
+
+    incrementQuantity(productId: number) {
+      const item = this.items.find(i => i.product.id === productId);
+      if (!item) return;
+
+      const step = item.product.inter ?? 1;
+      const newQuantity = +(item.quantity + step).toFixed(2);
+
+      if (item.product.stock !== null && newQuantity > item.product.stock) {
+        return;
+      }
+
+      item.quantity = newQuantity;
+      this.saveCartToStorage();
+    },
+
+    decrementQuantity(productId: number) {
+      const item = this.items.find(i => i.product.id === productId);
+      if (!item) return;
+
+      const step = item.product.inter ?? 1;
+      const newQuantity = +(item.quantity - step).toFixed(2);
+
+      item.quantity = newQuantity >= 0 ? newQuantity : 0;
+
+      // Supprimer si on veut pas afficher quantité = 0
+      if (item.quantity === 0) {
+        this.removeFromCart(productId);
       }
 
       this.saveCartToStorage();
