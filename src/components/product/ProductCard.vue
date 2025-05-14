@@ -42,7 +42,7 @@
       <ProductQuantity v-model="quantity" :product="product" />
 
 
-        <p class="font-medium cursor-pointer hover:text-primary">AJOUTER AU PANIER</p>
+        <p class="font-medium cursor-pointer hover:text-primary "   @click="cart.addToCart(product, quantity)">AJOUTER AU PANIER</p>
 
     </div>
 
@@ -54,6 +54,8 @@
 import type { Product } from '@/models/Product';
 import ProductQuantity from '@/components/quantity/ProductQuantity.vue'
 import { ref } from 'vue';
+import { useCartStore } from '@/stores/cartStore';
+const cart = useCartStore();
 
 const quantity = ref(0);
 defineProps<{ product: Product }>();
