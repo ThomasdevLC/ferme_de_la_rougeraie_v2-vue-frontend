@@ -3,6 +3,7 @@ export interface Product {
   name: string;
   price: number;
   unit: string;
+  inter: number | null;
   image: string;
   stock: number | null;
   limited: boolean;
