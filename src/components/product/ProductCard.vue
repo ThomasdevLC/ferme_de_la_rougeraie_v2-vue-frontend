@@ -39,28 +39,7 @@
         {{ product.price.toFixed(2) }} € / <span>{{ product.unit }}</span>
       </p>
 
-      <div class="flex items-center my-3 ">
-          <!-- Minus button -->
-          <button
-            class="w-[28px] bg-white border  text-sm px-2.5 py-0.5 cursor-pointer"
-          >
-            -
-          </button>
-
-          <!-- Quantity display -->
-          <div
-            class="min-w-[28px] flex items-center justify-center px-2.5 py-0.5 text-sm border-t border-b "
-          >
-            <span>0</span>
-          </div>
-
-          <!-- Plus button -->
-          <button
-            class="w-[28px] bg-white border text-sm px-2.5 py-0.5 cursor-pointer"
-          >
-            +
-          </button>
-        </div>
+      <ProductQuantity v-model="quantity" :product="product" />
 
 
         <p class="font-medium cursor-pointer hover:text-primary">AJOUTER AU PANIER</p>
@@ -73,6 +52,9 @@
 
 <script setup lang="ts">
 import type { Product } from '@/models/Product';
+import ProductQuantity from '@/components/quantity/ProductQuantity.vue'
+import { ref } from 'vue';
 
+const quantity = ref(0);
 defineProps<{ product: Product }>();
 </script>
