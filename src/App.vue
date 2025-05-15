@@ -1,32 +1,13 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router';
-import { useUIStore } from '@/stores/uiStore';
+import {  RouterView } from 'vue-router';
 import CartSidebar from '@/components/cart/CartSidebar.vue'
-
-const ui = useUIStore();
+import Navbar from '@/components/nav/NavBar.vue';
 </script>
 
 <template>
   <header>
-    <img
-      alt="Vue logo"
-      class="logo cursor-pointer"
-      src="@/assets/logo.svg"
-      width="125"
-      height="125"
-      @click="ui.openCart"
-    />
-
-    <div class="wrapper">
-      <nav>
-        <RouterLink to="/about">About</RouterLink>
-        <RouterLink to="/products">Produits</RouterLink>
-        <RouterLink to="/cart">Panier</RouterLink>
-
-      </nav>
-    </div>
+    <Navbar />
   </header>
-
   <RouterView />
   <CartSidebar />
 </template>
