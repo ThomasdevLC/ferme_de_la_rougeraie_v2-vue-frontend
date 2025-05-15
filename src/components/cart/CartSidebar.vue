@@ -2,7 +2,7 @@
   <transition name="slide">
     <div
       v-if="ui.cartOpen"
-      class="fixed top-0 right-0 w-full max-w-md h-full bg-white shadow-lg z-50 p-4 overflow-auto"
+      class="fixed top-0 right-0 w-full max-w-1/3  h-full bg-white shadow-lg z-50 p-4 overflow-auto"
     >
       <button @click="ui.closeCart" class="mb-4 text-right">Fermer</button>
       <!-- Ton CartView ici -->
@@ -17,6 +17,10 @@
           :item="item"
         />
 
+        <p>
+          <span class="font-bold">Total:</span>
+          {{ cart.cartTotal}} €
+        </p>
         </div>
       </div>
 
