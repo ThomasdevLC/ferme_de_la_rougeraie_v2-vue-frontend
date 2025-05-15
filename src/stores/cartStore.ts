@@ -1,11 +1,29 @@
 import { defineStore } from 'pinia';
 import type { Product } from '@/models/Product';
 import type { CartItem } from '@/models/CartItem';
+import { convertPriceToCents, formatPrice } from '@/utils/price'
 
 export const useCartStore = defineStore('cart', {
   state: () => ({
     items: [] as CartItem[],
   }),
+
+  getters: {
+    cartTotal(state): string {
+      const totalCents = state.items.reduce((sum, item) => {
+        const unitPriceCents = convertPriceToCents(item.product.price);
+        return sum + Math.round(unitPriceCents * item.quantity);
+      }, 0);
+
+      return formatPrice(totalCents);
+    },
+
+    numberOfProducts(state): number {
+      return state.items.length;
+    },
+
+  },
+
 
   actions: {
     loadCartFromStorage() {
@@ -80,5 +98,12 @@ export const useCartStore = defineStore('cart', {
       this.items = [];
       this.saveCartToStorage();
     },
+
+    getItemTotal(item: CartItem): string {
+      const unitPriceInCents = convertPriceToCents(item.product.price);
+      const totalInCents = Math.round(unitPriceInCents * item.quantity);
+      return formatPrice(totalInCents);
+    },
+
   },
 });
