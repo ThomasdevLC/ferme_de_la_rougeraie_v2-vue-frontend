@@ -41,8 +41,9 @@
 
       <ProductQuantity v-model="quantity" :product="product" />
 
-
-        <p class="font-medium cursor-pointer hover:text-primary "   @click="cart.addToCart(product, quantity)">AJOUTER AU PANIER</p>
+        <p class="font-medium cursor-pointer hover:text-primary "
+           @click="cart.addToCart(product, quantity)">AJOUTER AU PANIER
+        </p>
 
     </div>
 

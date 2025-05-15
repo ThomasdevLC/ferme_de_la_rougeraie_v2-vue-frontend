@@ -47,6 +47,10 @@ watch(() => props.modelValue, (val) => {
   quantity.value = val;
 });
 
+const isMax = computed(() =>
+  props.product.stock !== null && quantity.value >= props.product.stock
+);
+
 const step = computed(() => props.product.inter ?? 1);
 
 function increment() {
@@ -72,8 +76,5 @@ const formattedQuantity = computed(() =>
     : Math.round(quantity.value)
 );
 
-const isMax = computed(() =>
-  props.product.stock !== null && quantity.value >= props.product.stock
-);
 
 </script>
