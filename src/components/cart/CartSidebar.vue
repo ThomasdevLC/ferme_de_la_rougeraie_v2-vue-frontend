@@ -7,11 +7,9 @@
       <button @click="ui.closeCart" class="mb-4 text-right">Fermer</button>
       <!-- Ton CartView ici -->
       <div class="p-4 max-w-5xl mx-auto">
-        <h1 class="text-2xl font-bold mb-6">Mon Panier</h1>
+        <h1 class="text-2xl font-bold mb-6">Votre Panier</h1>
 
-        <div v-if="cart.items.length === 0" class="text-gray-500">
-          Votre panier est vide.
-        </div>
+        <div v-if="cart.items.length === 0" class="text-gray-500">Votre panier est vide.</div>
 
         <div v-else class="space-y-4">
           <div
@@ -30,9 +28,9 @@
                 <p class="text-sm text-gray-500">
                   {{ item.product.price.toFixed(2) }} € / {{ item.product.unit }}
                 </p>
-                <p class="text-sm text-gray-700 mt-1">
-                  Quantité : {{ item.quantity }}
-                </p>
+                <CartQuantity :product="item.product" :quantity="item.quantity" />
+
+                <p class="text-sm text-gray-500">Total : {{ cart.getItemTotal(item) }}</p>
               </div>
             </div>
 
@@ -43,18 +41,20 @@
               Supprimer
             </button>
           </div>
+          <p class="text-sm text-gray-500">Total : {{ cart.cartTotal }}</p>
         </div>
-      </div>    </div>
+      </div>
+    </div>
   </transition>
 </template>
 
 <script lang="ts" setup>
-import { useUIStore } from '@/stores/uiStore';
+import { useUIStore } from '@/stores/uiStore'
 import { useCartStore } from '@/stores/cartStore.js'
+import CartQuantity from '@/components/cart/CartQuantity.vue'
 
-const cart = useCartStore();
-
-const ui = useUIStore();
+const cart = useCartStore()
+const ui = useUIStore()
 </script>
 
 <style scoped>
@@ -62,15 +62,19 @@ const ui = useUIStore();
 .slide-leave-active {
   transition: transform 0.3s ease;
 }
+
 .slide-enter-from {
   transform: translateX(100%);
 }
+
 .slide-enter-to {
   transform: translateX(0);
 }
+
 .slide-leave-from {
   transform: translateX(0);
 }
+
 .slide-leave-to {
   transform: translateX(100%);
 }
