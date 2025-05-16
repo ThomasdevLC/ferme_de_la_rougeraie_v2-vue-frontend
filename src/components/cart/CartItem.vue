@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { CartItem } from '@/models/CartItem'
+import type { CartItem } from '@/models/cart/CartItem.ts'
 import CartQuantity from './CartQuantity.vue'
 import { useCartStore } from '@/stores/cartStore'
 

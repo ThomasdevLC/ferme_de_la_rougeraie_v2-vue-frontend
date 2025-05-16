@@ -62,7 +62,7 @@ const handleLogin = async () => {
     localStorage.setItem('token', token);
 
     // Rediriger l'utilisateur après connexion
-    router.push('/products');
+    await router.push('/products');
   } catch (err: any) {
     error.value = err.response?.data?.message || "Échec de la connexion.";
   }

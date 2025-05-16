@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue';
-import type { Product } from '@/models/Product';
+import type { Product } from '@/models/product/Product.ts';
 
 const props = defineProps<{
   modelValue: number;
