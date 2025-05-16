@@ -34,8 +34,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useUIStore } from '@/stores/uiStore'
-import { useCartStore } from '@/stores/cartStore.js'
+import { useUIStore } from '@/stores/ui-store.ts'
+import { useCartStore } from '@/stores/cart-store.ts'
 import CartItem from '@/components/cart/CartItem.vue'
 import { ref } from 'vue'
 

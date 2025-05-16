@@ -17,8 +17,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { fetchProducts } from '@/services/productService';
-import type { Product } from '@/models/product/Product.ts';
+import { fetchProducts } from '@/services/product-service.ts';
+import type { Product } from '@/models/product/product.ts';
 import ProductCard from '@/components/product/ProductCard.vue';
 
 const products = ref<Product[]>([]);

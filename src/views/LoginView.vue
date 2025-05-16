@@ -40,7 +40,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { login } from '@/services/authService';
+import { login } from '@/services/auth-service.ts';
 
 const email = ref('');
 const password = ref('');

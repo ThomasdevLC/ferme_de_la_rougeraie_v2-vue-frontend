@@ -27,8 +27,8 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { Product } from '@/models/product/Product.ts';
-import { useCartStore } from '@/stores/cartStore';
+import type { Product } from '@/models/product/product.ts';
+import { useCartStore } from '@/stores/cart-store.ts';
 
 const cart = useCartStore();
 

@@ -52,10 +52,10 @@
 </template>
 
 <script setup lang="ts">
-import type { Product } from '@/models/product/Product.ts';
+import type { Product } from '@/models/product/product.ts';
 import ProductQuantity from '@/components/product/ProductQuantity.vue'
 import { ref } from 'vue';
-import { useCartStore } from '@/stores/cartStore';
+import { useCartStore } from '@/stores/cart-store.ts';
 const cart = useCartStore();
 
 const quantity = ref(0);

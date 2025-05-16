@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { useUIStore } from '@/stores/uiStore'
+import { useUIStore } from '@/stores/ui-store.ts'
 
 const ui = useUIStore()
 </script>

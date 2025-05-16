@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
-import type { Product } from '@/models/product/Product.ts';
-import type { CartItem } from '@/models/cart/CartItem.ts';
+import type { Product } from '@/models/product/product.ts';
+import type { CartItem } from '@/models/cart/cart-item.ts';
 import { convertPriceToCents, formatPrice } from '@/utils/price'
-import { createOrder } from '@/services/orderService.ts'
+import { createOrder } from '@/services/order-service.ts'
 
 export const useCartStore = defineStore('cart', {
   state: () => ({

@@ -1,4 +1,4 @@
-// stores/uiStore.ts
+// stores/ui-store.ts
 import { defineStore } from 'pinia';
 
 export const useUIStore = defineStore('ui', {
