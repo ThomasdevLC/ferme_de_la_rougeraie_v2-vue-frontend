@@ -2,6 +2,10 @@
   <div class="max-w-md mx-auto mt-16 p-6 bg-white shadow rounded">
     <h2 class="text-xl font-bold mb-4 text-center">Connexion</h2>
 
+    <div v-if="route.query.registered" class="text-green-600 text-sm text-center mb-4">
+      ✅ Inscription réussie. Vous pouvez maintenant vous connecter.
+    </div>
+
     <form @submit.prevent="handleLogin" class="space-y-4">
       <div>
         <label for="email" class="block text-sm font-medium">Email</label>
@@ -34,37 +38,42 @@
         Se connecter
       </button>
     </form>
+    <div class="text-center mt-4">
+      <span>Pas encore inscrit ? </span>
+      <a :href="registerUrl" class="text-primary font-medium hover:underline"> Créer un compte </a>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { login } from '@/services/auth-service.ts';
+import { ref } from 'vue'
+import { useRouter, useRoute  } from 'vue-router'
+import { login } from '@/services/auth-service.ts'
 
-const email = ref('');
-const password = ref('');
-const error = ref('');
-const router = useRouter();
+const email = ref('')
+const password = ref('')
+const error = ref('')
+const router = useRouter()
+const route = useRoute()
+
+const registerUrl = `${import.meta.env.VITE_API_BASE_URL}/register`
 
 const handleLogin = async () => {
-  error.value = '';
+  error.value = ''
 
   try {
     const response = await login({
       email: email.value,
       password: password.value,
-    });
+    })
 
-    const token = response.data.token;
+    const token = response.data.token
 
-    // Stocker le token (exemple : localStorage)
-    localStorage.setItem('token', token);
+    localStorage.setItem('token', token)
 
-    // Rediriger l'utilisateur après connexion
-    await router.push('/products');
+    await router.push('/products')
   } catch (err: any) {
-    error.value = err.response?.data?.message || "Échec de la connexion.";
+    error.value = err.response?.data?.message || 'Échec de la connexion.'
   }
-};
+}
 </script>
