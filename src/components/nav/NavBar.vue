@@ -25,6 +25,9 @@
             Connexion
           </RouterLink>
         </li>
+        <li>
+          <RouterLink to="/orders">Mes commandes</RouterLink>
+        </li>
 
         <li>
           <p class="cursor-pointer hover:text-primary transition" @click="ui.openCart">panier</p>

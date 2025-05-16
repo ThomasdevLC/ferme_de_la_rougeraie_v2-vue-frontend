@@ -25,6 +25,12 @@ const router = createRouter({
       name: 'login',
       component: () => import('@/views/LoginView.vue'),
     }
+    ,
+    {
+      path: '/orders',
+      name: 'order-history',
+      component: () => import('@/views/OrderHistoryView.vue')
+    }
   ],
 })
 
