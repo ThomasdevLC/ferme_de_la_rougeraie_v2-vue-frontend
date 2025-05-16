@@ -1,0 +1,70 @@
+<template>
+  <div class="max-w-md mx-auto mt-16 p-6 bg-white shadow rounded">
+    <h2 class="text-xl font-bold mb-4 text-center">Connexion</h2>
+
+    <form @submit.prevent="handleLogin" class="space-y-4">
+      <div>
+        <label for="email" class="block text-sm font-medium">Email</label>
+        <input
+          v-model="email"
+          type="email"
+          id="email"
+          required
+          class="w-full border rounded px-3 py-2 mt-1"
+        />
+      </div>
+
+      <div>
+        <label for="password" class="block text-sm font-medium">Mot de passe</label>
+        <input
+          v-model="password"
+          type="password"
+          id="password"
+          required
+          class="w-full border rounded px-3 py-2 mt-1"
+        />
+      </div>
+
+      <div v-if="error" class="text-sm text-red-500">{{ error }}</div>
+
+      <button
+        type="submit"
+        class="w-full bg-primary text-white py-2 px-4 rounded hover:bg-opacity-90"
+      >
+        Se connecter
+      </button>
+    </form>
+  </div>
+</template>
+
+<script lang="ts" setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { login } from '@/services/authService';
+
+const email = ref('');
+const password = ref('');
+const error = ref('');
+const router = useRouter();
+
+const handleLogin = async () => {
+  error.value = '';
+
+  try {
+    const response = await login({
+      email: email.value,
+      password: password.value,
+    });
+
+    const token = response.data.token;
+
+    // Stocker le token (exemple : localStorage)
+    localStorage.setItem('token', token);
+
+    // Rediriger l'utilisateur après connexion
+    router.push('/products');
+  } catch (err: any) {
+    error.value = err.response?.data?.message || "Échec de la connexion.";
+  }
+};
+</script>
