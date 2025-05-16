@@ -44,9 +44,9 @@
 </template>
 
 <script lang="ts" setup>
-import type { CartItem } from '@/models/cart/CartItem.ts'
+import type { CartItem } from '@/models/cart/cart-item.ts'
 import CartQuantity from './CartQuantity.vue'
-import { useCartStore } from '@/stores/cartStore'
+import { useCartStore } from '@/stores/cart-store.ts'
 
 const cart = useCartStore()
 const baseUrl = import.meta.env.VITE_API_BASE_URL

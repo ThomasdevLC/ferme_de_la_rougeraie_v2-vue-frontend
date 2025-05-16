@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
-import type { Product } from '@/models/Product';
-import type { CartItem } from '@/models/CartItem';
+import type { Product } from '@/models/product/product.ts';
+import type { CartItem } from '@/models/cart/cart-item.ts';
 import { convertPriceToCents, formatPrice } from '@/utils/price'
+import { createOrder } from '@/services/order-service.ts'
 
 export const useCartStore = defineStore('cart', {
   state: () => ({
@@ -105,5 +106,22 @@ export const useCartStore = defineStore('cart', {
       return formatPrice(totalInCents);
     },
 
-  },
+    async submitOrder(pickup: 'TUESDAY' | 'THURSDAY') {
+      const payload = {
+        pickup,
+        items: this.items.map(item => ({
+          productId: item.product.id,
+          quantity: item.quantity,
+        })),
+      };
+
+      const response = await createOrder(payload);
+
+      // 🧹 Vider le panier après commande
+      this.clearCart();
+
+      return response;
+    }
+  }
+
 });

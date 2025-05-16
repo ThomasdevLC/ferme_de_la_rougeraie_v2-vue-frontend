@@ -1,5 +1,5 @@
-import apiClient from './apiClient';
-import type { LoginPayload } from '@/models/login/LoginPayload.ts'
+import apiClient from './api-client.ts';
+import type { LoginPayload } from '@/models/login/login-payload.ts'
 
 
 export const login = (credentials: LoginPayload) => {
