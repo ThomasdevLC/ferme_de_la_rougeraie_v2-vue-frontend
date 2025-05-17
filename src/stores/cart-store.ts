@@ -22,7 +22,6 @@ export const useCartStore = defineStore('cart', {
     numberOfProducts(state): number {
       return state.items.length;
     },
-
   },
 
 
@@ -82,7 +81,6 @@ export const useCartStore = defineStore('cart', {
 
       item.quantity = newQuantity >= 0 ? newQuantity : 0;
 
-      // Supprimer si on veut pas afficher quantité = 0
       if (item.quantity === 0) {
         this.removeFromCart(productId);
       }
@@ -117,7 +115,6 @@ export const useCartStore = defineStore('cart', {
 
       const response = await createOrder(payload);
 
-      // 🧹 Vider le panier après commande
       this.clearCart();
 
       return response;

@@ -49,21 +49,10 @@
 
 <script setup lang="ts">
 import type { OrderHistory } from '@/models/order/order-history.ts'
-
-const props = defineProps<{
+import { formatDate } from '@/utils/date-format.ts'
+import { pickupLabel } from '@/utils/pickup-label.ts'
+const { order } = defineProps<{
   order: OrderHistory
 }>()
 
-function formatDate(dateStr: any): string {
-  const date = new Date(dateStr.date ?? dateStr)
-  return date.toLocaleDateString('fr-FR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-}
-
-function pickupLabel(pickup: 'TUESDAY' | 'THURSDAY'): string {
-  return pickup === 'TUESDAY' ? 'Mardi' : 'Jeudi'
-}
 </script>
