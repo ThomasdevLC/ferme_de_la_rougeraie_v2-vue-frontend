@@ -29,6 +29,7 @@
 import { computed } from 'vue';
 import type { Product } from '@/models/product/product.ts';
 import { useCartStore } from '@/stores/cart-store.ts';
+import { formatFloat } from '@/utils/number-format.ts';
 
 const cart = useCartStore();
 
@@ -41,9 +42,10 @@ const isMax = computed(() =>
   props.product.stock !== null && props.quantity >= props.product.stock
 );
 
+
 const formattedQuantity = computed(() =>
   props.product.unit === 'Kilo'
-    ? props.quantity.toFixed(1)
-    : Math.round(props.quantity)
+    ? formatFloat(props.quantity)
+    : Math.round(props.quantity).toString()
 );
 </script>
