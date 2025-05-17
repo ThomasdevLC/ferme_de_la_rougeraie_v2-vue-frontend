@@ -31,6 +31,7 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue';
 import type { Product } from '@/models/product/product.ts';
+import { formatFloat } from '@/utils/number-format.ts'
 
 const props = defineProps<{
   modelValue: number;
@@ -72,8 +73,8 @@ function decrement() {
 
 const formattedQuantity = computed(() =>
   props.product.unit === 'Kilo'
-    ? quantity.value.toFixed(1)
-    : Math.round(quantity.value)
+    ? formatFloat(quantity.value)
+    : Math.round(quantity.value).toString()
 );
 
 

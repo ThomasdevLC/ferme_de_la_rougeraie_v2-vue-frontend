@@ -33,7 +33,7 @@
         <td class="px-3 py-2 text-right">{{ item.quantity }}</td>
         <td class="px-3 py-2 text-right">{{ item.unitPrice.toFixed(2) }} €</td>
         <td class="px-3 py-2 text-right">
-          {{ (item.unitPrice * item.quantity).toFixed(2) }} €
+          {{ (item.lineTotal.toFixed(2)) }} €
         </td>
       </tr>
       </tbody>

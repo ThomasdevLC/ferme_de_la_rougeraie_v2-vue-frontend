@@ -7,6 +7,12 @@
       <!-- Liens de navigation -->
       <ul class="flex gap-6 text-sm font-medium text-gray-700">
         <li>
+          <RouterLink to="/about" class="hover:text-primary transition" active-class="text-primary">
+            À propos
+          </RouterLink>
+        </li>
+
+        <li>
           <RouterLink
             to="/products"
             class="hover:text-primary transition"
@@ -15,11 +21,7 @@
             Produits
           </RouterLink>
         </li>
-        <li>
-          <RouterLink to="/about" class="hover:text-primary transition" active-class="text-primary">
-            À propos
-          </RouterLink>
-        </li>
+
         <li>
           <RouterLink to="/login" class="hover:text-primary transition" active-class="text-primary">
             Connexion
