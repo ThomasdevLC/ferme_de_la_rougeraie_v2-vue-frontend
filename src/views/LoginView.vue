@@ -50,6 +50,7 @@ import { ref } from 'vue'
 import { useRouter, useRoute  } from 'vue-router'
 import { login } from '@/services/auth-service.ts'
 import { useAuthStore } from '@/stores/auth-store.ts'
+import { useUserStore } from '@/stores/user-store.ts'
 
 const email = ref('')
 const password = ref('')
@@ -57,6 +58,7 @@ const error = ref('')
 const router = useRouter()
 const route = useRoute()
 const auth = useAuthStore()
+const userStore = useUserStore()
 
 const registerUrl = `${import.meta.env.VITE_API_BASE_URL}/register`
 
@@ -72,6 +74,7 @@ const handleLogin = async () => {
     const token = response.data.token
 
     auth.setToken(token)
+    await userStore.loadProfile()
 
     await router.push('/products')
   } catch (err: any) {

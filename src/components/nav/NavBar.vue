@@ -34,6 +34,10 @@
         <li>
           <p class="cursor-pointer hover:text-primary transition" @click="ui.openCart">panier</p>
         </li>
+
+        <li v-if="user.profile">
+          <p>{{ user.name }}</p>
+        </li>
       </ul>
     </div>
   </nav>
@@ -42,6 +46,10 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import { useUIStore } from '@/stores/ui-store.ts'
+import { useUserStore } from '@/stores/user-store.ts'
 
 const ui = useUIStore()
+const user = useUserStore()
+
+
 </script>
