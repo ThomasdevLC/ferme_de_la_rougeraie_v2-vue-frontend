@@ -51,6 +51,8 @@ import { useRouter, useRoute  } from 'vue-router'
 import { login } from '@/services/auth-service.ts'
 import { useAuthStore } from '@/stores/auth-store.ts'
 import { useUserStore } from '@/stores/user-store.ts'
+import { useCartStore } from '@/stores/cart-store.ts'
+import { useUIStore } from '@/stores/ui-store.ts'
 
 const email = ref('')
 const password = ref('')
@@ -59,6 +61,11 @@ const router = useRouter()
 const route = useRoute()
 const auth = useAuthStore()
 const userStore = useUserStore()
+
+
+const cart = useCartStore()
+const ui = useUIStore()
+
 
 const registerUrl = `${import.meta.env.VITE_API_BASE_URL}/register`
 
@@ -77,6 +84,11 @@ const handleLogin = async () => {
     await userStore.loadProfile()
 
     await router.push('/products')
+
+    if (!cart.isEmpty) {
+      ui.openCart()
+    }
+
   } catch (err: any) {
     error.value = err.response?.data?.message || 'Échec de la connexion.'
   }
