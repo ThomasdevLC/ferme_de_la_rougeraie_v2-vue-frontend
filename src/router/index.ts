@@ -30,7 +30,15 @@ const router = createRouter({
       path: '/orders',
       name: 'order-history',
       component: () => import('@/views/OrderHistoryView.vue')
+    },
+
+    {
+      path: '/profile/edit',
+      name: 'EditProfile',
+      component: () => import('@/views/EditProfileView.vue'),
+      meta: { requiresAuth: true }
     }
+
   ],
 })
 
