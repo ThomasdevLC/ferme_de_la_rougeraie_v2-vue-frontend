@@ -35,7 +35,10 @@
         </li>
 
         <li>
-          <p class="cursor-pointer hover:text-primary transition" @click="ui.openCart">panier</p>
+          <p class="cursor-pointer hover:text-primary transition"
+             @click="ui.openCart">
+            <ShoppingBag class="w-5 h-5 transition"/>
+          </p>
         </li>
       </ul>
     </div>
@@ -46,7 +49,7 @@
 import { RouterLink } from 'vue-router'
 import { useUIStore } from '@/stores/ui-store.ts'
 import { useUserStore } from '@/stores/user-store.ts'
-import { UserRoundCheck, UserRound } from 'lucide-vue-next'
+import { UserRoundCheck, UserRound, ShoppingBag } from 'lucide-vue-next'
 import UserMenu from '@/components/user/UserMenu.vue'
 
 const ui = useUIStore()
