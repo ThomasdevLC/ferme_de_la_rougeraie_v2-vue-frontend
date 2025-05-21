@@ -4,6 +4,7 @@ import { defineStore } from 'pinia';
 export const useUIStore = defineStore('ui', {
   state: () => ({
     cartOpen: false,
+    userMenuOpen: false,
   }),
   actions: {
     toggleCart() {
@@ -15,5 +16,12 @@ export const useUIStore = defineStore('ui', {
     closeCart() {
       this.cartOpen = false;
     },
+
+    toggleUserMenu() {
+      this.userMenuOpen = !this.userMenuOpen;
+    },
+    closeUserMenu() {
+      this.userMenuOpen = false;
+    }
   },
 });

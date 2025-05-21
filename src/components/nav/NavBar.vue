@@ -6,7 +6,7 @@
 
       <!-- Liens de navigation -->
       <ul class="flex gap-6 text-sm font-medium text-gray-700">
-        <li>
+        <li @click="ui.closeUserMenu">
           <RouterLink to="/about" class="hover:text-primary transition" active-class="text-primary">
             À propos
           </RouterLink>
@@ -22,13 +22,16 @@
           </RouterLink>
         </li>
 
-        <li>
-          <RouterLink to="/login" class="hover:text-primary transition" active-class="text-primary">
-            Connexion
-          </RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/orders">Mes commandes</RouterLink>
+        <li class="relative">
+          <button @click="ui.toggleUserMenu" aria-label="Compte utilisateur" class="cursor-pointer">
+            <span v-if="user.isLoggedIn">
+              <UserRoundCheck class="w-5 h-5 text-primary transition" />
+            </span>
+            <span v-else>
+              <UserRound class="w-5 h-5 transition" />
+            </span>
+          </button>
+          <UserMenu />
         </li>
 
         <li>
@@ -42,6 +45,10 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import { useUIStore } from '@/stores/ui-store.ts'
+import { useUserStore } from '@/stores/user-store.ts'
+import { UserRoundCheck, UserRound } from 'lucide-vue-next'
+import UserMenu from '@/components/user/UserMenu.vue'
 
 const ui = useUIStore()
+const user = useUserStore()
 </script>
