@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 import type { UserProfile } from '@/models/user/user-profile.ts'
 import type { UserProfileUpdate } from '@/models/user/user-profile-update.ts'
 import { fetchUserProfile, updateUserProfile } from '@/services/user-profile-service';
+import { useAuthStore } from '@/stores/auth-store.ts'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -45,5 +46,11 @@ export const useUserStore = defineStore('user', {
         this.loading = false;
       }
     },
+
+    logout() {
+      const auth = useAuthStore()
+      auth.logout()
+      this.profile = null
+    }
   },
 });
