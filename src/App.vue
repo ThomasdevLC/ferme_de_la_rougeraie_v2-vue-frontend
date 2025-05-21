@@ -2,6 +2,10 @@
 import { RouterView } from 'vue-router'
 import CartSidebar from '@/components/cart/CartSidebar.vue'
 import Navbar from '@/components/nav/NavBar.vue'
+import { useUIStore } from '@/stores/ui-store'
+
+const ui = useUIStore()
+
 
 </script>
 
@@ -9,7 +13,7 @@ import Navbar from '@/components/nav/NavBar.vue'
   <header>
     <Navbar />
   </header>
-  <main>
+  <main @click="ui.closeUserMenu">
     <RouterView />
     <CartSidebar />
   </main>
