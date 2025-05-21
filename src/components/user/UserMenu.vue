@@ -16,6 +16,11 @@
       </RouterLink>
     </template>
 
+    <RouterLink to="/profile/edit" v-if="user.isLoggedIn" class="block text-sm text-primary hover:underline" >
+      Modifier profil
+    </RouterLink>
+
+
     <p v-if="user.isLoggedIn" @click="logout()" class="cursor-pointer" >
       Se déconnecter
     </p>
