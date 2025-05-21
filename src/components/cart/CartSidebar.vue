@@ -9,48 +9,62 @@
       <div class="p-4 max-w-5xl mx-auto">
         <h1 class="text-2xl font-bold mb-6">Votre Panier</h1>
 
-        <div v-if="cart.items.length === 0" class="text-gray-500">Votre panier est vide.</div>
+        <div v-if="cart.numberOfProducts === 0" class="text-gray-500">Votre panier est vide.</div>
 
         <CartItem v-for="item in cart.items" :key="item.product.id" :item="item" />
 
-        <p>
+        <p v-if="cart.numberOfProducts>0">
           <span class="font-bold">Total:</span>
-          {{ cart.cartTotal }} €
+          {{ cart.cartTotal }}
         </p>
+
       </div>
-      <label class="block mb-2 font-semibold">Jour de retrait :</label>
-      <select v-model="pickup" class="border px-2 py-1 rounded w-full mb-4">
-        <option value="TUESDAY">Mardi</option>
-        <option value="THURSDAY">Jeudi</option>
-      </select>
-      <button
-        class="mt-4 bg-primary text-white px-4 py-2 rounded hover:bg-opacity-90"
-        @click="placeOrder"
-      >
-        Valider ma commande
-      </button>
+
+      <div v-if="auth.isAuthenticated && cart.numberOfProducts > 0">
+        <label class="block mb-2 font-semibold">Jour de retrait :</label>
+        <select v-model="pickup" class="border px-2 py-1 rounded w-full mb-4">
+          <option value="TUESDAY">Mardi</option>
+          <option value="THURSDAY">Jeudi</option>
+        </select>
+        <button
+          class="mt-4 bg-primary text-white px-4 py-2 rounded hover:bg-opacity-90"
+          @click="placeOrder"
+        >
+          Valider ma commande
+        </button>
+      </div>
+
+      <div v-else-if="!auth.isAuthenticated && cart.numberOfProducts > 0">
+        <p class="text-gray-500 mb-4">Veuillez vous connecter pour passer une commande.</p>
+        <router-link to="/login" class="text-primary font-medium hover:underline">
+          Se connecter
+        </router-link>
+      </div>
+
     </div>
   </transition>
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue'
 import { useUIStore } from '@/stores/ui-store.ts'
 import { useCartStore } from '@/stores/cart-store.ts'
+import {useAuthStore} from '@/stores/auth-store.ts'
 import CartItem from '@/components/cart/CartItem.vue'
-import { ref } from 'vue'
 
 const cart = useCartStore()
 const ui = useUIStore()
+const auth = useAuthStore()
 
 const pickup = ref<'TUESDAY' | 'THURSDAY'>('TUESDAY')
+
 
 const placeOrder = async () => {
   try {
     const response = await cart.submitOrder(pickup.value)
-    console.log('Commande créée ✅', response.data)
-    // Optionnel : rediriger, afficher un toast, etc.
+    console.log('Commande créée ', response.data)
   } catch (err) {
-    console.error('Erreur commande ❌', err)
+    console.error('Erreur commande ', err)
   }
 }
 </script>
