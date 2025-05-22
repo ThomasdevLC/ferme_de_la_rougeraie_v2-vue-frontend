@@ -14,7 +14,11 @@
         </button>
 
         <!-- Contenu principal -->
-        <div class="p-4">
+        <div v-if="displayMessage" class="text-center font-semibold text-xl flex flex-col justify-center min-h-48">
+          Merci pour votre commande {{ user.name }} ! à {{ pickup === 'TUESDAY' ? 'mardi' : 'jeudi' }}.
+        </div>
+
+        <div v-else class="p-4">
           <div class="flex gap-3 items-baseline mb-4">
             <ShoppingBag class="w-8 h-8" />
             <h1 class="text-2xl font-bold">Panier</h1>
@@ -69,15 +73,24 @@ const cart = useCartStore()
 const ui = useUIStore()
 const user = useUserStore()
 
+const displayMessage = ref(false)
+
 const pickup = ref<'TUESDAY' | 'THURSDAY'>('TUESDAY')
 
 const placeOrder = async () => {
   try {
     const response = await cart.submitOrder(pickup.value)
+
+    displayMessage.value = true
+    await new Promise((resolve) => setTimeout(resolve, 3000))
+    ui.closeCart()
+    displayMessage.value = false
+
     console.log('Commande créée ', response.data)
   } catch (err) {
     console.error('Erreur commande ', err)
   }
 }
+
 </script>
 
