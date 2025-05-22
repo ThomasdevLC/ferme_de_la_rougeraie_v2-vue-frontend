@@ -8,6 +8,17 @@ export const useAuthStore = defineStore('auth', {
   }),
   getters: {
     isAuthenticated: (state) => !!state.token,
+
+    isTokenValid: (state) => {
+      if (!state.token) return false
+
+      try {
+        const payload = JSON.parse(atob(state.token.split('.')[1]))
+        return payload.exp * 1000 > Date.now()
+      } catch {
+        return false
+      }
+    }
   },
   actions: {
     setToken(token: string) {
