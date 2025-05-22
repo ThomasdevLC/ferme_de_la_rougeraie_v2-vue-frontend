@@ -2,7 +2,6 @@
   <div
     class="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-gray-200 py-4 px-2"
   >
-    <!-- Image produit + badge limité -->
     <div class="relative">
       <img
         :src="`${baseUrl}${item.product.image}`"
@@ -29,14 +28,14 @@
     </div>
 
     <!-- Total -->
-    <div class="text-right text-base font-semibold w-20 sm:w-24">
+    <div class="text-right text-base w-20 sm:w-24">
       {{ cart.getItemTotal(item) }}
     </div>
 
     <!-- Supprimer -->
     <button
       @click="cart.removeFromCart(item.product.id)"
-      class="text-red-500 hover:text-black text-sm"
+      class=" hover:text-black text-sm cursor-pointer "
     >
       <span class="material-icons">clear</span>
     </button>

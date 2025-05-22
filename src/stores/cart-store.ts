@@ -22,6 +22,12 @@ export const useCartStore = defineStore('cart', {
     numberOfProducts(state): number {
       return state.items.length;
     },
+
+    isEmpty(state): boolean {
+      return state.items.length === 0;
+    },
+
+
   },
 
 
