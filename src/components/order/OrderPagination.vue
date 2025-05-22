@@ -3,7 +3,7 @@
     <button
       @click="$emit('prev')"
       :disabled="currentPage === 1"
-      class="text-blue-600 hover:underline disabled:text-gray-400 disabled:cursor-not-allowed"
+      class="cursor-pointer hover:underline disabled:text-gray-400 "
     >
       < Précédent
     </button>
@@ -13,7 +13,7 @@
     <button
       @click="$emit('next')"
       :disabled="currentPage === totalPages"
-      class="text-blue-600 hover:underline disabled:text-gray-400 disabled:cursor-not-allowed"
+      class="cursor-pointer hover:underline disabled:text-gray-400 "
     >
       Suivant >
     </button>
