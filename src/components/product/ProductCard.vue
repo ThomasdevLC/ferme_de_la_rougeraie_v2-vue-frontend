@@ -42,8 +42,8 @@
       <ProductQuantity v-model="quantity" :product="product" />
 
         <p class="font-medium cursor-pointer hover:text-primary "
-           @click="cart.addToCart(product, quantity)">AJOUTER AU PANIER
-        </p>
+           @click="onAddToCart">
+          {{ added ? 'AJOUTÉ' : 'AJOUTER AU PANIER' }}        </p>
 
     </div>
 
@@ -56,8 +56,23 @@ import type { Product } from '@/models/product/product.ts';
 import ProductQuantity from '@/components/product/ProductQuantity.vue'
 import { ref } from 'vue';
 import { useCartStore } from '@/stores/cart-store.ts';
+
+const { product } = defineProps<{ product: Product }>()
 const cart = useCartStore();
 
 const quantity = ref(0);
-defineProps<{ product: Product }>();
+const added = ref(false)
+
+function onAddToCart() {
+  if (quantity.value <= 0) return
+
+  cart.addToCart(product, quantity.value)
+
+  added.value = true
+  setTimeout(() => {
+    added.value = false
+    quantity.value = 0
+  }, 1500)
+}
+
 </script>
