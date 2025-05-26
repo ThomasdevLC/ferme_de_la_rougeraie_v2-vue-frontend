@@ -2,6 +2,7 @@
   <div class="max-w-xl mx-auto mt-16 p-6 bg-white shadow rounded">
     <h2 class="text-xl font-bold mb-4 text-center">Votre profil</h2>
 
+    <!-- Affichage des infos existantes -->
     <div class="bg-gray-100 p-4 mb-6">
       <div class="text-sm">
         <p><span class="font-medium">Nom :</span> {{ user.profile?.lastName }}</p>
@@ -11,19 +12,22 @@
       </div>
     </div>
 
+    <!-- Boutons Toggle -->
     <button
-      @click="updatePhone =  !updatePhone"
+      @click="togglePhone"
       class="w-full bg-primary text-white py-2 px-4 rounded hover:bg-opacity-90 mb-4"
     >
-      Modifier le téléphone
+      {{ updatePhone ? 'Annuler la modification du téléphone' : 'Modifier le téléphone' }}
     </button>
 
     <button
-      @click="updatePassword= !updatePassword"
+      @click="togglePassword"
       class="w-full bg-primary text-white py-2 px-4 rounded hover:bg-opacity-90 mb-4"
     >
-      Modifier le mot de passe
+      {{ updatePassword ? 'Annuler la modification du mot de passe' : 'Modifier le mot de passe' }}
     </button>
+
+
 
     <form @submit.prevent="submit" class="space-y-4">
       <div v-if="updatePhone">
@@ -41,6 +45,7 @@
             v-model="form.phone"
             type="text"
             class="w-full border rounded px-3 py-2 mt-1"
+            placeholder="Entrez le nouveau numéro"
           />
         </div>
       </div>
@@ -54,7 +59,6 @@
             class="w-full border rounded px-3 py-2 mt-1"
           />
         </div>
-
         <div>
           <label class="block text-sm font-medium">Nouveau mot de passe</label>
           <input
@@ -63,7 +67,6 @@
             class="w-full border rounded px-3 py-2 mt-1"
           />
         </div>
-
         <div>
           <label class="block text-sm font-medium">Confirmer le nouveau mot de passe</label>
           <input
@@ -74,8 +77,6 @@
         </div>
       </div>
 
-      <div v-if="user.error" class="text-sm text-red-500">{{ user.error }}</div>
-
       <button
         v-if="updatePhone || updatePassword"
         type="submit"
@@ -83,6 +84,14 @@
       >
         Enregistrer
       </button>
+
+      <div v-if="user.error" class="mb-4 p-3 bg-red-100 text-red-800 rounded">
+        {{ user.error }}
+      </div>
+      <div v-else-if="successMessage" class="mb-4 p-3 bg-green-100 text-green-800 rounded">
+        {{ successMessage }}
+      </div>
+
     </form>
   </div>
 </template>
@@ -90,13 +99,15 @@
 <script setup lang="ts">
 import { reactive, onMounted, ref } from 'vue'
 import { useUserStore } from '@/stores/user-store'
-import { useRouter } from 'vue-router'
-import { handleAxiosError } from '@/utils/handle-axios-error.ts'
+import { handleAxiosError } from '@/utils/handle-axios-error'
+import { handleAxiosSuccess } from '@/utils/handle-axios-success'
+import { a } from 'vitest/dist/chunks/suite.d.FvehnV49'
 
 const user = useUserStore()
-const router = useRouter()
+
 const updatePhone = ref(false)
 const updatePassword = ref(false)
+const successMessage = ref('')
 
 const form = reactive({
   oldPhone: '',
@@ -108,28 +119,54 @@ const form = reactive({
 
 onMounted(() => {
   if (user.profile) {
-    form.phone = user.profile.phone
+    form.oldPhone = user.profile.phone
+    form.phone = ''
   }
 })
 
-const submit = async () => {
-  user.error = ''
+function togglePhone() {
+  updatePhone.value = !updatePhone.value
+  if (updatePhone.value) {
+    form.phone = ''
+  } else if (user.profile) {
+    form.oldPhone = user.profile.phone
+    form.phone = user.profile.phone
+  }
+}
 
-  if (form.newPassword !== form.confirmPassword) {
+function togglePassword() {
+  updatePassword.value = !updatePassword.value
+  if (!updatePassword.value) {
+    form.oldPassword = ''
+    form.newPassword = ''
+    form.confirmPassword = ''
+  }
+}
+
+const submit = async () => {
+  user.error = null
+  successMessage.value = ''
+
+  if (updatePassword.value && form.newPassword !== form.confirmPassword) {
     user.error = 'Les nouveaux mots de passe ne correspondent pas'
     return
   }
 
   try {
-    await user.updateProfile({
-      phone: form.phone,
-      oldPassword: form.oldPassword,
-      plainPassword: form.newPassword,
+    const response = await user.updateProfile({
+      oldPhone:     updatePhone.value ? form.oldPhone : undefined,
+      phone:        form.phone,
+      oldPassword:  updatePassword.value ? form.oldPassword : undefined,
+      plainPassword:updatePassword.value ? form.newPassword : undefined,
     })
 
-    if (!user.error) {
-      router.push('/products')
-    }
+    successMessage.value = handleAxiosSuccess(response)
+    updatePhone.value = false ; updatePassword.value = false;
+    await user.loadProfile()
+    setTimeout(() => {
+      successMessage.value = ''
+    }, 3000)
+
   } catch (error) {
     user.error = handleAxiosError(error)
   }
