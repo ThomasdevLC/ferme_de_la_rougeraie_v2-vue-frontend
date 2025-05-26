@@ -7,6 +7,7 @@ import { createOrder } from '@/services/order-service.ts'
 export const useCartStore = defineStore('cart', {
   state: () => ({
     items: [] as CartItem[],
+
   }),
 
   getters: {
@@ -48,20 +49,15 @@ export const useCartStore = defineStore('cart', {
 
       const existingItem = this.items.find(item => item.product.id === product.id);
       if (existingItem) {
-        const newQuantity = existingItem.quantity + quantity;
-        existingItem.quantity = product.stock !== null && newQuantity > product.stock
-          ? product.stock
-          : newQuantity;
+        existingItem.quantity += quantity;
       } else {
-        const qty = product.stock !== null && quantity > product.stock
-          ? product.stock
-          : quantity;
-
-        this.items.push({ product, quantity: qty });
+        this.items.push({ product, quantity });
       }
 
       this.saveCartToStorage();
+
     },
+
 
     incrementQuantity(productId: number) {
       const item = this.items.find(i => i.product.id === productId);
@@ -119,12 +115,10 @@ export const useCartStore = defineStore('cart', {
         })),
       };
 
-      const response = await createOrder(payload);
-
-      this.clearCart();
-
-      return response;
+        const response = await createOrder(payload);
+        this.clearCart();
+        return response;
     }
-  }
+  },
 
 });
