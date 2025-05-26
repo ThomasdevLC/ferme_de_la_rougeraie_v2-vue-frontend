@@ -4,6 +4,8 @@ import type { UserProfile } from '@/models/user/user-profile.ts'
 import type { UserProfileUpdate } from '@/models/user/user-profile-update.ts'
 import { fetchUserProfile, updateUserProfile } from '@/services/user-profile-service';
 import { useAuthStore } from '@/stores/auth-store.ts'
+import type { AxiosResponse } from 'axios'
+
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -33,17 +35,22 @@ export const useUserStore = defineStore('user', {
       }
     },
 
-    async updateProfile(payload: UserProfileUpdate) {
-      this.loading = true;
-      this.error = null;
+    async updateProfile(
+      payload: UserProfileUpdate
+    ): Promise<AxiosResponse<{ message: string; user?: UserProfile }>> {
+      this.loading = true
+      this.error = null
       try {
-        await updateUserProfile(payload);
-        await this.loadProfile();
+        const response = await updateUserProfile(payload)
+        if (response.data.user) {
+          this.profile = response.data.user
+        }
+        return response
       } catch (err: any) {
-        this.error = 'Erreur lors de la mise à jour du profil';
-        console.error(err);
+        this.error = err.response?.data?.error
+        throw err
       } finally {
-        this.loading = false;
+        this.loading = false
       }
     },
 
