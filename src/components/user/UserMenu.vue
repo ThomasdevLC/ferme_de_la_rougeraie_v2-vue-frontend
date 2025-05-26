@@ -30,13 +30,16 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/user-store'
 import { useUIStore } from '@/stores/ui-store'
+import {  useRouter } from 'vue-router'
 
 const user = useUserStore()
 const ui = useUIStore()
+const router = useRouter()
 
 function logout() {
   user.logout()
   ui.closeUserMenu()
+  router.push('/products')
 }
 
 </script>
