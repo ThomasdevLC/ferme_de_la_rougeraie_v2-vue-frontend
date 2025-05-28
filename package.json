@@ -15,12 +15,15 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.6",
+    "@vee-validate/yup": "^4.15.0",
     "axios": "^1.9.0",
     "lucide-vue-next": "^0.511.0",
     "pinia": "^3.0.1",
     "tailwindcss": "^4.1.6",
+    "vee-validate": "^4.5.8",
     "vue": "^3.5.13",
-    "vue-router": "^4.5.0"
+    "vue-router": "^4.5.0",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@tsconfig/node22": "^22.0.1",
