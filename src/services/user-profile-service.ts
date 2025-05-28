@@ -13,5 +13,5 @@ export async function fetchUserProfile(): Promise<UserProfile> {
 export async function updateUserProfile(
   payload: UserProfileUpdate
 ): Promise<AxiosResponse<{ message: string; user?: UserProfile }>> {
-  return await http.put<{ message: string; user?: UserProfile }>('/api/me', payload)
+  return await http.patch<{ message: string; user?: UserProfile }>('/api/me', payload)
 }
