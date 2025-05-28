@@ -16,7 +16,7 @@
       </RouterLink>
     </template>
 
-    <RouterLink to="/profile/edit" v-if="user.isLoggedIn" class="block text-sm text-primary hover:underline" >
+    <RouterLink to="/profile/edit" v-if="user.isLoggedIn" class="block text-sm text-primary hover:underline" @click="ui.closeUserMenu" >
       Modifier profil
     </RouterLink>
 
