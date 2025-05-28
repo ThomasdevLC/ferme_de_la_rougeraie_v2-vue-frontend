@@ -5,6 +5,10 @@
     <div v-if="route.query.registered" class="text-green-600 text-sm text-center mb-4">
       ✅ Inscription réussie. Vous pouvez maintenant vous connecter.
     </div>
+    <div v-if="route.query.reset" class="text-green-600 text-sm text-center mb-4">
+      ✅ Mot de passe réinitialisé avec succès. Vous pouvez maintenant vous connecter.
+    </div>
+
 
     <form @submit.prevent="handleLogin" class="space-y-4">
       <div>
@@ -42,12 +46,17 @@
       <span>Pas encore inscrit ? </span>
       <a :href="registerUrl" class="text-primary font-medium hover:underline"> Créer un compte </a>
     </div>
+    <div class="text-center mt-4">
+      <a :href="resetPasswordUrl" class="text-primary font-medium hover:underline"
+        >Mot de passe oublié ?</a
+      >
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { useRouter, useRoute  } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { login } from '@/services/auth-service.ts'
 import { useAuthStore } from '@/stores/auth-store.ts'
 import { useUserStore } from '@/stores/user-store.ts'
@@ -62,12 +71,11 @@ const route = useRoute()
 const auth = useAuthStore()
 const userStore = useUserStore()
 
-
 const cart = useCartStore()
 const ui = useUIStore()
 
-
 const registerUrl = `${import.meta.env.VITE_API_BASE_URL}/register`
+const resetPasswordUrl = `${import.meta.env.VITE_API_BASE_URL}/reset-password`
 
 const handleLogin = async () => {
   error.value = ''
@@ -88,7 +96,6 @@ const handleLogin = async () => {
     if (!cart.isEmpty) {
       ui.openCart()
     }
-
   } catch (err: any) {
     error.value = err.response?.data?.message || 'Échec de la connexion.'
   }
