@@ -27,11 +27,11 @@
   </div>
 </template>
 
-
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue';
 import type { Product } from '@/models/product/product.ts';
 import { formatFloat } from '@/utils/number-format.ts'
+import { useCartStore } from '@/stores/cart-store.ts';
 
 const props = defineProps<{
   modelValue: number;
@@ -41,41 +41,58 @@ const emit = defineEmits<{
   (e: 'update:modelValue', value: number): void;
 }>();
 
-const quantity = ref(props.modelValue);
+const cart = useCartStore();
 
-// Sync with parent
-watch(() => props.modelValue, (val) => {
-  quantity.value = val;
-});
+const quantity = ref(props.modelValue);
+watch(() => props.modelValue, val => quantity.value = val);
+
+const quantityInCart = computed(() =>
+  cart.getProductQuantity(props.product.id)
+);
+
+const isInCart = computed(() =>
+  cart.isProductInCart(props.product.id)
+);
+
+const displayedQuantity = computed(() =>
+  isInCart.value
+    ? quantityInCart.value
+    : quantity.value
+);
 
 const isMax = computed(() =>
-  props.product.stock !== null && quantity.value >= props.product.stock
+  props.product.stock !== null && displayedQuantity.value >= props.product.stock
 );
 
 const step = computed(() => props.product.inter ?? 1);
 
 function increment() {
-  const nextValue = +(quantity.value + step.value).toFixed(2);
+  const nextValue = +(displayedQuantity.value + step.value).toFixed(2);
+  if (props.product.stock !== null && nextValue > props.product.stock) return;
 
-  if (props.product.stock !== null && nextValue > props.product.stock) {
-    return;
+  if (isInCart.value) {
+    cart.incrementQuantity(props.product.id);
+  } else {
+    quantity.value = nextValue;
+    emit('update:modelValue', quantity.value);
   }
-
-  quantity.value = nextValue;
-  emit('update:modelValue', quantity.value);
 }
 
 function decrement() {
-  const newVal = +(quantity.value - step.value).toFixed(2);
-  quantity.value = newVal >= 0 ? newVal : 0;
-  emit('update:modelValue', quantity.value);
+  const newVal = +(displayedQuantity.value - step.value).toFixed(2);
+  const nextQty = Math.max(newVal, 0);
+
+  if (isInCart.value) {
+    cart.decrementQuantity(props.product.id);
+  } else {
+    quantity.value = nextQty;
+    emit('update:modelValue', quantity.value);
+  }
 }
 
 const formattedQuantity = computed(() =>
   props.product.unit === 'Kilo'
-    ? formatFloat(quantity.value)
-    : Math.round(quantity.value).toString()
+    ? formatFloat(displayedQuantity.value)
+    : Math.round(displayedQuantity.value).toString()
 );
-
-
 </script>
