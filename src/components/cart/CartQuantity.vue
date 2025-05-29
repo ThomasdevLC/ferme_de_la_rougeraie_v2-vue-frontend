@@ -1,47 +1,26 @@
 <template>
-  <div class="flex items-center my-3">
-    <button
-      @click="cart.decrementQuantity(product.id)"
-      class="w-7 bg-white border text-sm px-2 py-0.5 cursor-pointer"
-    >
-      -
-    </button>
-
-    <div class="w-14 flex items-center justify-center px-2 py-0.5 text-sm border-t border-b">
-      <span>{{ formattedQuantity }}</span>
-      <span v-if="product.unit === 'Kilo'" class="text-xs ml-1">Kg</span>
-    </div>
-
-    <button
-      @click="cart.incrementQuantity(product.id)"
-      class="w-7 bg-white border text-sm px-2 py-0.5 cursor-pointer"
-    >
-      +
-    </button>
-
-    <p v-if="isMax" class="text-xs text-red-600 mt-1 ml-2">
-      Stock max atteint
-    </p>
-  </div>
+  <QuantityControl
+    :displayedQuantity="formattedQuantity"
+    :unit="product.unit"
+    :isMax="isMax"
+    :onIncrement="() => cart.incrementQuantity(product.id)"
+    :onDecrement="() => cart.decrementQuantity(product.id)"
+  />
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { Product } from '@/models/product/product.ts';
-import { useCartStore } from '@/stores/cart-store.ts';
-import { formatFloat } from '@/utils/number-format.ts';
+import { formatFloat } from '@/utils/number-format';
+import { useCartStore } from '@/stores/cart-store';
+import QuantityControl from '@/components/ui/common/QuantityControl.vue';
+import type { Product } from '@/models/product/product';
 
+const props = defineProps<{ product: Product; quantity: number }>();
 const cart = useCartStore();
-
-const props = defineProps<{
-  product: Product;
-  quantity: number;
-}>();
 
 const isMax = computed(() =>
   props.product.stock !== null && props.quantity >= props.product.stock
 );
-
 
 const formattedQuantity = computed(() =>
   props.product.unit === 'Kilo'
