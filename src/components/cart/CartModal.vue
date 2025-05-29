@@ -1,48 +1,29 @@
 <template>
-  <!-- On bind le v-model à ui.cartOpen -->
   <Modal v-model="ui.cartOpen" :closable="true" :closeOnBackdrop="true">
-    <!-- Slot header pour le titre de la fenêtre -->
+
     <template #header>
       <div class="flex gap-3 items-center">
         <ShoppingBag class="w-8 h-8" />
         <h1 class="text-2xl font-bold">Panier</h1>
-        <p v-if="!cart.isEmpty" class="text-gray-500">
-          {{ cart.numberOfProducts }} article(s)
-        </p>
+        <p v-if="!cart.isEmpty" class="text-gray-500">{{ cart.numberOfProducts }} article(s)</p>
       </div>
     </template>
 
-    <!-- Slot par défaut pour le contenu principal -->
     <template #default>
-      <div v-if="displayMessage" class="text-center font-semibold text-xl flex flex-col justify-center space-y-8 min-h-48 p-8">
-        <img src="/assets/plane.png" alt="plane logo" class="w-14 mx-auto" />
-        <p>
-          Merci {{ user.name }}, votre commande a bien été envoyée !<br />
-          À {{ pickup === 'TUESDAY' ? 'mardi' : 'jeudi' }}.
-        </p>
-        <button
-          class="bg-primary text-white text-base font-medium px-4 py-2 hover:bg-opacity-90 cursor-pointer rounded-xs"
-          @click="goToOrders"
-        >
-          Suivre vos commandes
-        </button>
-      </div>
+      <OrderConfirmation
+        v-if="displayMessage"
+        :userFirstName="user.firstName"
+        :pickup="pickup"
+        @follow-orders="goToOrders"
+      />
 
       <div v-else class="p-4 space-y-4">
-        <div v-if="cart.isEmpty" class="text-gray-500 text-center">
-          Votre panier est vide.
-        </div>
+        <div v-if="cart.isEmpty" class="text-gray-500 text-center">Votre panier est vide.</div>
 
         <div v-else class="flex flex-col space-y-4">
-          <CartItem
-            v-for="item in cart.items"
-            :key="item.product.id"
-            :item="item"
-          />
+          <CartItem v-for="item in cart.items" :key="item.product.id" :item="item" />
 
-          <p class="flex justify-end text-xl font-semibold">
-            Total : {{ cart.cartTotal }}
-          </p>
+          <p class="flex justify-end text-xl font-semibold">Total : {{ cart.cartTotal }}</p>
 
           <div v-if="user.isLoggedIn" class="flex flex-col space-y-4">
             <label class="font-semibold">Jour de retrait :</label>
@@ -64,9 +45,7 @@
           </p>
 
           <div v-else-if="!user.isLoggedIn" class="mt-6 text-center">
-            <p class="text-gray-500 mb-4">
-              Veuillez vous connecter pour passer une commande.
-            </p>
+            <p class="text-gray-500 mb-4">Veuillez vous connecter pour passer une commande.</p>
             <router-link
               to="/login"
               class="text-primary font-medium flex items-center gap-1 justify-center"
@@ -79,7 +58,6 @@
         </div>
       </div>
     </template>
-
   </Modal>
 </template>
 
@@ -94,6 +72,7 @@ import { ShoppingBag, ArrowRightFromLine } from 'lucide-vue-next'
 
 import Modal from '@/components/ui/ModalComponent.vue'
 import CartItem from '@/components/cart/CartItem.vue'
+import OrderConfirmation from '@/components/cart/OrderConfirmation.vue'
 
 const ui = useUIStore()
 const cart = useCartStore()
@@ -113,8 +92,7 @@ async function placeOrder() {
   try {
     await cart.submitOrder(pickup.value)
     displayMessage.value = true
-    // on ferme après 4 s
-    await new Promise(res => setTimeout(res, 4000))
+    await new Promise((res) => setTimeout(res, 5000))
     ui.closeCart()
     displayMessage.value = false
     errorMessage.value = null
