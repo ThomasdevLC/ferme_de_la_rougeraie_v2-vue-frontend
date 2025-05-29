@@ -1,81 +1,63 @@
 <template>
-  <div class="flex items-center my-3">
-    <button
-      @click="decrement"
-      class="w-7 bg-white border text-sm px-2 py-0.5 cursor-pointer"
-    >
-      -
-    </button>
-
-    <div
-      class="min-w-8 flex items-center justify-center px-2 py-0.5 text-sm border-t border-b"
-    >
-      <span>{{ formattedQuantity }}</span>
-      <span v-if="product.unit === 'Kilo'" class="text-xs ml-1">Kg</span>
-    </div>
-
-    <button
-      @click="increment"
-      class="w-7 bg-white border text-sm px-2 py-0.5 cursor-pointer"
-    >
-      +
-    </button>
-
-    <p v-if="isMax" class="text-xs text-red-600 mt-1 ml-2">
-      Stock max atteint
-    </p>
-  </div>
+  <QuantityControl
+    :displayedQuantity="formattedQuantity"
+    :unit="product.unit"
+    :isMax="isMax"
+    :onIncrement="handleIncrement"
+    :onDecrement="handleDecrement"
+  />
 </template>
-
 
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue';
-import type { Product } from '@/models/product/product.ts';
-import { formatFloat } from '@/utils/number-format.ts'
+import { formatFloat } from '@/utils/number-format';
+import { useCartStore } from '@/stores/cart-store';
+import type { Product } from '@/models/product/product';
+import QuantityControl from '@/components/ui/common/QuantityControl.vue';
 
-const props = defineProps<{
-  modelValue: number;
-  product: Product;
-}>();
+const props = defineProps<{ modelValue: number; product: Product }>();
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: number): void;
+  (e: 'update:modelValue', value: number): void
 }>();
+const cart = useCartStore();
 
 const quantity = ref(props.modelValue);
+watch(() => props.modelValue, v => quantity.value = v);
 
-// Sync with parent
-watch(() => props.modelValue, (val) => {
-  quantity.value = val;
+const inCartQty = computed(() => cart.getProductQuantity(props.product.id));
+const isInCart  = computed(() => cart.isProductInCart(props.product.id));
+const displayed = computed(() => isInCart.value ? inCartQty.value : quantity.value);
+const isMax     = computed(() => props.product.stock !== null && displayed.value >= props.product.stock);
+const step      = props.product.inter ?? 1;
+
+watch(inCartQty, (newQty, oldQty) => {
+  if (oldQty > 0 && newQty === 0) {
+    quantity.value = 0;
+    emit('update:modelValue', 0);
+  }
 });
 
-const isMax = computed(() =>
-  props.product.stock !== null && quantity.value >= props.product.stock
-);
-
-const step = computed(() => props.product.inter ?? 1);
-
-function increment() {
-  const nextValue = +(quantity.value + step.value).toFixed(2);
-
-  if (props.product.stock !== null && nextValue > props.product.stock) {
-    return;
+function handleIncrement() {
+  if (isInCart.value) cart.incrementQuantity(props.product.id);
+  else {
+    const nextQty = +(displayed.value + step).toFixed(2);
+    quantity.value = nextQty;
+    emit('update:modelValue', nextQty);
   }
-
-  quantity.value = nextValue;
-  emit('update:modelValue', quantity.value);
 }
 
-function decrement() {
-  const newVal = +(quantity.value - step.value).toFixed(2);
-  quantity.value = newVal >= 0 ? newVal : 0;
-  emit('update:modelValue', quantity.value);
+function handleDecrement() {
+  if (isInCart.value) cart.decrementQuantity(props.product.id);
+  else {
+    const nextQty = Math.max(+(displayed.value - step).toFixed(2), 0);
+    quantity.value = nextQty;
+    emit('update:modelValue', nextQty);
+  }
 }
 
 const formattedQuantity = computed(() =>
   props.product.unit === 'Kilo'
-    ? formatFloat(quantity.value)
-    : Math.round(quantity.value).toString()
+    ? formatFloat(displayed.value)
+    : Math.round(displayed.value).toString()
 );
-
-
 </script>

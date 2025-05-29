@@ -71,7 +71,6 @@ function onAddToCart() {
   added.value = true
   setTimeout(() => {
     added.value = false
-    quantity.value = 0
   }, 1500)
 }
 
