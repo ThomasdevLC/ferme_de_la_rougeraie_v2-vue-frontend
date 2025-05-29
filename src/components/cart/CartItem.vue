@@ -14,7 +14,6 @@
       />
     </div>
 
-    <!-- Infos produit -->
     <div class="flex-1 sm:w-48 text-center sm:text-left">
       <p class="font-medium leading-5">{{ item.product.name }}</p>
       <p class="text-xs text-gray-500 mt-1 hidden sm:block">
@@ -22,17 +21,14 @@
       </p>
     </div>
 
-    <!-- Quantité -->
     <div class="flex items-center mb-1 sm:mb-0">
       <CartQuantity :product="item.product" :quantity="item.quantity" />
     </div>
 
-    <!-- Total -->
     <div class="text-right text-base w-20 sm:w-24">
       {{ cart.getItemTotal(item) }}
     </div>
 
-    <!-- Supprimer -->
     <button
       @click="cart.removeFromCart(item.product.id)"
       class="text-gray-4 hover:text-black text-sm cursor-pointer transition "
