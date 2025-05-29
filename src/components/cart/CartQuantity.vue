@@ -7,7 +7,7 @@
       -
     </button>
 
-    <div class="min-w-8 flex items-center justify-center px-2 py-0.5 text-sm border-t border-b">
+    <div class="w-14 flex items-center justify-center px-2 py-0.5 text-sm border-t border-b">
       <span>{{ formattedQuantity }}</span>
       <span v-if="product.unit === 'Kilo'" class="text-xs ml-1">Kg</span>
     </div>
