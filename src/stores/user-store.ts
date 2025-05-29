@@ -17,7 +17,7 @@ export const useUserStore = defineStore('user', {
   getters: {
     isLoggedIn: (state) => !!state.profile,
     fullName: (state) => state.profile ? `${state.profile.firstName} ${state.profile.lastName}` : '',
-    name: (state) => state.profile ? state.profile.firstName : '',
+    firstName: (state) => state.profile ? state.profile.firstName : '',
 
   },
 
