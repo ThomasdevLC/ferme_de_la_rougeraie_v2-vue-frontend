@@ -3,6 +3,7 @@
 
 /* stylelint-disable at-rule-no-unknown */
 @theme {
+    --color-xtra-light-primary: hsl(34, 100%, 85%);
     --color-light-primary: hsl(34, 100%, 55%);
     --color-primary: #fe8401;
     --color-secondary: #c16500;
