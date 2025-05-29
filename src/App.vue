@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
 import { onMounted } from 'vue'
-import CartSidebar from '@/components/cart/CartModal.vue'
+import CartModal from '@/components/cart/CartModal.vue'
 import Navbar from '@/components/nav/NavBar.vue'
 import { useUIStore } from '@/stores/ui-store'
 import { useUserStore } from '@/stores/user-store'
@@ -35,11 +35,15 @@ onMounted(() => {
 </script>
 
 <template>
-  <header>
+  <header class=" fixed z-50 w-full">
     <Navbar />
   </header>
-  <main @click="ui.closeUserMenu">
+  <main @click="ui.closeUserMenu" class="relative min-h-screen">
+    <img src="/assets/background.png"
+         alt="Background"
+         class="absolute inset-0 w-full h-full object-cover pointer-events-none z-0" />
     <RouterView />
-    <CartSidebar />
+    <CartModal class="z-60" />
   </main>
+
 </template>
