@@ -12,6 +12,16 @@ export const useCartStore = defineStore('cart', {
   }),
 
   getters: {
+
+    isProductInCart: (state) => (productId: number): boolean => {
+      return state.items.some(item => item.product.id === productId);
+    },
+
+    getProductQuantity: (state) => (productId: number): number => {
+      const item = state.items.find(item => item.product.id === productId);
+      return item ? item.quantity : 0;
+    },
+
     cartTotal(state): string {
       const totalCents = state.items.reduce((sum, item) => {
         const unitPriceCents = convertPriceToCents(item.product.price);
@@ -45,20 +55,18 @@ export const useCartStore = defineStore('cart', {
       localStorage.setItem('cart', JSON.stringify(this.items));
     },
 
-    addToCart(product: Product, quantity: number) {
-      if (quantity <= 0) return;
 
-      const existingItem = this.items.find(item => item.product.id === product.id);
-      if (existingItem) {
-        existingItem.quantity += quantity;
+    addToCart(product: Product, quantity: number): boolean {
+      if (quantity <= 0) return false;
+
+      if (this.isProductInCart(product.id)) {
+        return false;
       } else {
         this.items.push({ product, quantity });
+        this.saveCartToStorage();
+        return true;
       }
-
-      this.saveCartToStorage();
-
     },
-
 
     incrementQuantity(productId: number) {
       const item = this.items.find(i => i.product.id === productId);
