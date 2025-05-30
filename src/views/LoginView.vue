@@ -119,16 +119,19 @@ const ui = useUIStore()
 
 const showPassword = ref(false)
 
-
 const showRegisterSuccessModal = ref(false)
 const showResetSuccessModal = ref(false)
+
+function redirectToLogin() {
+  router.replace({ path: route.path, query: {} })
+  router.push('/login')
+}
 
 if (route.query.registered) {
   showRegisterSuccessModal.value = true
   setTimeout(() => {
     showRegisterSuccessModal.value = false
-    router.replace({ path: route.path, query: {} })
-    router.push('/login')
+    redirectToLogin()
   }, 5000)
 }
 
@@ -136,8 +139,7 @@ if (route.query.reset) {
   showResetSuccessModal.value = true
   setTimeout(() => {
     showResetSuccessModal.value = false
-    router.replace({ path: route.path, query: {} })
-    router.push('/login')
+    redirectToLogin()
   }, 5000)
 }
 
