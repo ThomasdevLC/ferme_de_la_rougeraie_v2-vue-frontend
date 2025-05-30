@@ -1,59 +1,64 @@
 <template>
-  <div class="w-full px-96 relative pt-60">
-    <div class="mx-auto mt-16 p-6 bg-white rounded-sm">
-      <h1 class="text-2xl font-bold mb-4">Votre profil</h1>
+  <div class="px-96 relative">
+    <div class="mx-auto w-fit mt-16 p-6 bg-white border border-gray-2 rounded-sm">
+      <h1 class="text-3xl font-bold mb-6">Votre profil</h1>
 
-      <div class="p-4 mb-6">
-        <div class="flex gap-2 items-center mb-2">
-          <IdCard class="w-10 h-10" :stroke-width="1" />
-          <p class="font-bold text-xl">
-            <span> {{ user.profile?.lastName }}&nbsp;</span
-            ><span>{{ user.profile?.firstName }}</span>
-          </p>
-        </div>
-        <div class="flex gap-2 items-center mb-2">
-          <Mail class="w-5 h-5" :stroke-width="1" />
-          <p>{{ user.profile?.email }}</p>
-        </div>
-        <div class="flex gap-2 items-center">
-          <Phone class="w-5 h-5" :stroke-width="1" />
-          <p>{{ user.profile?.phone }}</p>
-        </div>
-      </div>
+      <div class="flex justify-between items-start mb-8">
+        <div class="flex flex-col gap-5">
+          <div class="flex gap-2 items-center ">
+            <IdCard class="w-12 h-12" :stroke-width="1" />
+            <p class="font-bold text-2xl">
+              <span> {{ user.profile?.firstName }}&nbsp;</span
+              ><span>{{ user.profile?.lastName }}</span>
+            </p>
+          </div>
+          <div class="flex gap-4">
 
-      <div class="flex justify-center gap-4  text-sm ">
-        <button
-          @click="togglePhone"
-          class="w-50 bg-primary text-white py-2 px-4 rounded-sm hover:bg-opacity-90 mb-4 cursor-pointer flex items-center justify-center gap-2"
-        >
-          <template v-if="updatePhone">
-            <PencilOff class="w-5 h-5" :stroke-width="1" />
-            Annuler
-          </template>
-          <template v-else>
-            <Pencil class="w-5 h-5" :stroke-width="1" />
-            Modifier téléphone
-          </template>
-        </button>
+          <div class="flex gap-2 items-center ">
+            <Mail class="w-7 h-7" :stroke-width="1" />
+            <p class="text-xl">{{ user.profile?.email }}</p>
+          </div>
+          <div class="flex gap-2 items-center">
+            <Phone class="w-7 h-7" :stroke-width="1" />
+            <p class="text-xl">{{ user.profile?.phone }}</p>
+          </div>
+          </div>
+        </div>
 
-        <button
-          @click="togglePassword"
-          class="w-50 bg-primary text-white py-2 px-4 rounded-sm hover:bg-opacity-90 mb-4 cursor-pointer flex items-center justify-center gap-2"
-        >
-          <template v-if="updatePassword">
-            <PencilOff class="w-5 h-5" :stroke-width="1" />
-            Annuler
-          </template>
-          <template v-else>
-            <Pencil class="w-5 h-5" :stroke-width="1" />
-            Modifier mot de passe
-          </template>
-        </button>
+        <div class="flex justify-center gap-4 text-sm">
+          <button
+            @click="togglePhone"
+            class="w-50 bg-primary text-white py-2 px-4 rounded-sm hover:bg-opacity-90 mb-4 cursor-pointer flex items-center justify-center gap-2"
+          >
+            <template v-if="updatePhone">
+              <PencilOff class="w-5 h-5" :stroke-width="1" />
+              Modifier téléphone
+            </template>
+            <template v-else>
+              <Pencil class="w-5 h-5" :stroke-width="1" />
+              Modifier téléphone
+            </template>
+          </button>
+
+          <button
+            @click="togglePassword"
+            class="w-50 bg-primary text-white py-2 px-4 rounded-sm hover:bg-opacity-90 mb-4 cursor-pointer flex items-center justify-center gap-2"
+          >
+            <template v-if="updatePassword">
+              <PencilOff class="w-5 h-5" :stroke-width="1" />
+              Modifier mot de passe
+            </template>
+            <template v-else>
+              <Pencil class="w-5 h-5" :stroke-width="1" />
+              Modifier mot de passe
+            </template>
+          </button>
+        </div>
       </div>
 
       <form @submit.prevent="onSubmit" class="space-y-4 px-8">
         <!-- Modification téléphone -->
-        <div v-if="updatePhone">
+        <div  v-if="updatePhone" class="flex flex-col gap-2">
           <div>
             <label class="block text-sm font-medium">Ancien téléphone</label>
             <input v-model="oldPhone" type="text" class="w-full border rounded px-3 py-2 mt-1" />
@@ -69,8 +74,8 @@
         </div>
 
         <!-- Modification mot de passe -->
-        <div v-if="updatePassword">
-          <div>
+        <div v-if="updatePassword" class="flex flex-col gap-2">
+          <div >
             <label class="block text-sm font-medium">Mot de passe actuel</label>
             <input
               v-model="oldPassword"
@@ -109,7 +114,7 @@
           <button
             v-if="updatePhone || updatePassword"
             type="submit"
-            class="w-fit bg-primary text-white py-2 px-4 rounded-sm hover:bg-opacity-90"
+            class="cursor-pointer w-fit bg-primary text-white py-2 px-4 rounded-sm hover:bg-opacity-90"
           >
             Enregistrer
           </button>
