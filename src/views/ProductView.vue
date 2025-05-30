@@ -1,6 +1,6 @@
 <template>
-  <div class="relative z-10 max-w-[75rem] mx-auto min-h-screen pt-64">
-    <div v-if="loading" class="text-center pt-20 mx-auto py-8 text-gray-800 font-base text-xl">
+  <div class="relative z-10 max-w-[75rem] mx-auto min-h-screen ">
+    <div v-if="loading" class="text-center mx-auto py-8 text-gray-800 font-base text-xl">
     <img src="/assets/tomatoe.png" alt="loader" class="mx-auto">
       <p class="text-3xl font-black font-titles text-gray-4" >Chargement ...</p>
     </div>
