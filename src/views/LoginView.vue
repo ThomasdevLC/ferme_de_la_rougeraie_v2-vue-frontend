@@ -1,12 +1,12 @@
 <template>
-  <div class="max-w-md mx-auto mt-16 p-6 bg-white shadow rounded relative ">
+  <div class="max-w-md mx-auto p-6 bg-white shadow rounded relative ">
     <h2 class="text-xl font-bold mb-4 text-center">Connexion</h2>
 
     <div v-if="route.query.registered" class="text-green-600 text-sm text-center mb-4">
       ✅ Inscription réussie. Vous pouvez maintenant vous connecter.
     </div>
     <div v-if="route.query.reset" class="text-green-600 text-sm text-center mb-4">
-      ✅ Mot de passe réinitialisé avec succès. Vous pouvez maintenant vous connecter.
+      ✅ Mot de passe réinitialisé. Vous pouvez maintenant vous connecter.
     </div>
 
 
@@ -37,7 +37,7 @@
 
       <button
         type="submit"
-        class="w-full bg-primary text-white py-2 px-4 rounded hover:bg-opacity-90"
+        class="w-full bg-primary text-white py-2 px-4 rounded hover:bg-opacity-90 cursor-pointer"
       >
         Se connecter
       </button>
@@ -90,7 +90,6 @@ const handleLogin = async () => {
 
     auth.setToken(token)
     await userStore.loadProfile()
-
     await router.push('/products')
 
     if (!cart.isEmpty) {
