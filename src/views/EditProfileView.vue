@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100 h-screen w-full px-96">
+  <div class="w-full px-96 relative pt-60">
     <div class="mx-auto mt-16 p-6 bg-white rounded-sm">
       <h1 class="text-2xl font-bold mb-4">Votre profil</h1>
 

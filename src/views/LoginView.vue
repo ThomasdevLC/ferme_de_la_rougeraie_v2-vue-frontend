@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-md mx-auto mt-16 p-6 bg-white shadow rounded">
+  <div class="max-w-md mx-auto mt-16 p-6 bg-white shadow rounded relative ">
     <h2 class="text-xl font-bold mb-4 text-center">Connexion</h2>
 
     <div v-if="route.query.registered" class="text-green-600 text-sm text-center mb-4">

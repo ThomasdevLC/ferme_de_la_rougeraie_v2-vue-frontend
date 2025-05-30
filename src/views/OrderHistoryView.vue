@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full px-124 min-h-screen flex flex-col justify-start">
+  <div class="w-full px-124 min-h-screen flex flex-col justify-start relative pt-64 pb-10">
     <h1 class="text-2xl font-semibold mb-4 text-center">Mes commandes</h1>
 
     <div v-if="loading" class="text-center py-10 text-gray-500">
