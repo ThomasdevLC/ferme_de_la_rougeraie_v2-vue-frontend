@@ -1,4 +1,4 @@
-<template>
+<template >
   <nav class="bg-white border-b border-blue-2 px-13 py-4 relative w-full  ">
     <img src="/assets/header.png"
          alt="Background"
@@ -65,6 +65,7 @@ const cart = useCartStore()
 
 const scrolled = ref(false)
 const router = useRouter()
+
 
 function handleScroll() {
   if (router.currentRoute.value.path !== '/products') {
