@@ -1,7 +1,7 @@
 <template>
   <div class="relative z-10 max-w-[75rem] mx-auto min-h-screen ">
     <div v-if="loading" class="text-center mx-auto py-8 text-gray-800 font-base text-xl">
-    <img src="/assets/tomatoe.png" alt="loader" class="mx-auto">
+      <img :src="loaderSrc" alt="loader" class="mx-auto" />
       <p class="text-3xl font-black font-titles text-gray-4" >Chargement ...</p>
     </div>
 
@@ -24,9 +24,11 @@ import { ref, onMounted } from 'vue'
 import { fetchProducts } from '@/services/product-service.ts'
 import type { Product } from '@/models/product/product.ts'
 import ProductCard from '@/components/product/ProductCard.vue'
+import loaderImg from '/assets/tomatoe.png'
 
 const products = ref<Product[]>([])
 const loading = ref(true)
+const loaderSrc = loaderImg
 
 onMounted(async () => {
   try {
