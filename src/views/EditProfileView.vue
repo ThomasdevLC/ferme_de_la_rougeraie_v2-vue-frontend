@@ -1,54 +1,56 @@
 <template>
   <div class="w-full px-96 relative pt-60">
-    <div class="mx-auto mt-16 p-6 bg-white rounded-sm">
-      <h1 class="text-2xl font-bold mb-4">Votre profil</h1>
+    <div class="mx-auto mt-16 p-6 bg-white border border-gray-2 rounded-sm">
+      <h1 class="text-3xl font-bold mb-4">Votre profil</h1>
 
-      <div class="p-4 mb-6">
-        <div class="flex gap-2 items-center mb-2">
-          <IdCard class="w-10 h-10" :stroke-width="1" />
-          <p class="font-bold text-xl">
-            <span> {{ user.profile?.lastName }}&nbsp;</span
-            ><span>{{ user.profile?.firstName }}</span>
-          </p>
+      <div class="flex justify-between items-start mb-8">
+        <div class="">
+          <div class="flex gap-2 items-center mb-2">
+            <IdCard class="w-12 h-12" :stroke-width="1" />
+            <p class="font-bold text-2xl">
+              <span> {{ user.profile?.lastName }}&nbsp;</span
+              ><span>{{ user.profile?.firstName }}</span>
+            </p>
+          </div>
+          <div class="flex gap-2 items-center mb-2">
+            <Mail class="w-6 h-6" :stroke-width="1" />
+            <p class="text-lg">{{ user.profile?.email }}</p>
+          </div>
+          <div class="flex gap-2 items-center">
+            <Phone class="w-6 h-6" :stroke-width="1" />
+            <p class="text-lg">{{ user.profile?.phone }}</p>
+          </div>
         </div>
-        <div class="flex gap-2 items-center mb-2">
-          <Mail class="w-5 h-5" :stroke-width="1" />
-          <p>{{ user.profile?.email }}</p>
-        </div>
-        <div class="flex gap-2 items-center">
-          <Phone class="w-5 h-5" :stroke-width="1" />
-          <p>{{ user.profile?.phone }}</p>
-        </div>
-      </div>
 
-      <div class="flex justify-center gap-4  text-sm ">
-        <button
-          @click="togglePhone"
-          class="w-50 bg-primary text-white py-2 px-4 rounded-sm hover:bg-opacity-90 mb-4 cursor-pointer flex items-center justify-center gap-2"
-        >
-          <template v-if="updatePhone">
-            <PencilOff class="w-5 h-5" :stroke-width="1" />
-            Annuler
-          </template>
-          <template v-else>
-            <Pencil class="w-5 h-5" :stroke-width="1" />
-            Modifier téléphone
-          </template>
-        </button>
+        <div class="flex justify-center gap-2 text-sm">
+          <button
+            @click="togglePhone"
+            class="w-50 bg-primary text-white py-2 px-4 rounded-sm hover:bg-opacity-90 mb-4 cursor-pointer flex items-center justify-center gap-2"
+          >
+            <template v-if="updatePhone">
+              <PencilOff class="w-5 h-5" :stroke-width="1" />
+              Modifier téléphone
+            </template>
+            <template v-else>
+              <Pencil class="w-5 h-5" :stroke-width="1" />
+              Modifier téléphone
+            </template>
+          </button>
 
-        <button
-          @click="togglePassword"
-          class="w-50 bg-primary text-white py-2 px-4 rounded-sm hover:bg-opacity-90 mb-4 cursor-pointer flex items-center justify-center gap-2"
-        >
-          <template v-if="updatePassword">
-            <PencilOff class="w-5 h-5" :stroke-width="1" />
-            Annuler
-          </template>
-          <template v-else>
-            <Pencil class="w-5 h-5" :stroke-width="1" />
-            Modifier mot de passe
-          </template>
-        </button>
+          <button
+            @click="togglePassword"
+            class="w-50 bg-primary text-white py-2 px-4 rounded-sm hover:bg-opacity-90 mb-4 cursor-pointer flex items-center justify-center gap-2"
+          >
+            <template v-if="updatePassword">
+              <PencilOff class="w-5 h-5" :stroke-width="1" />
+              Modifier mot de passe
+            </template>
+            <template v-else>
+              <Pencil class="w-5 h-5" :stroke-width="1" />
+              Modifier mot de passe
+            </template>
+          </button>
+        </div>
       </div>
 
       <form @submit.prevent="onSubmit" class="space-y-4 px-8">
@@ -131,10 +133,10 @@ import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 import { useUserStore } from '@/stores/user-store'
 import { updateUserProfile } from '@/services/user-profile-service'
-import type { UserProfileUpdate } from '@/models/user/user-profile-update'
 import { handleAxiosError } from '@/utils/handle-axios-error'
 import { handleAxiosSuccess } from '@/utils/handle-axios-success'
 import { IdCard, Mail, Phone, Pencil, PencilOff } from 'lucide-vue-next'
+import type { UserProfileUpdate } from '@/models/user/user-profile-update'
 
 const user = useUserStore()
 
