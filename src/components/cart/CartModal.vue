@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="ui.cartOpen" :closable="true" :closeOnBackdrop="true">
+  <Modal v-model="ui.cartOpen" :closable="true" :closeOnBackdrop="true" >
 
     <template #header>
       <div class="flex gap-3 items-center">
@@ -25,9 +25,9 @@
 
           <p class="flex justify-end text-xl font-semibold">Total : {{ cart.cartTotal }}</p>
 
-          <div v-if="user.isLoggedIn" class="flex flex-col space-y-4">
+          <div v-if="user.isLoggedIn" class="flex flex-col space-y-4 ">
             <label class="font-semibold">Jour de retrait :</label>
-            <select v-model="pickup" class="border px-2 py-1 w-full">
+            <select v-model="pickup" class="border px-2 py-1 w-full mb-4">
               <option value="TUESDAY">Mardi</option>
               <option value="THURSDAY">Jeudi</option>
             </select>
