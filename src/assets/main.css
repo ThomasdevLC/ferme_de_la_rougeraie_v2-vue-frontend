@@ -16,6 +16,10 @@
     --font-titles: "Jacques Francois", serif;
   }
 
+html, body, #app {
+  height: 100%;
+}
+
 body {
 
   min-height: 100vh;
