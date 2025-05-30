@@ -9,14 +9,14 @@
 
       <!-- container -->
       <div
-        class="relative bg-white max-w-[65vw] max-h-[75vh] w-full p-6 shadow-lg z-10 overflow-y-auto p-12"
+        class="relative bg-white max-w-[50vw] max-h-[75vh] w-full p-6 shadow-lg z-10 overflow-y-auto p-12"
         role="dialog" aria-modal="true"
       >
         <!-- close button slot or default -->
         <button
           v-if="closable"
           @click="close()"
-          class="absolute top-4 right-4 text-gray-4 hover:text-black"
+          class="absolute top-5 right-5 text-gray-4 hover:text-black"
           aria-label="Fermer"
         >
           <slot name="close-icon ">
