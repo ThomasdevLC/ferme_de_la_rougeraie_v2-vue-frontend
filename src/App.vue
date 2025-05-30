@@ -40,7 +40,7 @@ onMounted(() => {
   <header v-if="displayNavbar" class="fixed z-50 w-full">
     <Navbar />
   </header>
-  <main @click="ui.closeUserMenu" class="relative min-h-screen text-text-color">
+  <main @click="ui.closeUserMenu" class="relative min-h-screen text-text-color pt-64 pb-12">
     <img src="/assets/background.png"
          alt="Background"
          class="fixed inset-0 w-full h-full object-cover pointer-events-none z-0" />
