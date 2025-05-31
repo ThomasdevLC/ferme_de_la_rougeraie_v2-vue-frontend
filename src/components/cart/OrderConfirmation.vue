@@ -20,6 +20,7 @@
 import { defineProps, defineEmits } from 'vue'
 import planeLogo from '/assets/plane.png'
 
+
 defineProps<{
   userFirstName: string
   pickup: 'TUESDAY' | 'THURSDAY'

@@ -3,8 +3,8 @@
     <div class="mx-auto w-fit mt-16 p-6 bg-white border border-gray-2 rounded-sm">
       <h1 class="text-3xl font-bold mb-6">Votre profil</h1>
 
-      <div class="flex justify-between items-start mb-8">
-        <div class="flex flex-col gap-5">
+      <div>
+        <div class="flex justify-evenly mb-6">
           <div class="flex gap-2 items-center ">
             <IdCard class="w-12 h-12" :stroke-width="1" />
             <p class="font-bold text-2xl">
@@ -28,35 +28,44 @@
         <div class="flex justify-center gap-4 text-sm">
           <button
             @click="togglePhone"
-            class="w-50 bg-primary text-white py-2 px-4 rounded-sm hover:bg-opacity-90 mb-4 cursor-pointer flex items-center justify-center gap-2"
+            class="w-40 bg-primary text-white py-2 px-4 rounded-sm hover:bg-opacity-90  cursor-pointer flex items-center justify-center gap-2"
           >
             <template v-if="updatePhone">
               <PencilOff class="w-5 h-5" :stroke-width="1" />
-              Modifier téléphone
+              téléphone
             </template>
             <template v-else>
               <Pencil class="w-5 h-5" :stroke-width="1" />
-              Modifier téléphone
+              téléphone
             </template>
           </button>
 
           <button
             @click="togglePassword"
-            class="w-50 bg-primary text-white py-2 px-4 rounded-sm hover:bg-opacity-90 mb-4 cursor-pointer flex items-center justify-center gap-2"
+            class="w-40 bg-primary text-white py-2 px-4 rounded-sm hover:bg-opacity-90  cursor-pointer flex items-center justify-center gap-2"
           >
             <template v-if="updatePassword">
               <PencilOff class="w-5 h-5" :stroke-width="1" />
-              Modifier mot de passe
+              mot de passe
             </template>
             <template v-else>
               <Pencil class="w-5 h-5" :stroke-width="1" />
-              Modifier mot de passe
+              mot de passe
             </template>
           </button>
+
+          <button
+            @click="user.logout()"
+            class="w-fit bg-red-500 text-white py-2 px-4 rounded-sm hover:bg-opacity-90 cursor-pointer flex items-center justify-center gap-2"
+          >
+            <UserRoundX class="w-5 h-5" :stroke-width="1" />
+            Suppression compte
+          </button>
+
         </div>
       </div>
 
-      <form @submit.prevent="onSubmit" class="space-y-4 px-8">
+      <form @submit.prevent="onSubmit" class="space-y-4 px-8 mt-6">
         <!-- Modification téléphone -->
         <div  v-if="updatePhone" class="flex flex-col gap-2">
           <div>
@@ -139,7 +148,7 @@ import { updateUserProfile } from '@/services/user-profile-service'
 import type { UserProfileUpdate } from '@/models/user/user-profile-update'
 import { handleAxiosError } from '@/utils/handle-axios-error'
 import { handleAxiosSuccess } from '@/utils/handle-axios-success'
-import { IdCard, Mail, Phone, Pencil, PencilOff } from 'lucide-vue-next'
+import { IdCard, Mail, Phone, Pencil, PencilOff, UserRoundX } from 'lucide-vue-next'
 
 const user = useUserStore()
 
