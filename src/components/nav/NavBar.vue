@@ -88,6 +88,6 @@ onBeforeUnmount(() => {
 })
 
 const displayMarquee = computed(() => {
-  return route.value.path === '/products' && !scrolled.value
+  return route.value.path === '/products' && !scrolled.value && !ui.cartOpen
 })
 </script>
