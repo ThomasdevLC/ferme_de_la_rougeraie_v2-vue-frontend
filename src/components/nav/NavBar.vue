@@ -1,5 +1,7 @@
 <template >
-  <nav class="bg-white border-b border-blue-2 px-13 py-4 relative w-full  ">
+  <nav class=" border-b border-blue-2 px-13 py-4 relative w-full  "
+       :class="[ scrolled ? 'bg-white' : 'bg-white/80']"
+  >
     <img src="/assets/header.png"
          alt="Background"
          class="absolute inset-0 w-full h-full object-cover pointer-events-none z-0 opacity-95" />
@@ -9,7 +11,7 @@
       <img
         src="/assets/logo.png"
         alt="logo"
-        :class="['transition-all duration-500', scrolled ? 'w-24' : 'w-40']"
+        :class="['transition-all duration-500', scrolled ? 'w-24' : 'w-36']"
       />
 
       <ul class="flex space-x-8 text-[1.7rem] font-semibold text-gray-700">
@@ -47,38 +49,45 @@
       </ul>
     </div>
   </nav>
+  <div class="">
+    <MessageInfosMarquee v-if="displayMarquee" class="w-full"  />
+  </div>
 </template>
 
 
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, ref } from 'vue'
+import { onMounted, onBeforeUnmount, ref, computed } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useUIStore } from '@/stores/ui-store.ts'
 import { useUserStore } from '@/stores/user-store.ts'
 import { useCartStore } from '@/stores/cart-store.ts'
 import { UserRoundCheck, UserRound, ShoppingBag } from 'lucide-vue-next'
 import UserMenu from '@/components/user/UserMenu.vue'
+import MessageInfosMarquee from '@/components/message/MessageInfosMarquee.vue'
 
 const ui = useUIStore()
 const user = useUserStore()
 const cart = useCartStore()
 
-const scrolled = ref(false)
 const router = useRouter()
+const route = router.currentRoute
 
+
+const scrolled = ref(false)
 
 function handleScroll() {
-  if (router.currentRoute.value.path !== '/products') {
-    return
-  }
-  scrolled.value = window.scrollY >= 186
+  scrolled.value = window.scrollY >= 160
 }
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
 })
+
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', handleScroll)
 })
-</script>
 
+const displayMarquee = computed(() => {
+  return route.value.path === '/products' && !scrolled.value
+})
+</script>
