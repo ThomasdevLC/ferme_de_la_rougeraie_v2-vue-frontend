@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full px-124 min-h-screen flex flex-col justify-start relative">
-    <h1 class="text-2xl font-semibold mb-4 text-center">Mes commandes</h1>
+  <div class="w-full px-4 min-h-screen flex flex-col justify-start relative">
+    <h1 class="text-3xl font-semibold mb-10 text-center">Vos commandes</h1>
 
     <div v-if="loading" class="text-center py-10 text-gray-500">
       Chargement des commandes...
