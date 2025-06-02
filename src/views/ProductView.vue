@@ -5,6 +5,7 @@
       <p class="text-3xl font-black font-titles text-gray-4" >Chargement ...</p>
     </div>
 
+
     <Transition
       name="slide-up"
       enter-active-class="transition duration-400"
