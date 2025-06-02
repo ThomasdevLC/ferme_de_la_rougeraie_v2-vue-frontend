@@ -1,6 +1,6 @@
 <template>
   <transition name="modal-fade">
-    <div v-if="modelValue" class="fixed inset-0 z-50 flex items-center justify-center ">
+    <div v-if="modelValue" class="fixed inset-0 z-50 flex items-center justify-center">
       <!-- backdrop -->
       <div
         class="absolute inset-0 bg-black/50 backdrop-blur-xs"
@@ -9,8 +9,9 @@
 
       <!-- container -->
       <div
-        class="relative bg-white max-w-[50vw] max-h-[75vh] w-full p-6 shadow-lg z-10 overflow-y-auto p-12"
-        role="dialog" aria-modal="true"
+        class="relative bg-white w-full md:max-w-[50vw] h-full md:max-h-[75vh] w-full p-6 shadow-lg z-10 overflow-y-auto p-6 md:p-12"
+        role="dialog"
+        aria-modal="true"
       >
         <!-- close button slot or default -->
         <button
@@ -47,13 +48,9 @@
 import { defineProps, defineEmits } from 'vue'
 import { X } from 'lucide-vue-next'
 
-const {
-  modelValue,
-  closable,
-  closeOnBackdrop
-} = defineProps({
+const { modelValue, closable, closeOnBackdrop } = defineProps({
   modelValue: { type: Boolean, required: true },
-  closable:   { type: Boolean, default: true },
+  closable: { type: Boolean, default: true },
   closeOnBackdrop: { type: Boolean, default: true },
 })
 
@@ -69,7 +66,7 @@ function close() {
 <style>
 .modal-fade-enter-active,
 .modal-fade-leave-active {
-  transition: opacity .2s ease;
+  transition: opacity 0.2s ease;
 }
 .modal-fade-enter-from,
 .modal-fade-leave-to {
