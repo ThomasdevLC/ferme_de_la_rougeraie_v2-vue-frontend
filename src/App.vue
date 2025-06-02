@@ -3,18 +3,15 @@ import { RouterView, useRouter } from 'vue-router'
 import { onMounted, computed } from 'vue'
 import CartModal from '@/components/cart/CartModal.vue'
 import Navbar from '@/components/nav/NavBar.vue'
-import MessageInfosMarquee from '@/components/message/MessageInfosMarquee.vue'
 import { useUIStore } from '@/stores/ui-store'
 import { useUserStore } from '@/stores/user-store'
 import { useAuthStore } from '@/stores/auth-store'
 import { useMessageStore } from '@/stores/message-store'
 
-
 const ui = useUIStore()
 const user = useUserStore()
 const auth = useAuthStore()
 const messageStore = useMessageStore()
-
 
 const router = useRouter()
 const route = router.currentRoute
