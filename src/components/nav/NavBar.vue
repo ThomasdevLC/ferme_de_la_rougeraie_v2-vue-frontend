@@ -84,6 +84,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', handleScroll)
+  scrolled.value = false
 })
 
 const displayMarquee = computed(() => {

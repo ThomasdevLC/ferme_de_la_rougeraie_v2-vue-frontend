@@ -10,14 +10,9 @@
 
 <script setup lang="ts">
 import { useMessageStore } from '@/stores/message-store.ts'
-import { onMounted, computed } from 'vue'
+import { computed } from 'vue'
 
 const messageStore = useMessageStore()
-
-onMounted(() => {
-  messageStore.loadMessages();
-});
-
 
 const marqueeMessage = computed(() => messageStore.marqueeMessage)
 </script>
