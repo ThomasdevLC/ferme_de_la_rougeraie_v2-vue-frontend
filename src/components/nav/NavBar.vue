@@ -1,6 +1,5 @@
 <template >
-  <nav class=" border-b border-blue-2 px-13 py-4 relative w-full  "
-       :class="[ scrolled ? 'bg-white' : 'bg-white/80']"
+  <nav class=" border-b border-blue-2 bg-white px-13 py-4 relative w-full  "
   >
     <img src="/assets/header.png"
          alt="Background"
@@ -76,7 +75,7 @@ const route = router.currentRoute
 const scrolled = ref(false)
 
 function handleScroll() {
-  scrolled.value = window.scrollY >= 160
+  scrolled.value = window.scrollY >= 100
 }
 
 onMounted(() => {
