@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-gray-200 py-5 px-12"
+    class="flex flex-col md:flex-row items-center justify-between gap-4 border-b border-gray-200 py-5 px-12"
   >
     <div class="relative">
       <img
