@@ -13,7 +13,7 @@
       enter-to-class="opacity-100 translate-y-0"
     >
       <div v-if="!loading"
-           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 py-24">
+           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 py-24 place-items-center">
         <ProductCard v-for="product in products" :key="product.id" :product="product" />
       </div>
     </Transition>
