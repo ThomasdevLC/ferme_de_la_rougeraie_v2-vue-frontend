@@ -1,62 +1,56 @@
 <template>
-  <div v-if="marqueeMessages.length" class="marquee-container bg-black/20">
-<div class="marquee-content py-4 text-xl font-medium font-titles border-b border-b-black">
-  <span v-for="msg in marqueeMessages" :key="msg.id">{{ msg.content }} &nbsp;|&nbsp;</span>
-  <span v-for="msg in marqueeMessages" :key="msg.id">{{ msg.content }} &nbsp; &nbsp;|&nbsp; &nbsp;</span>
-  <span v-for="msg in marqueeMessages" :key="msg.id">{{ msg.content }} &nbsp; &nbsp;|&nbsp; &nbsp;</span>
-  <span v-for="msg in marqueeMessages" :key="msg.id">{{ msg.content }} &nbsp; &nbsp;|&nbsp; &nbsp;</span>
-  <span v-for="msg in marqueeMessages" :key="msg.id">{{ msg.content }} &nbsp; &nbsp;|&nbsp; &nbsp;</span>
-  <span v-for="msg in marqueeMessages" :key="msg.id">{{ msg.content }} &nbsp; &nbsp;|&nbsp; &nbsp;</span>
-  <span v-for="msg in marqueeMessages" :key="msg.id">{{ msg.content }} &nbsp; &nbsp;|&nbsp; &nbsp;</span>
-  <span v-for="msg in marqueeMessages" :key="msg.id">{{ msg.content }} &nbsp; &nbsp;|&nbsp; &nbsp;</span>
-  <span v-for="msg in marqueeMessages" :key="msg.id">{{ msg.content }} &nbsp; &nbsp;|&nbsp; &nbsp;</span>
-  <span v-for="msg in marqueeMessages" :key="msg.id">{{ msg.content }} &nbsp; &nbsp;|&nbsp; &nbsp;</span>
-  <span v-for="msg in marqueeMessages" :key="msg.id">{{ msg.content }} &nbsp; &nbsp;|&nbsp; &nbsp;</span>
-  <span v-for="msg in marqueeMessages" :key="msg.id">{{ msg.content }} &nbsp; &nbsp;|&nbsp; &nbsp;</span>
-  <span v-for="msg in marqueeMessages" :key="msg.id">{{ msg.content }} &nbsp; &nbsp;|&nbsp; &nbsp;</span>
-  <span v-for="msg in marqueeMessages" :key="msg.id">{{ msg.content }} &nbsp; &nbsp;|&nbsp; &nbsp;</span>
-  <span v-for="msg in marqueeMessages" :key="msg.id">{{ msg.content }} &nbsp; &nbsp;|&nbsp; &nbsp;</span>
-  <span v-for="msg in marqueeMessages" :key="msg.id">{{ msg.content }} &nbsp; &nbsp;|&nbsp; &nbsp;</span>
-  <span v-for="msg in marqueeMessages" :key="msg.id">{{ msg.content }} &nbsp; &nbsp;|&nbsp; &nbsp;</span>
-  <span v-for="msg in marqueeMessages" :key="msg.id">{{ msg.content }} &nbsp; &nbsp;|&nbsp; &nbsp;</span>
-  <span v-for="msg in marqueeMessages" :key="msg.id">{{ msg.content }} &nbsp; &nbsp;|&nbsp; &nbsp;</span>
-  <span v-for="msg in marqueeMessages" :key="msg.id">{{ msg.content }} &nbsp; &nbsp;|&nbsp; &nbsp;</span>
-  <span v-for="msg in marqueeMessages" :key="msg.id">{{ msg.content }} &nbsp; &nbsp;|&nbsp; &nbsp;</span>
-
-</div>
-</div>
+  <div v-if="marqueeMessage" class="marquee bg-black/20 border-b border-b-black text-text-color py-3">
+    <span>{{ marqueeMessage.content }} &nbsp;|&nbsp;</span>
+    <span >{{ marqueeMessage.content }} &nbsp;|&nbsp;</span>
+    <span>{{ marqueeMessage.content }} &nbsp;|&nbsp;</span>
+    <span>{{ marqueeMessage.content }} &nbsp;|&nbsp;</span>
+    <span>{{ marqueeMessage.content }} &nbsp;|&nbsp;</span>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { useMessageStore } from '@/stores/message-store.ts';
-import { onMounted } from 'vue';
+import { useMessageStore } from '@/stores/message-store.ts'
+import { onMounted, computed } from 'vue'
 
-const messageStore = useMessageStore();
+const messageStore = useMessageStore()
 
 onMounted(() => {
-  if (!messageStore.messages.length) {
-    messageStore.loadMessages();
-  }
+  messageStore.loadMessages();
 });
 
-const marqueeMessages = messageStore.marqueeMessages;
 
-
+const marqueeMessage = computed(() => messageStore.marqueeMessage)
 </script>
 
 <style scoped>
-.marquee-container {
+.marquee {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
   overflow: hidden;
-  white-space: nowrap;
 }
 
-.marquee-content {
-  display: inline-block;
-  animation: marquee 100s linear infinite;
+.marquee span {
+  text-transform: uppercase;
+  will-change: transform;
+  white-space: nowrap;
+  animation: marquee 10s linear infinite;
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
+.marquee span svg {
+  width: 1.5em;
+  height: 1.5em;
+  margin: 0 0.5rem;
 }
 
 @keyframes marquee {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-100%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
 }
 </style>
