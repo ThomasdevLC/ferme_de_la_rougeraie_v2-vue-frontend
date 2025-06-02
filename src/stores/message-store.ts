@@ -9,11 +9,11 @@ export const useMessageStore = defineStore('messages', {
     error: null as string | null,
   }),
   getters: {
-    marqueeMessages(state) {
-      return state.messages.filter(m => m.type === 'MARQUEE');
+    marqueeMessage(state) {
+      return state.messages.find(m => m.type === 'MARQUEE');
     },
     closedShopMessages(state) {
-      return state.messages.filter(m => m.type === 'CLOSEDSHOP' );
+      return state.messages.find(m => m.type === 'CLOSEDSHOP' );
     },
   },
   actions: {
