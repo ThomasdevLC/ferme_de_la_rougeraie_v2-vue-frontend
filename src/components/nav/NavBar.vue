@@ -46,7 +46,7 @@
             <ShoppingBag class="w-9 h-9 transition bg-white" />
             <div
               v-if="!cart.isEmpty"
-              class="absolute bottom-6 left-9 w-[22px] h-[22px] rounded-full bg-primary text-white text-xs flex items-center justify-center z-20"
+              class="absolute bottom-7 left-9 w-[22px] h-[22px] rounded-full bg-primary text-white text-xs flex items-center justify-center z-20"
             >
               {{ cart.numberOfProducts }}
             </div>
@@ -83,7 +83,7 @@ function handleScroll() {
   if (window.innerWidth < 768) {
     scrolled.value = false
   } else {
-    scrolled.value = window.scrollY >= 100
+    scrolled.value = window.scrollY >= 80
   }
 }
 
