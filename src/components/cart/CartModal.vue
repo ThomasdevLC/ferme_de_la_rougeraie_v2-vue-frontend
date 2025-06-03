@@ -2,7 +2,7 @@
   <Modal v-model="ui.cartOpen" :closable="true" :closeOnBackdrop="true" >
 
     <template #header>
-      <div class="flex flex-col md:flex-row gap-3 items-center">
+      <div class="flex gap-3 items-center">
         <ShoppingBag class="w-8 h-8" />
         <h1 class="text-2xl font-bold">Panier</h1>
         <p v-if="!cart.isEmpty" class="text-gray-500">{{ cart.numberOfProducts }} article(s)</p>
