@@ -9,7 +9,7 @@
 
       <!-- container -->
       <div
-        class="relative bg-white w-full md:max-w-[50vw] h-full md:max-h-[75vh] w-full p-6 shadow-lg z-10 overflow-y-auto p-6 md:p-12"
+        class="relative bg-white max-w-[90vw] lg:max-w-[50vw] max-h-[90vh] lg:max-h-[75vh] w-full p-6 shadow-lg z-10 overflow-y-auto p-6 md:p-12"
         role="dialog"
         aria-modal="true"
       >
