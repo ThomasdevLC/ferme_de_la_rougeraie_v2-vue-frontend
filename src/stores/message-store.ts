@@ -10,10 +10,10 @@ export const useMessageStore = defineStore('messages', {
   }),
   getters: {
     marqueeMessage(state) {
-      return state.messages.find(m => m.type === 'MARQUEE');
+      return state.messages.find(m => m.type === 'MARQUEE' && m.isActive);
     },
-    closedShopMessages(state) {
-      return state.messages.find(m => m.type === 'CLOSEDSHOP' );
+    closedShopMessage(state) {
+      return state.messages.find(m => m.type === 'CLOSEDSHOP' && m.isActive);
     },
   },
   actions: {
