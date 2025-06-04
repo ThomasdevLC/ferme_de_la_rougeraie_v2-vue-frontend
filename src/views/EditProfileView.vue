@@ -127,12 +127,14 @@
           </button>
         </div>
 
-        <div v-if="user.error" class="mb-4 p-3 bg-red-100 text-red-800 rounded">
+        <p v-if="user.error" class="mb-4 p-3 bg-red-100 text-red-800 text-center rounded">
+          <CircleX class="inline-block mr-2" :stroke-width="1" />
           {{ user.error }}
-        </div>
-        <div v-else-if="successMessage" class="mb-4 p-3 bg-green-100 text-green-800 rounded">
+        </p>
+        <p v-else-if="successMessage" class="mb-4 p-3 bg-green-100 text-green-800 text-center rounded">
+          <Check class="inline-block mr-2" :stroke-width="1" />
           {{ successMessage }}
-        </div>
+        </p>
       </form>
     </div>
   </div>
@@ -146,7 +148,7 @@ import { updateUserProfile } from '@/services/user-profile-service'
 import type { UserProfileUpdate } from '@/models/user/user-profile-update'
 import { handleAxiosError } from '@/utils/handle-axios-error'
 import { handleAxiosSuccess } from '@/utils/handle-axios-success'
-import { IdCard, Mail, Phone, Pencil, PencilOff, UserRoundX } from 'lucide-vue-next'
+import { IdCard, Mail, Phone, Pencil, PencilOff, UserRoundX , CircleX, Check  } from 'lucide-vue-next'
 
 const user = useUserStore()
 
@@ -154,7 +156,6 @@ const updatePhone = ref(false)
 const updatePassword = ref(false)
 const successMessage = ref('')
 
-// Schéma dynamique
 const schema = computed(() =>
   yup.object({
     oldPhone: yup
@@ -206,7 +207,6 @@ const { value: oldPassword } = useField('oldPassword')
 const { value: newPassword } = useField('newPassword')
 const { value: confirmPassword } = useField('confirmPassword')
 
-// Toggle
 function togglePhone() {
   updatePhone.value = !updatePhone.value
   if (!updatePhone.value) {
@@ -224,9 +224,8 @@ function togglePassword() {
   }
 }
 
-// Soumission
 const onSubmit = handleSubmit(async (values) => {
-  if (!updatePhone.value && !updatePassword.value) return // Protection supplémentaire
+  if (!updatePhone.value && !updatePassword.value) return
 
   const payload: UserProfileUpdate = {
     phone: updatePhone.value ? values.phone : undefined,
@@ -242,9 +241,18 @@ const onSubmit = handleSubmit(async (values) => {
     updatePassword.value = false
     await user.loadProfile()
     resetForm()
-    setTimeout(() => (successMessage.value = ''), 3000)
+    setTimeout(() => {
+      successMessage.value = ''
+    }, 3000)
   } catch (err) {
     user.error = handleAxiosError(err)
+    setTimeout(() => {
+      user.error = ''
+      updatePhone.value = false
+      updatePassword.value = false
+      resetForm()
+    }, 3000)
+
   }
 })
 </script>
