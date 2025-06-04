@@ -1,11 +1,11 @@
 <template>
   <div class="relative z-10 max-w-[75rem] mx-auto ">
-    <div v-if="loading" class="text-center mx-auto py-8 text-gray-800 font-base text-xl">
+    <div v-if="loading && !closedShopMessage" class="text-center mx-auto py-8 text-gray-800 font-base text-xl">
       <img :src="loaderSrc" alt="loader" class="mx-auto" />
       <p class="text-3xl font-black font-titles text-gray-4">Chargement ...</p>
     </div>
 
-    <p v-else-if="closedShopMessage" class="text-2xl sm:text-3xl font-bold text-gray-4 text-center mt-40 px-4">{{ closedShopMessage.content }}</p>
+    <p v-else-if="closedShopMessage" class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-4 text-center mt-40 px-4">{{ closedShopMessage.content }}</p>
 
     <Transition
       name="slide-up"
