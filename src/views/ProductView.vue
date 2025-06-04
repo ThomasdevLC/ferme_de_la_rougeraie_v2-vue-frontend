@@ -5,7 +5,6 @@
       <p class="text-3xl font-black font-titles text-gray-4" >Chargement ...</p>
     </div>
 
-
     <Transition
       name="slide-up"
       enter-active-class="transition duration-400"
@@ -32,6 +31,7 @@ const loading = ref(true)
 const loaderSrc = loaderImg
 
 onMounted(async () => {
+  window.scrollTo({ top: 0 })
   try {
     const response = await fetchProducts()
     products.value = response.data as Product[]
