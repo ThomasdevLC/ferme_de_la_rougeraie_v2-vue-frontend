@@ -10,7 +10,7 @@
       <img
         src="/assets/logo.png"
         alt="logo"
-        :class="['transition-all duration-500 mx-auto md:mx-0', scrolled ? 'w-24' : 'w-36']"
+        :class="['transition-all duration-500 mx-auto md:mx-0', scrolled ? 'w-24' : 'w-32 sm:w-36']"
       />
 
       <ul
@@ -30,7 +30,7 @@
             Produits
           </RouterLink>
         </li>
-        <li class="w-1/2 text-center pt-4 pl-8 md:w-auto md:ml-auto md:p-0" :class="['order-last md:order-none']">
+        <li class="w-1/2 text-center pt-4 pl-12 md:w-auto md:ml-auto md:p-0" :class="['order-last md:order-none']">
           <button @click="ui.toggleUserMenu" aria-label="Compte utilisateur" class="cursor-pointer">
             <span v-if="user.isLoggedIn">
               <UserRoundCheck class="w-8 h-8 text-primary transition " />
@@ -41,7 +41,7 @@
           </button>
           <UserMenu />
         </li>
-        <li class="w-1/2 flex justify-center pt-4 pr-8 md:w-auto md:p-0 " :class="['order-last md:order-none']">
+        <li class="w-1/2 flex justify-center pt-4 pr-12 md:w-auto md:p-0 " :class="['order-last md:order-none']">
           <div class="relative cursor-pointer hover:text-black transition" @click="ui.openCart">
             <ShoppingBag class="w-9 h-9 transition bg-white" />
             <div
