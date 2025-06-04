@@ -1,23 +1,31 @@
 <template>
-  <div class="w-full px-124 min-h-screen flex flex-col justify-start relative">
-    <h1 class="text-2xl font-semibold mb-4 text-center">Mes commandes</h1>
+  <div class="w-full px-4 flex flex-col justify-start relative">
 
-    <div v-if="loading" class="text-center py-10 text-gray-500">
-      Chargement des commandes...
-    </div>
+    <div >
+      <h1 class="text-3xl font-semibold mb-10 text-center">Vos commandes</h1>
 
-    <div v-else>
-      <div v-for="order in paginatedOrders" :key="order.id" class="mb-4">
-        <OrderCard :order="order" />
+      <div v-if="loading" class="text-center py-10 text-gray-500">Chargement des commandes...</div>
+
+      <div
+        v-else-if="!hasOrder"
+        class="flex flex-1 items-center justify-center text-2xl font-semibold text-center"
+      >
+        Vous n'avez pas encore de commande en cours
       </div>
 
-      <div class="w-fit m-auto">
-      <OrderPagination
-        :currentPage="currentPage"
-        :totalPages="totalPages"
-        @prev="prevPage"
-        @next="nextPage"
-      />
+      <div v-else>
+        <div v-for="order in paginatedOrders" :key="order.id" class="mb-4">
+          <OrderCard :order="order" />
+        </div>
+
+        <div class="w-fit m-auto">
+          <OrderPagination
+            :currentPage="currentPage"
+            :totalPages="totalPages"
+            @prev="prevPage"
+            @next="nextPage"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -35,14 +43,14 @@ const orders = ref<OrderHistory[]>([])
 const currentPage = ref(1)
 const perPage = 5
 
+const hasOrder = computed(() => orders.value.length > 0)
+
 const paginatedOrders = computed(() => {
   const start = (currentPage.value - 1) * perPage
   return orders.value.slice(start, start + perPage)
 })
 
-const totalPages = computed(() =>
-  Math.ceil(orders.value.length / perPage)
-)
+const totalPages = computed(() => Math.ceil(orders.value.length / perPage))
 
 onMounted(async () => {
   loading.value = true

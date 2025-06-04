@@ -1,10 +1,15 @@
 <template>
-  <div v-if="marqueeMessage" class="marquee bg-black/20 border-b border-b-black text-text-color py-3">
-    <span>{{ marqueeMessage.content }} &nbsp;|&nbsp;</span>
-    <span >{{ marqueeMessage.content }} &nbsp;|&nbsp;</span>
-    <span>{{ marqueeMessage.content }} &nbsp;|&nbsp;</span>
-    <span>{{ marqueeMessage.content }} &nbsp;|&nbsp;</span>
-    <span>{{ marqueeMessage.content }} &nbsp;|&nbsp;</span>
+  <div
+    v-if="marqueeMessage"
+    class="flex items-center justify-start overflow-hidden bg-gray-1 sm:bg-black/20 border-b border-black text-text-color py-2 sm:py-3"
+  >
+    <span
+      v-for="i in 6"
+      :key="i"
+      class="uppercase whitespace-nowrap animate-marquee text-xl sm:text-[1.5rem] font-black mr-6"
+    >
+      {{ marqueeMessage.content }} &nbsp; | &nbsp;
+    </span>
   </div>
 </template>
 
@@ -18,28 +23,6 @@ const marqueeMessage = computed(() => messageStore.marqueeMessage)
 </script>
 
 <style scoped>
-.marquee {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  overflow: hidden;
-}
-
-.marquee span {
-  text-transform: uppercase;
-  will-change: transform;
-  white-space: nowrap;
-  animation: marquee 10s linear infinite;
-  font-size: 1.5rem;
-  font-weight: 900;
-}
-
-.marquee span svg {
-  width: 1.5em;
-  height: 1.5em;
-  margin: 0 0.5rem;
-}
-
 @keyframes marquee {
   0% {
     transform: translateX(0);
@@ -48,4 +31,9 @@ const marqueeMessage = computed(() => messageStore.marqueeMessage)
     transform: translateX(-100%);
   }
 }
+
+.animate-marquee {
+  animation: marquee 10s linear infinite;
+}
 </style>
+

@@ -1,10 +1,10 @@
 <template>
-  <div class="border border-b-gray-3 rounded-sm shadow p-4 mb-6 bg-white/80 ">
-    <div class="flex flex-col sm:flex-row sm:justify-between mb-4">
+  <div class="border border-b-gray-3 min-w-72 max-w-120 mx-auto  rounded-sm shadow p-4 mb-6 bg-white/80 ">
+    <div class="flex flex-row justify-between mb-4">
       <div>
         <p class="text-sm text-gray-500">Commande n°{{ order.id }}</p>
         <p class="text-lg font-semibold">
-          Reçu le {{ formatDate(order.createdAt) }}
+          {{ formatDate(order.createdAt) }}
         </p>
       </div>
       <div class="text-right">

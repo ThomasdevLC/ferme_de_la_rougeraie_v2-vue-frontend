@@ -1,34 +1,33 @@
 <template>
-  <div class="px-96 relative">
-    <div class="mx-auto w-fit mt-16 p-6 bg-white border border-gray-2 rounded-sm">
-      <h1 class="text-3xl font-bold mb-6">Votre profil</h1>
+  <div class="p-4 md:p-0 relative flex justify-center">
+    <div class="w-full md:w-fit md:mt-16 p-6 bg-white border border-gray-2 rounded-sm">
+      <h1 class="text-3xl text-center md:text-start font-bold mb-6">Votre profil</h1>
 
       <div>
-        <div class="flex justify-evenly mb-6">
-          <div class="flex gap-2 items-center ">
+        <div class="flex flex-col md:flex-row justify-evenly mb-6">
+          <div class="flex gap-2 items-center mb-2 md:mb-0">
             <IdCard class="w-12 h-12" :stroke-width="1" />
             <p class="font-bold text-2xl">
               <span> {{ user.profile?.firstName }}&nbsp;</span
               ><span>{{ user.profile?.lastName }}</span>
             </p>
           </div>
-          <div class="flex gap-4">
-
-          <div class="flex gap-2 items-center ">
-            <Mail class="w-7 h-7" :stroke-width="1" />
-            <p class="text-xl">{{ user.profile?.email }}</p>
-          </div>
-          <div class="flex gap-2 items-center">
-            <Phone class="w-7 h-7" :stroke-width="1" />
-            <p class="text-xl">{{ user.profile?.phone }}</p>
-          </div>
+          <div class="flex flex-col md:flex-row gap-4">
+            <div class="flex gap-2 items-center">
+              <Mail class="w-7 h-7" :stroke-width="1" />
+              <p class="text-xl">{{ user.profile?.email }}</p>
+            </div>
+            <div class="flex gap-2 items-center">
+              <Phone class="w-7 h-7" :stroke-width="1" />
+              <p class="text-xl">{{ user.profile?.phone }}</p>
+            </div>
           </div>
         </div>
 
-        <div class="flex justify-center gap-4 text-sm">
+        <div class="flex flex-col sm:flex-row justify-center gap-4 text-sm">
           <button
             @click="togglePhone"
-            class="w-40 bg-primary text-white py-2 px-4 rounded-sm hover:bg-opacity-90  cursor-pointer flex items-center justify-center gap-2"
+            class="w-full md:w-40 bg-primary text-white py-2 px-4 rounded-sm hover:bg-opacity-90 cursor-pointer flex items-center justify-center gap-2"
           >
             <template v-if="updatePhone">
               <PencilOff class="w-5 h-5" :stroke-width="1" />
@@ -42,7 +41,7 @@
 
           <button
             @click="togglePassword"
-            class="w-40 bg-primary text-white py-2 px-4 rounded-sm hover:bg-opacity-90  cursor-pointer flex items-center justify-center gap-2"
+            class="w-full md:w-40 bg-primary text-white py-2 px-4 rounded-sm hover:bg-opacity-90 cursor-pointer flex items-center justify-center gap-2"
           >
             <template v-if="updatePassword">
               <PencilOff class="w-5 h-5" :stroke-width="1" />
@@ -56,18 +55,17 @@
 
           <button
             @click="user.logout()"
-            class="w-fit bg-red-500 text-white py-2 px-4 rounded-sm hover:bg-opacity-90 cursor-pointer flex items-center justify-center gap-2"
+            class="w-full md:w-fit bg-red-500 text-white py-2 px-4 rounded-sm hover:bg-opacity-90 cursor-pointer flex items-center justify-center gap-2"
           >
             <UserRoundX class="w-5 h-5" :stroke-width="1" />
             Suppression compte
           </button>
-
         </div>
       </div>
 
-      <form @submit.prevent="onSubmit" class="space-y-4 px-8 mt-6">
+      <form @submit.prevent="onSubmit" class="space-y-4 md:px-8 mt-6">
         <!-- Modification téléphone -->
-        <div  v-if="updatePhone" class="flex flex-col gap-2">
+        <div v-if="updatePhone" class="flex flex-col gap-2">
           <div>
             <label class="block text-sm font-medium">Ancien téléphone</label>
             <input v-model="oldPhone" type="text" class="w-full border rounded px-3 py-2 mt-1" />
@@ -84,7 +82,7 @@
 
         <!-- Modification mot de passe -->
         <div v-if="updatePassword" class="flex flex-col gap-2">
-          <div >
+          <div>
             <label class="block text-sm font-medium">Mot de passe actuel</label>
             <input
               v-model="oldPassword"
@@ -129,12 +127,14 @@
           </button>
         </div>
 
-        <div v-if="user.error" class="mb-4 p-3 bg-red-100 text-red-800 rounded">
+        <p v-if="user.error" class="mb-4 p-3 bg-red-100 text-red-800 text-center rounded">
+          <CircleX class="inline-block mr-2" :stroke-width="1" />
           {{ user.error }}
-        </div>
-        <div v-else-if="successMessage" class="mb-4 p-3 bg-green-100 text-green-800 rounded">
+        </p>
+        <p v-else-if="successMessage" class="mb-4 p-3 bg-green-100 text-green-800 text-center rounded">
+          <Check class="inline-block mr-2" :stroke-width="1" />
           {{ successMessage }}
-        </div>
+        </p>
       </form>
     </div>
   </div>
@@ -148,7 +148,7 @@ import { updateUserProfile } from '@/services/user-profile-service'
 import type { UserProfileUpdate } from '@/models/user/user-profile-update'
 import { handleAxiosError } from '@/utils/handle-axios-error'
 import { handleAxiosSuccess } from '@/utils/handle-axios-success'
-import { IdCard, Mail, Phone, Pencil, PencilOff, UserRoundX } from 'lucide-vue-next'
+import { IdCard, Mail, Phone, Pencil, PencilOff, UserRoundX , CircleX, Check  } from 'lucide-vue-next'
 
 const user = useUserStore()
 
@@ -156,7 +156,6 @@ const updatePhone = ref(false)
 const updatePassword = ref(false)
 const successMessage = ref('')
 
-// Schéma dynamique
 const schema = computed(() =>
   yup.object({
     oldPhone: yup
@@ -208,7 +207,6 @@ const { value: oldPassword } = useField('oldPassword')
 const { value: newPassword } = useField('newPassword')
 const { value: confirmPassword } = useField('confirmPassword')
 
-// Toggle
 function togglePhone() {
   updatePhone.value = !updatePhone.value
   if (!updatePhone.value) {
@@ -226,9 +224,8 @@ function togglePassword() {
   }
 }
 
-// Soumission
 const onSubmit = handleSubmit(async (values) => {
-  if (!updatePhone.value && !updatePassword.value) return // Protection supplémentaire
+  if (!updatePhone.value && !updatePassword.value) return
 
   const payload: UserProfileUpdate = {
     phone: updatePhone.value ? values.phone : undefined,
@@ -244,9 +241,18 @@ const onSubmit = handleSubmit(async (values) => {
     updatePassword.value = false
     await user.loadProfile()
     resetForm()
-    setTimeout(() => (successMessage.value = ''), 3000)
+    setTimeout(() => {
+      successMessage.value = ''
+    }, 3000)
   } catch (err) {
     user.error = handleAxiosError(err)
+    setTimeout(() => {
+      user.error = ''
+      updatePhone.value = false
+      updatePassword.value = false
+      resetForm()
+    }, 3000)
+
   }
 })
 </script>
