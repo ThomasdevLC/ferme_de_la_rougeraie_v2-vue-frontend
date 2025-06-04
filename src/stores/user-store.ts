@@ -27,9 +27,8 @@ export const useUserStore = defineStore('user', {
       this.error = null;
       try {
         this.profile = await fetchUserProfile();
-      } catch (err: any) {
+      } catch  {
         this.error = 'Erreur lors du chargement du profil';
-        console.error(err);
       } finally {
         this.loading = false;
       }
