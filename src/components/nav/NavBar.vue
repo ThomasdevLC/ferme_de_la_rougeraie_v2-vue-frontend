@@ -61,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, ref, computed } from 'vue'
+import { onMounted, onBeforeUnmount, ref, computed  } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useUIStore } from '@/stores/ui-store.ts'
 import { useUserStore } from '@/stores/user-store.ts'
@@ -80,12 +80,9 @@ const route = router.currentRoute
 const scrolled = ref(false)
 
 function handleScroll() {
-  if (window.innerWidth < 768) {
-    scrolled.value = false
-  } else {
-    scrolled.value = window.scrollY >= 80
-  }
+  scrolled.value = window.innerWidth >= 768 && route.value.path === '/products' && window.scrollY >= 75
 }
+
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
@@ -96,7 +93,10 @@ onBeforeUnmount(() => {
   scrolled.value = false
 })
 
-const displayMarquee = computed(() => {
-  return route.value.path === '/products' && !scrolled.value && !ui.cartOpen
-})
+const displayMarquee = computed(() =>
+  route.value.path === '/products' &&
+  !scrolled.value &&
+  !ui.cartOpen
+)
+
 </script>
