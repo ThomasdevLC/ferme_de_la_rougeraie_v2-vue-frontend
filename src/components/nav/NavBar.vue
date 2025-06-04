@@ -16,16 +16,16 @@
       <ul
         class="flex flex-wrap md:space-x-8 text-[1.7rem] font-semibold text-gray-700 justify-center md:justify-start"
       >
-        <li class="w-1/2 text-center md:w-auto" @click="ui.closeUserMenu">
-          <RouterLink to="/about" class="hover:text-primary transition" active-class="text-primary">
+        <li class="w-1/2 text-center md:w-auto sm:mr-14" @click="ui.closeUserMenu">
+          <RouterLink to="/about" class="hover:text-primary transition" active-class="text-primary underline">
             À propos
           </RouterLink>
         </li>
-        <li class="w-1/2 text-center md:w-auto">
+        <li class="w-1/2 text-center md:w-auto sm:mr-20">
           <RouterLink
             to="/products"
             class="hover:text-primary transition"
-            active-class="text-primary"
+            active-class="text-primary underline"
           >
             Produits
           </RouterLink>
