@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="ui.userMenuOpen"
-    class="absolute right-7 mt-6 w-fit bg-white border border-gray-2 rounded-sm shadow-md z-[9999] py-4 px-6 flex flex-col items-start space-y-4 text-xl"
+    class="absolute right-7 sm:right-0 mt-4 w-fit bg-white border border-gray-2 rounded-sm shadow-md z-[9999] py-4 px-6 flex flex-col items-start space-y-4 text-xl"
   >
     <template v-if="user.isLoggedIn">
       <p class="mb-6">
