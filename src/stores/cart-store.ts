@@ -115,9 +115,12 @@ export const useCartStore = defineStore('cart', {
       return formatPrice(totalInCents);
     },
 
-    async submitOrder(pickup: 'TUESDAY' | 'THURSDAY') {
+    async submitOrder(pickupDate: string) {
+      if (!pickupDate) {
+        throw new Error('Date de retrait manquante')
+      }
       const payload = {
-        pickup,
+        pickupDate,
         items: this.items.map(item => ({
           productId: item.product.id,
           quantity: item.quantity,
