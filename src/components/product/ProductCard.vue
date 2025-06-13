@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col max-w-[260px] h-[440px] bg-white border border-gray-2 relative"
+    class="flex flex-col npm run devw-[260px] h-[440px] bg-white border border-gray-2 relative"
     :title="product.discount && product.discountText ? `${product.name} - ${product.discountText}` : product.name"
   >
     <div class="absolute bottom-[165px] ml-[-5px]">
