@@ -14,7 +14,7 @@
         >
           {{ order.done ? 'Traitée' : 'En attente' }}
         </span>
-        <p class="text-sm text-gray-500 mt-1">Retrait : {{ pickupLabel(order.pickup) }}</p>
+        <p class="text-sm text-gray-500 mt-1">Retrait : {{ formatDate(order.pickupDate, true, false) }}</p>
       </div>
     </div>
 
@@ -44,15 +44,24 @@
       </tr>
       </tfoot>
     </table>
+    <button v-if ="order.isEditable"
+      class="mt-4 w-full bg-primary text-white px-4 py-2 rounded hover:bg-opacity-90 transition"
+      @click="$emit('view-order', order.id)"
+    >
+      Modifier la commande
+    </button>
+
   </div>
+
 </template>
 
 <script setup lang="ts">
 import type { OrderHistory } from '@/models/order/order-history.ts'
 import { formatDate } from '@/utils/date-format.ts'
-import { pickupLabel } from '@/utils/pickup-label.ts'
 const { order } = defineProps<{
   order: OrderHistory
 }>()
+
+console.log ('Order:', order)
 
 </script>
