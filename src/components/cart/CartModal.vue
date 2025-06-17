@@ -81,14 +81,13 @@ const router = useRouter()
 const displayMessage = ref(false)
 const errorMessage   = ref<string|null>(null)
 
-// Panier
 const pickupDate = ref<Date|null>(null)
 
-// Libellé humain pour OrderConfirmation
 const displayPickupLabel = computed(() => {
+console.log(pickupDate.value)
   if (!pickupDate.value) return ''
   return pickupDate.value
-    .toLocaleDateString('fr-FR', { weekday: 'long', day: '2-digit', month: '2-digit' })
+    .toLocaleDateString('fr-FR', { weekday: 'long' })
 })
 
 function goToOrders() {
@@ -102,10 +101,12 @@ async function placeOrder() {
   try {
     await cart.submitOrder(isoDate)
     displayMessage.value = true
-    await new Promise(r => setTimeout(r, 5000))
-    ui.closeCart()
-    displayMessage.value = false
-    pickupDate.value = null
+
+    setTimeout(() => {
+      displayMessage.value = false
+      pickupDate.value    = null
+      ui.closeCart()
+    }, 5000)
   } catch (err) {
     errorMessage.value = handleAxiosError(err)
   }

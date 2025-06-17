@@ -6,7 +6,7 @@
 
     <p>
       Merci {{ userFirstName }}, votre commande a bien été envoyée !<br />
-      À {{ pickup === 'TUESDAY' ? 'mardi' : 'jeudi' }}.
+       À {{ pickup  }}.
     </p>
     <button
       class="w-fit mx-auto cursor-pointer rounded-xs bg-primary text-white text-base font-medium px-4 py-2 hover:bg-opacity-90 "
@@ -20,11 +20,11 @@
 import { defineProps, defineEmits } from 'vue'
 import planeLogo from '/assets/plane.png'
 
-
-defineProps<{
+const { userFirstName, pickup } = defineProps<{
   userFirstName: string
-  pickup: 'TUESDAY' | 'THURSDAY'
+  pickup: string
 }>()
+
 
 defineEmits<{
   (e: 'follow-orders'): void
