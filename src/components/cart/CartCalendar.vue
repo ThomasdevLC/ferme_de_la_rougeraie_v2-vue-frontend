@@ -4,14 +4,14 @@
     <PvCalendar
       id="pickup"
       v-model="innerDate"
-    :min-date="minDate"
-    :max-date="maxDate"
-    :disabled-days="disabledDays"
-    :disabled-dates="disabledDates"
-    date-format="dd/mm/yy"
-    locale="fr"
-    :show-icon="true"
-    input-class="p-inputtext"
+      :min-date="minDate"
+      :max-date="maxDate"
+      :disabled-days="disabledDays"
+      :disabled-dates="disabledDates"
+      date-format="dd/mm/yy"
+      locale="fr"
+      :show-icon="true"
+      input-class="p-inputtext"
     />
   </div>
 </template>
@@ -21,69 +21,74 @@ import { ref, computed, watch } from 'vue'
 import { startOfWeek, addDays } from 'date-fns'
 import PvCalendar from 'primevue/calendar'
 
-// —————————————————————————————————————————
-// 1) PROPS & EMITS pour supporter v-model
-// —————————————————————————————————————————
-const props = defineProps<{
-  modelValue: Date | null
-}>()
+const props = defineProps<{ modelValue: Date | null }>()
+const emit  = defineEmits<{ (e: 'update:modelValue', val: Date | null): void }>()
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', val: Date | null): void
-}>()
-
-// —————————————————————————————————————————
-// 2) ÉTAT LOCAL & SYNCHRONISATION avec v-model
-// —————————————————————————————————————————
 const innerDate = ref<Date|null>(props.modelValue)
+watch(() => props.modelValue, v => innerDate.value = v)
+watch(innerDate, v => emit('update:modelValue', v))
 
-// si le parent change modelValue, on le reflète localement
-watch(() => props.modelValue, v => {
-  innerDate.value = v
-})
-// si l’utilisateur sélectionne une date, on émet l’update
-watch(innerDate, v => {
-  emit('update:modelValue', v)
-})
-
-// —————————————————————————————————————————
-// 3) CALCUL DES BORNES DE SEMAINE
-// —————————————————————————————————————————
 const today     = new Date()
-const weekStart = computed(() => startOfWeek(today, { weekStartsOn: 1 })) // lundi
-const minDate   = computed(() => weekStart.value)                         // date min
-const maxDate   = computed(() => addDays(weekStart.value, 13))            // dimanche S+1
+const weekStart = computed(() => startOfWeek(today, { weekStartsOn: 1 }))
+const minDate   = computed(() => weekStart.value)
+const maxDate   = computed(() => addDays(weekStart.value, 13))
 
-// —————————————————————————————————————————
-// 4) JOURS AUTORISÉS & DÉSACTIVÉS
-// —————————————————————————————————————————
-// on bloque tous les jours de la semaine sauf mardi (2) et vendredi (5)
 const disabledDays = [0,1,3,4,6]
 
-// générer la liste de tous les mardis et vendredis dans la plage
-function listPickupCandidates(): Date[] {
+/**
+ * Generates all Tuesdays and Fridays between minDate and maxDate.
+ *
+ * @returns An array of candidate pickup dates.
+ */
+
+function getPickupDateOptions(): Date[] {
   const dates: Date[] = []
   for (
     let d = new Date(minDate.value);
     d <= maxDate.value;
     d.setDate(d.getDate() + 1)
   ) {
-    const dow = d.getDay() === 0 ? 7 : d.getDay()  // dimanche→7
-    if (dow === 2 || dow === 5) {
-      dates.push(new Date(d))                       // mardi ou vendredi
-    }
+    const dayOfWeekNumber = d.getDay() === 0 ? 7 : d.getDay()
+    if (dayOfWeekNumber === 2 || dayOfWeekNumber === 5) dates.push(new Date(d))
   }
   return dates
 }
 
-// désactiver les dates candidates dont le cutoff (veille à 21h) est déjà passé
+/**
+ * The exact date/time  after which next week’s
+ * pickup dates become selectable.
+ */
+const unlockNextWeek = computed(() => {
+  const fridayThisWeek = new Date(weekStart.value)
+  fridayThisWeek.setDate(fridayThisWeek.getDate() + 4)
+  fridayThisWeek.setHours(0,0,0,0)
+  return fridayThisWeek
+})
+
+//const unlockNextWeek = computed(() => {
+//  const thursday = new Date(weekStart.value)
+ // thursday.setDate(thursday.getDate() + 3)
+ // thursday.setHours(21, 0, 0, 0)
+ // return thursday
+//})
+
+/**
+ * Computes which dates should be disabled in the calendar:
+ *   1. All dates falling in next week before unlockNextWeek.
+ *   2. Any date whose cutoff (the day before at 21:00) has already passed.
+ */
 const disabledDates = computed(() => {
   const now = new Date()
-  return listPickupCandidates().filter(d => {
+  return getPickupDateOptions().filter(d => {
     const cutoff = new Date(d)
-    cutoff.setDate(cutoff.getDate() - 1) // veille
-    cutoff.setHours(21, 0, 0, 0)          // 21:00
-    return now > cutoff                   // true → on désactive
+    cutoff.setDate(cutoff.getDate() - 1)
+    cutoff.setHours(21, 0, 0, 0)
+
+    const isNextWeek = d > addDays(weekStart.value, 6)
+    if (isNextWeek && now < unlockNextWeek.value) {
+      return true
+    }
+    return now > cutoff
   })
 })
 </script>

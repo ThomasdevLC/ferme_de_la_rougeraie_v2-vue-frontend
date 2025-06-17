@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="ui.cartOpen" :closable="true" :closeOnBackdrop="true" >
+  <Modal v-model="ui.cartOpen" :closable="true" :closeOnBackdrop="true">
 
     <template #header>
       <div class="flex gap-3 items-center">
@@ -25,16 +25,9 @@
 
           <p class="flex justify-end text-xl font-semibold">Total : {{ cart.cartTotal }}</p>
 
-          <div v-if="user.isLoggedIn" class="flex flex-col space-y-4 ">
-            <label class="font-semibold">Jour de retrait :</label>
-
-            <CartCalendar
-              v-model="pickupDate"
-              :min-date="minDate"
-              :max-date="maxDate"
-            :disabled-days="disabledDays"
-            :disabled-dates="disabledDates"
-            />
+          <div v-if="user.isLoggedIn" class="flex flex-col space-y-4">
+            <label class="font-semibold">Jour de retrait&nbsp;:</label>
+            <CartCalendar v-model="pickupDate" />
             <button
               class="bg-primary text-white px-4 py-2 hover:bg-opacity-90 cursor-pointer w-fit mx-auto"
               @click="placeOrder"
@@ -64,7 +57,6 @@
   </Modal>
 </template>
 
-
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
@@ -72,7 +64,6 @@ import { useUIStore } from '@/stores/ui-store'
 import { useCartStore } from '@/stores/cart-store'
 import { useUserStore } from '@/stores/user-store'
 import { handleAxiosError } from '@/utils/handle-axios-error'
-import { addDays, startOfWeek } from 'date-fns'
 import { format } from 'date-fns'
 import { ShoppingBag, ArrowRightFromLine } from 'lucide-vue-next'
 
@@ -90,54 +81,21 @@ const router = useRouter()
 const displayMessage = ref(false)
 const errorMessage   = ref<string|null>(null)
 
-// 1) Panier
+// Panier
 const pickupDate = ref<Date|null>(null)
-const today      = new Date()
 
-// 2) Jours de semaine autorisés (0=dimanche…6=samedi)
-const disabledDays = [0,1,3,4,6]  // seuls mardi(2) et vendredi(5) restent actifs
-
-const weekStart = startOfWeek(today, { weekStartsOn: 1 }) // lundi
-const minDate   = computed(() => weekStart)
-const maxDate   = computed(() => addDays(weekStart, 13))  // +13j = dimanche semaine suivante
-
-// 4) Construire la liste des mardis/vendredis dans cette plage
-function listPickupCandidates(): Date[] {
-  const dates: Date[] = []
-  for (let d = new Date(minDate.value); d <= maxDate.value; d.setDate(d.getDate()+1)) {
-    const dow = d.getDay() === 0 ? 7 : d.getDay()
-    if (dow === 2 || dow === 5) {
-      dates.push(new Date(d))
-    }
-  }
-  return dates
-}
-
-// 5) Désactiver les dates dont le cutoff (veille à 21h) est passé
-const disabledDates = computed(() => {
-  const now = new Date()
-  return listPickupCandidates().filter(d => {
-    const cutoff = new Date(d)
-    cutoff.setDate(cutoff.getDate() - 1)
-    cutoff.setHours(21,0,0,0)
-    return now > cutoff
-  })
-})
-
-// 6) Libellé humain pour OrderConfirmation
+// Libellé humain pour OrderConfirmation
 const displayPickupLabel = computed(() => {
   if (!pickupDate.value) return ''
   return pickupDate.value
     .toLocaleDateString('fr-FR', { weekday: 'long', day: '2-digit', month: '2-digit' })
 })
 
-// 7) Navigation
 function goToOrders() {
   router.push('/orders')
   ui.closeCart()
 }
 
-// 8) Soumission
 async function placeOrder() {
   if (!pickupDate.value) return
   const isoDate = format(pickupDate.value, 'yyyy-MM-dd')
@@ -152,13 +110,8 @@ async function placeOrder() {
     errorMessage.value = handleAxiosError(err)
   }
 }
-
 </script>
 
 <style scoped>
-.pickup-picker {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
+
 </style>
