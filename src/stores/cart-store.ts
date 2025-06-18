@@ -9,6 +9,10 @@ export const useCartStore = defineStore('cart', {
   state: () => ({
     items: [] as CartItem[],
 
+    isEditing: false,
+    editPickupDate: '' as string,
+    currentOrderId: null as number | null,
+
   }),
 
   getters: {
@@ -130,7 +134,24 @@ export const useCartStore = defineStore('cart', {
         const response = await createOrder(payload);
         this.clearCart();
         return response;
+    },
+
+    /**
+     * @param orderId
+     * @param pickupDateIso ISO Date "YYYY-MM-DD"
+     */
+    startEditing(orderId: number, pickupDateIso: string) {
+      this.currentOrderId  = orderId
+      this.isEditing       = true
+      this.editPickupDate  = pickupDateIso
+    },
+
+    stopEditing() {
+      this.currentOrderId  = null
+      this.isEditing      = false
+      this.editPickupDate = ''
     }
+
   },
 
 });
