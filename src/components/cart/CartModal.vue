@@ -30,10 +30,9 @@
             <CartCalendar v-model="pickupDate" />
             <button
               class="bg-primary text-white px-4 py-2 hover:bg-opacity-90 cursor-pointer w-fit mx-auto"
-              @click="placeOrder"
+              @click="onSubmit"
             >
-              Valider commande
-            </button>
+              {{ cart.isEditing ? 'Mettre à jour la commande' : 'Valider commande' }}            </button>
           </div>
 
           <p v-if="errorMessage" class="text-red-500 text-center font-semibold">
@@ -58,36 +57,46 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { useUIStore } from '@/stores/ui-store'
-import { useCartStore } from '@/stores/cart-store'
-import { useUserStore } from '@/stores/user-store'
-import { handleAxiosError } from '@/utils/handle-axios-error'
-import { format } from 'date-fns'
+import { format, parseISO } from 'date-fns'
 import { ShoppingBag, ArrowRightFromLine } from 'lucide-vue-next'
-
 import Modal from '@/components/ui/ModalComponent.vue'
 import CartItem from '@/components/cart/CartItem.vue'
 import OrderConfirmation from '@/components/cart/OrderConfirmation.vue'
 import CartCalendar from '@/components/cart/CartCalendar.vue'
 
-const ui = useUIStore()
-const cart = useCartStore()
-const user = useUserStore()
+import { useUIStore } from '@/stores/ui-store'
+import { useCartStore } from '@/stores/cart-store'
+import { useUserStore } from '@/stores/user-store'
+import { handleAxiosError } from '@/utils/handle-axios-error'
+import { updateOrder } from '@/services/order-edit-service'
+
+const ui    = useUIStore()
+const cart  = useCartStore()
+const user  = useUserStore()
 const router = useRouter()
 
-// UI state
+// Local UI state
 const displayMessage = ref(false)
 const errorMessage   = ref<string|null>(null)
-
 const pickupDate = ref<Date|null>(null)
 
+watch(
+  () => cart.editPickupDate,
+  iso => {
+    pickupDate.value = iso ? parseISO(iso) : null
+  },
+  { immediate: true }
+)
+
+watch(pickupDate, date => {
+  cart.editPickupDate = date ? format(date, 'yyyy-MM-dd') : ''
+})
+
 const displayPickupLabel = computed(() => {
-console.log(pickupDate.value)
   if (!pickupDate.value) return ''
-  return pickupDate.value
-    .toLocaleDateString('fr-FR', { weekday: 'long' })
+  return pickupDate.value.toLocaleDateString('fr-FR', { weekday: 'long' })
 })
 
 function goToOrders() {
@@ -95,24 +104,38 @@ function goToOrders() {
   ui.closeCart()
 }
 
-async function placeOrder() {
+
+async function onSubmit() {
   if (!pickupDate.value) return
   const isoDate = format(pickupDate.value, 'yyyy-MM-dd')
-  try {
-    await cart.submitOrder(isoDate)
-    displayMessage.value = true
 
+  try {
+    if (cart.isEditing) {
+      await updateOrder(
+        cart.currentOrderId!,
+        cart.items.map(i => ({
+          productId: i.product.id,
+          quantity:  i.quantity
+        })),
+        isoDate
+      )
+      cart.stopEditing()
+
+    } else {
+      await cart.submitOrder(isoDate)
+    }
+
+    displayMessage.value = true
     setTimeout(() => {
       displayMessage.value = false
-      pickupDate.value    = null
+      pickupDate.value = null
+      cart.stopEditing()
+      cart.clearCart()
       ui.closeCart()
     }, 5000)
+
   } catch (err) {
     errorMessage.value = handleAxiosError(err)
   }
 }
 </script>
-
-<style scoped>
-
-</style>
