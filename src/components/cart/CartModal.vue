@@ -2,10 +2,14 @@
   <Modal v-model="ui.cartOpen" :closable="true" :closeOnBackdrop="true">
 
     <template #header>
-      <div class="flex gap-3 items-center">
+      <div class="flex gap-3 items-center" v-if="!displayMessage">
         <ShoppingBag class="w-8 h-8" />
         <h1 class="text-2xl font-bold">Panier</h1>
         <p v-if="!cart.isEmpty" class="text-gray-500">{{ cart.numberOfProducts }} article(s)</p>
+      </div>
+      <div class="" v-if="cart.isEditing">
+        <p>Modification de votre commande en cours </p>
+
       </div>
     </template>
 
@@ -13,7 +17,7 @@
       <OrderConfirmation
         v-if="displayMessage"
         :userFirstName="user.firstName"
-        :pickup="displayPickupLabel"
+        :pickup="lastPickupLabel"
         @follow-orders="goToOrders"
       />
 
@@ -28,6 +32,10 @@
           <div v-if="user.isLoggedIn" class="flex flex-col space-y-4">
             <label class="font-semibold">Jour de retrait&nbsp;:</label>
             <CartCalendar v-model="pickupDate" />
+            <button v-if="cart.isEditing" @click="abortUpdate">
+              Abandonner la modification
+            </button>
+
             <button
               class="bg-primary text-white px-4 py-2 hover:bg-opacity-90 cursor-pointer w-fit mx-auto"
               @click="onSubmit"
@@ -69,18 +77,20 @@ import CartCalendar from '@/components/cart/CartCalendar.vue'
 import { useUIStore } from '@/stores/ui-store'
 import { useCartStore } from '@/stores/cart-store'
 import { useUserStore } from '@/stores/user-store'
+import { useOrderStore } from '@/stores/order-store'
 import { handleAxiosError } from '@/utils/handle-axios-error'
 import { updateOrder } from '@/services/order/order-edit-service.ts'
 
 const ui    = useUIStore()
 const cart  = useCartStore()
 const user  = useUserStore()
+const orderStore = useOrderStore()
 const router = useRouter()
 
-// Local UI state
 const displayMessage = ref(false)
 const errorMessage   = ref<string|null>(null)
 const pickupDate = ref<Date|null>(null)
+const lastPickupLabel = ref<string>('')
 
 watch(
   () => cart.editPickupDate,
@@ -93,6 +103,12 @@ watch(
 watch(pickupDate, date => {
   cart.editPickupDate = date ? format(date, 'yyyy-MM-dd') : ''
 })
+
+function abortUpdate ()  {
+  cart.stopEditing()
+  cart.clearCart()
+  ui.closeCart()
+}
 
 const displayPickupLabel = computed(() => {
   if (!pickupDate.value) return ''
@@ -111,25 +127,29 @@ async function onSubmit() {
 
   try {
     if (cart.isEditing) {
-      await updateOrder(
-        cart.currentOrderId!,
-        cart.items.map(i => ({
-          productId: i.product.id,
-          quantity:  i.quantity
-        })),
-        isoDate
-      )
-      cart.stopEditing()
+      const payload = {
+        pickupDate: isoDate,
+        items: cart.items.map(item => ({
+          productId: item.product.id,
+          quantity:  item.quantity
+        }))
+      }
+      await updateOrder(cart.currentOrderId!, payload)
+      lastPickupLabel.value   = displayPickupLabel.value
+    displayMessage.value = true
+      await orderStore.loadOrders()
+
 
     } else {
       await cart.submitOrder(isoDate)
+      lastPickupLabel.value = displayPickupLabel.value
+      displayMessage.value  = true
     }
 
-    displayMessage.value = true
     setTimeout(() => {
+      cart.stopEditing()
       displayMessage.value = false
       pickupDate.value = null
-      cart.stopEditing()
       cart.clearCart()
       ui.closeCart()
     }, 5000)
