@@ -14,7 +14,7 @@
         >
           {{ order.done ? 'Traitée' : 'En attente' }}
         </span>
-        <p class="text-sm text-gray-500 mt-1">Retrait : {{ pickupLabel(order.pickup) }}</p>
+        <p class="text-sm text-gray-500 mt-1">Retrait : {{ formatDate(order.pickupDate, true, false) }}</p>
       </div>
     </div>
 
@@ -29,7 +29,7 @@
       </thead>
       <tbody>
       <tr v-for="(item, i) in order.items" :key="i" class="border-b">
-        <td class="px-3 py-2">{{ item.productName }}</td>
+        <td class="px-3 py-2">{{ item.product.name }}</td>
         <td class="px-3 py-2 text-right">{{ item.quantity }}</td>
         <td class="px-3 py-2 text-right">{{ item.unitPrice.toFixed(2) }} €</td>
         <td class="px-3 py-2 text-right">
@@ -44,15 +44,51 @@
       </tr>
       </tfoot>
     </table>
+    <button v-if ="order.isEditable"
+      class="mt-4 w-full bg-primary text-white px-4 py-2 rounded hover:bg-opacity-90 transition"
+      @click="fetchOrder"
+    >
+      Modifier la commande
+    </button>
+
   </div>
+
 </template>
 
 <script setup lang="ts">
 import type { OrderHistory } from '@/models/order/order-history.ts'
+import { getOneOrder } from '@/services/order-single-service.ts'
 import { formatDate } from '@/utils/date-format.ts'
-import { pickupLabel } from '@/utils/pickup-label.ts'
+import { useUIStore } from '@/stores/ui-store.ts'
+import { useCartStore } from '@/stores/cart-store.ts'
 const { order } = defineProps<{
   order: OrderHistory
 }>()
+
+const ui = useUIStore()
+const cart = useCartStore()
+
+
+
+const fetchOrder = async () => {
+  try {
+    const res       = await getOneOrder(order.id)
+    const orderData = res.data
+
+    cart.clearCart()
+    cart.startEditing(
+      orderData.id,
+      orderData.pickupDate.slice(0, 10)
+    )
+
+    orderData.items.forEach(item => {
+      cart.addToCart(item.product, item.quantity)
+    })
+    ui.openCart()
+  } catch (error) {
+    console.error('Erreur fetchOrder :', error)
+  }
+}
+
 
 </script>

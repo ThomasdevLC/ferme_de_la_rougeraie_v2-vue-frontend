@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col max-w-[260px] h-[440px] bg-white border border-gray-2 relative"
+    class="flex flex-col npm run devw-[260px] h-[440px] bg-white border border-gray-2 relative"
     :title="product.discount && product.discountText ? `${product.name} - ${product.discountText}` : product.name"
   >
     <div class="absolute bottom-[165px] ml-[-5px]">
@@ -13,7 +13,7 @@
 
     <div class="h-[280px] overflow-hidden ">
       <img
-        :src="`http://localhost:8000${product.image}`"
+        :src="`${baseUrl}${product.image}`"
         :alt="`Image de ${product.name}`"
         loading="lazy"
         class="w-full h-full object-cover"
@@ -52,17 +52,19 @@ import { useCartStore } from '@/stores/cart-store.ts'
 const { product } = defineProps<{ product: Product }>()
 const cart = useCartStore()
 
+const baseUrl = import.meta.env.VITE_API_BASE_URL
+
 const quantity = ref(0)
 const added = ref(false)
 
 function onAddToCart() {
   if (quantity.value <= 0) return
-
   cart.addToCart(product, quantity.value)
+  }
 
   added.value = true
   setTimeout(() => {
     added.value = false
   }, 1500)
-}
+
 </script>

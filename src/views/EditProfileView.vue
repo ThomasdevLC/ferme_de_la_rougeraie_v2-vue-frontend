@@ -4,7 +4,7 @@
       <h1 class="text-3xl text-center md:text-start font-bold mb-6">Votre profil</h1>
 
       <div>
-        <div class="flex flex-col md:flex-row justify-evenly mb-6">
+        <div class="flex flex-col md:flex-row justify-around mb-6">
           <div class="flex gap-2 items-center mb-2 md:mb-0">
             <IdCard class="w-12 h-12" :stroke-width="1" />
             <p class="font-bold text-2xl">

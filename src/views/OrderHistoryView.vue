@@ -1,7 +1,6 @@
 <template>
   <div class="w-full px-4 flex flex-col justify-start relative">
-
-    <div >
+    <div>
       <h1 class="text-3xl font-semibold mb-10 text-center">Vos commandes</h1>
 
       <div v-if="loading" class="text-center py-10 text-gray-500">Chargement des commandes...</div>
@@ -15,7 +14,7 @@
 
       <div v-else>
         <div v-for="order in paginatedOrders" :key="order.id" class="mb-4">
-          <OrderCard :order="order" />
+          <OrderCard :order="order" :key="order.id" />
         </div>
 
         <div class="w-fit m-auto">

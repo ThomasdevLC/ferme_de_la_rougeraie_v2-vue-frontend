@@ -3,8 +3,10 @@ import type { OrderHistoryItem } from '@/models/order/order-history-item.ts'
 export interface OrderHistory {
   id: number;
   total: number;
-  pickup: 'TUESDAY' | 'THURSDAY';
+  pickupDate: string;
+  pickupDay: number;
   createdAt: string;
   done: boolean;
+  isEditable: boolean;
   items: OrderHistoryItem[];
 }

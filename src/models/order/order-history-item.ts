@@ -1,5 +1,7 @@
+import type { Product } from '@/models/product/product.ts';
+
 export interface OrderHistoryItem {
-  productName: string;
+  product: Product;
   quantity: number;
   unitPrice: number;
   lineTotal: number;
