@@ -1,4 +1,4 @@
-import apiClient from './api-client.ts';
+import apiClient from '../api/api-client.ts';
 import type { OrderHistory } from '@/models/order/order-history.ts';
 
 export const updateOrder = (

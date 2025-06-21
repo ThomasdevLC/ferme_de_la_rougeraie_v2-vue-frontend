@@ -70,7 +70,7 @@ import { useUIStore } from '@/stores/ui-store'
 import { useCartStore } from '@/stores/cart-store'
 import { useUserStore } from '@/stores/user-store'
 import { handleAxiosError } from '@/utils/handle-axios-error'
-import { updateOrder } from '@/services/order-edit-service'
+import { updateOrder } from '@/services/order/order-edit-service.ts'
 
 const ui    = useUIStore()
 const cart  = useCartStore()

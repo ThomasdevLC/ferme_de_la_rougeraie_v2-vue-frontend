@@ -1,5 +1,4 @@
-// src/services/user-profile-service.ts
-import http from '@/services/api-client.ts'
+import http from '@/services/api/api-client.ts'
 import type { UserProfile } from '@/models/user/user-profile.ts'
 import type { AxiosResponse } from 'axios'
 import type { UserProfileUpdate } from '@/models/user/user-profile-update.ts'

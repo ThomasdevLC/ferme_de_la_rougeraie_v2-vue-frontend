@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { getOrders } from '@/services/order-history-service.ts'
+import { getOrders } from '@/services/order/order-history-service.ts'
 import type { OrderHistory } from '@/models/order/order-history.ts'
 import OrderCard from '@/components/order/OrderCard.vue'
 import OrderPagination from '@/components/order/OrderPagination.vue'

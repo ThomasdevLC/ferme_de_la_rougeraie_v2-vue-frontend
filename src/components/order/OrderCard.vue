@@ -57,7 +57,7 @@
 
 <script setup lang="ts">
 import type { OrderHistory } from '@/models/order/order-history.ts'
-import { getOneOrder } from '@/services/order-single-service.ts'
+import { getOneOrder } from '@/services/order/order-single-service.ts'
 import { formatDate } from '@/utils/date-format.ts'
 import { useUIStore } from '@/stores/ui-store.ts'
 import { useCartStore } from '@/stores/cart-store.ts'

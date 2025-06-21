@@ -2,7 +2,7 @@
 import { defineStore } from 'pinia';
 import type { UserProfile } from '@/models/user/user-profile.ts'
 import type { UserProfileUpdate } from '@/models/user/user-profile-update.ts'
-import { fetchUserProfile, updateUserProfile } from '@/services/user-profile-service';
+import { fetchUserProfile, updateUserProfile } from '@/services/user/user-profile-service.ts';
 import { useAuthStore } from '@/stores/auth-store.ts'
 import type { AxiosResponse } from 'axios'
 
