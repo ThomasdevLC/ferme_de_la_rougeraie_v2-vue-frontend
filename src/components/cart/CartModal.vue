@@ -1,15 +1,17 @@
 <template>
   <Modal v-model="ui.cartOpen" :closable="true" :closeOnBackdrop="true">
-
     <template #header>
       <div class="flex gap-3 items-center" v-if="!displayMessage">
         <ShoppingBag class="w-8 h-8" />
         <h1 class="text-2xl font-bold">Panier</h1>
         <p v-if="!cart.isEmpty" class="text-gray-500">{{ cart.numberOfProducts }} article(s)</p>
       </div>
-      <div class="" v-if="cart.isEditing">
-        <p>Modification de votre commande en cours </p>
-
+      <div
+        class="pt-4 flex flex-row justify-center items-baseline space-x-2 text-md"
+        v-if="cart.isEditing && !displayMessage"
+      >
+        <CircleAlert class="w-5 h-5 text-primary" />
+        <p>Modification de votre commande n° {{ cart.currentOrderId }} en cours</p>
       </div>
     </template>
 
@@ -32,15 +34,22 @@
           <div v-if="user.isLoggedIn" class="flex flex-col space-y-4">
             <label class="font-semibold">Jour de retrait&nbsp;:</label>
             <CartCalendar v-model="pickupDate" />
-            <button v-if="cart.isEditing" @click="abortUpdate">
-              Abandonner la modification
-            </button>
+            <div class="flex justify-center space-x-4 pt-4">
+              <button
+                class="text-primary border-2 border-primary px-4 py-2 hover:bg-opacity-90 cursor-pointer w-fit "
+                v-if="cart.isEditing"
+                @click="abortUpdate"
+              >
+                Abandonner la modification
+              </button>
 
-            <button
-              class="bg-primary text-white px-4 py-2 hover:bg-opacity-90 cursor-pointer w-fit mx-auto"
-              @click="onSubmit"
-            >
-              {{ cart.isEditing ? 'Mettre à jour la commande' : 'Valider commande' }}            </button>
+              <button
+                class="bg-primary text-white px-4 py-2 hover:bg-opacity-90 cursor-pointer w-fit "
+                @click="onSubmit"
+              >
+                {{ cart.isEditing ? 'Mettre à jour la commande' : 'Valider commande' }}
+              </button>
+            </div>
           </div>
 
           <p v-if="errorMessage" class="text-red-500 text-center font-semibold">
@@ -65,15 +74,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, toRef } from 'vue'
 import { useRouter } from 'vue-router'
-import { format, parseISO } from 'date-fns'
-import { ShoppingBag, ArrowRightFromLine } from 'lucide-vue-next'
+import { format } from 'date-fns'
+import { ShoppingBag, ArrowRightFromLine, CircleAlert } from 'lucide-vue-next'
 import Modal from '@/components/ui/ModalComponent.vue'
 import CartItem from '@/components/cart/CartItem.vue'
 import OrderConfirmation from '@/components/cart/OrderConfirmation.vue'
 import CartCalendar from '@/components/cart/CartCalendar.vue'
 
+import { useSyncedDate } from '@/composables/useSyncedDate'
 import { useUIStore } from '@/stores/ui-store'
 import { useCartStore } from '@/stores/cart-store'
 import { useUserStore } from '@/stores/user-store'
@@ -81,30 +91,34 @@ import { useOrderStore } from '@/stores/order-store'
 import { handleAxiosError } from '@/utils/handle-axios-error'
 import { updateOrder } from '@/services/order/order-edit-service.ts'
 
-const ui    = useUIStore()
-const cart  = useCartStore()
-const user  = useUserStore()
+const ui = useUIStore()
+const cart = useCartStore()
+const user = useUserStore()
 const orderStore = useOrderStore()
 const router = useRouter()
 
 const displayMessage = ref(false)
-const errorMessage   = ref<string|null>(null)
-const pickupDate = ref<Date|null>(null)
+const errorMessage = ref<string | null>(null)
 const lastPickupLabel = ref<string>('')
+const isoPickupRef = toRef(cart, 'editPickupDate')
+const pickupDate = useSyncedDate(isoPickupRef)
+const originalPickup = ref<string>('')
+const originalItems = ref<{ productId: number; quantity: number }[]>([])
 
 watch(
-  () => cart.editPickupDate,
-  iso => {
-    pickupDate.value = iso ? parseISO(iso) : null
+  () => cart.isEditing,
+  (isEditing) => {
+    if (isEditing) {
+      originalPickup.value = cart.editPickupDate
+      originalItems.value = cart.items.map((i) => ({
+        productId: i.product.id,
+        quantity: i.quantity,
+      }))
+    }
   },
-  { immediate: true }
 )
 
-watch(pickupDate, date => {
-  cart.editPickupDate = date ? format(date, 'yyyy-MM-dd') : ''
-})
-
-function abortUpdate ()  {
+function abortUpdate() {
   cart.stopEditing()
   cart.clearCart()
   ui.closeCart()
@@ -120,30 +134,39 @@ function goToOrders() {
   ui.closeCart()
 }
 
-
 async function onSubmit() {
   if (!pickupDate.value) return
   const isoDate = format(pickupDate.value, 'yyyy-MM-dd')
+
+  if (cart.isEditing) {
+    const currentItems = cart.items.map((i) => ({
+      productId: i.product.id,
+      quantity: i.quantity,
+    }))
+    const sameDate = isoDate === originalPickup.value
+    const sameItems = JSON.stringify(currentItems) === JSON.stringify(originalItems.value)
+    if (sameDate && sameItems) {
+      return
+    }
+  }
 
   try {
     if (cart.isEditing) {
       const payload = {
         pickupDate: isoDate,
-        items: cart.items.map(item => ({
+        items: cart.items.map((item) => ({
           productId: item.product.id,
-          quantity:  item.quantity
-        }))
+          quantity: item.quantity,
+        })),
       }
       await updateOrder(cart.currentOrderId!, payload)
-      lastPickupLabel.value   = displayPickupLabel.value
-    displayMessage.value = true
+      lastPickupLabel.value = displayPickupLabel.value
+      displayMessage.value = true
       await orderStore.loadOrders()
-
-
     } else {
       await cart.submitOrder(isoDate)
       lastPickupLabel.value = displayPickupLabel.value
-      displayMessage.value  = true
+      displayMessage.value = true
     }
 
     setTimeout(() => {
@@ -153,7 +176,6 @@ async function onSubmit() {
       cart.clearCart()
       ui.closeCart()
     }, 5000)
-
   } catch (err) {
     errorMessage.value = handleAxiosError(err)
   }
