@@ -1,13 +1,12 @@
-// src/utils/price.ts
 
 /**
- * Converts a euro price to cents in a deterministic way:
- * 1. on fige le float à 2 décimales
- * 2. on supprime le point et on parse en int
+ * Converts a euro price to cents :
+ * 1. Fixes the price to 2 decimal
+ * 2. Removes the decimal point and parses it as an integer
  */
 export function convertPriceToCents(price: number): number {
-  const fixed = price.toFixed(2);      // ex. price = 2.995 → "3.00", price = 2.99 → "2.99"
-  const digits = fixed.replace('.', ''); // "300" ou "299"
+  const fixed = price.toFixed(2);
+  const digits = fixed.replace('.', '');
   return parseInt(digits, 10);
 }
 
