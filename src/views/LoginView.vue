@@ -1,16 +1,9 @@
 <template>
+  <ModalComponent v-model="showSuccessModal" :closable="true" :close-on-backdrop="true">
+    <div class="flex flex-col items-center justify-center text-center p-8">
+      <CircleCheckBig class="ThumbsUp tilt-n-move text-green-500 w-16 h-16 mb-4" />
 
-  <ModalComponent
-    v-model="showSuccessModal"
-    :closable="true"
-    :close-on-backdrop="true"
-  >
-    <div  class="flex flex-col items-center justify-center text-center p-8 ">
-      <CircleCheckBig
-        class="ThumbsUp tilt-n-move text-green-500 w-16 h-16 mb-4"
-      />
-
-      <div  class="circle-wrap ">
+      <div class="circle-wrap">
         <div class="circle-lg"></div>
       </div>
       <div class="dots-wrap">
@@ -21,13 +14,16 @@
         <div class="dot dot--bl"></div>
         <div class="dot dot--tl"></div>
       </div>
-      <p v-if="showRegisterSuccessModal" class="mt-4 text-lg">Inscription réussie. Vous pouvez maintenant vous connecter</p>
-      <p v-else class="mt-4 text-lg">Mot de passe réinitialisé. Vous pouvez maintenant vous connecter</p>
+      <p v-if="showRegisterSuccessModal" class="mt-4 text-lg">
+        Inscription réussie. Vous pouvez maintenant vous connecter
+      </p>
+      <p v-else class="mt-4 text-lg">
+        Mot de passe réinitialisé. Vous pouvez maintenant vous connecter
+      </p>
     </div>
-
   </ModalComponent>
 
-  <div class="max-w-md mx-auto p-6 bg-white shadow rounded relative ">
+  <div class="max-w-md mx-auto p-6 bg-white shadow rounded relative">
     <h2 class="text-xl font-bold mb-4 text-center">Connexion</h2>
 
     <form @submit.prevent="handleLogin" class="space-y-4">
@@ -45,7 +41,6 @@
       <div>
         <label for="password" class="block text-sm font-medium">Mot de passe</label>
         <div class="relative mt-1">
-          <!-- Le champ passe de "password" à "text" selon showPassword -->
           <input
             v-model="password"
             :type="showPassword ? 'text' : 'password'"
@@ -53,18 +48,14 @@
             required
             class="w-full border rounded px-3 py-2 pr-10"
           />
-          <!-- Bouton de toggle -->
+
           <button
             type="button"
             @click="showPassword = !showPassword"
-            class="cursor-pointer  absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700"
+            class="cursor-pointer absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700"
             :aria-label="showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'"
           >
-            <component
-              :is="showPassword ? EyeOff : Eye"
-              class="w-5 h-5"
-              stroke-width="1.5"
-            />
+            <component :is="showPassword ? EyeOff : Eye" class="w-5 h-5" stroke-width="1.5" />
           </button>
         </div>
       </div>
@@ -73,8 +64,9 @@
 
       <button
         type="submit"
-        class="w-full bg-primary text-white py-2 px-4 rounded hover:bg-opacity-90 cursor-pointer"
+        class="w-full bg-primary text-white py-2 px-4 rounded hover:bg-opacity-90 cursor-pointer flex items-center justify-center"
       >
+          <Loader v-if="loading"  class="animate-spin mr-2 w-4 h-4" stroke-width="1" />
         Se connecter
       </button>
     </form>
@@ -95,13 +87,13 @@ import '@/assets/css/modal-animations.css'
 import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { login } from '@/services/auth/auth-service.ts'
+import ModalComponent from '@/components/ui/ModalComponent.vue'
 import { useAuthStore } from '@/stores/auth-store.ts'
 import { useUserStore } from '@/stores/user-store.ts'
 import { useCartStore } from '@/stores/cart-store.ts'
 import { useUIStore } from '@/stores/ui-store.ts'
 import { CircleCheckBig } from 'lucide-vue-next'
-import ModalComponent from '@/components/ui/ModalComponent.vue'
-import { Eye, EyeOff } from 'lucide-vue-next'
+import { Eye, EyeOff, Loader } from 'lucide-vue-next'
 
 const email = ref('')
 const password = ref('')
@@ -121,6 +113,8 @@ const showPassword = ref(false)
 
 const showRegisterSuccessModal = ref(false)
 const showResetSuccessModal = ref(false)
+
+const loading = ref(false)
 
 function redirectToLogin() {
   router.replace({ path: route.path, query: {} })
@@ -143,12 +137,13 @@ if (route.query.reset) {
   }, 5000)
 }
 
-const showSuccessModal = computed(() =>
-  showRegisterSuccessModal.value || showResetSuccessModal.value
+const showSuccessModal = computed(
+  () => showRegisterSuccessModal.value || showResetSuccessModal.value,
 )
 
 const handleLogin = async () => {
   error.value = ''
+  loading.value = true
 
   try {
     const response = await login({
@@ -161,6 +156,7 @@ const handleLogin = async () => {
     auth.setToken(token)
     await userStore.loadProfile()
     await router.push('/products')
+    loading.value = false
 
     if (!cart.isEmpty) {
       ui.openCart()
@@ -170,4 +166,3 @@ const handleLogin = async () => {
   }
 }
 </script>
-
