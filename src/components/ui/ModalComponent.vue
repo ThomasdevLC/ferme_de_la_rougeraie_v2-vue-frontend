@@ -1,19 +1,16 @@
 <template>
   <transition name="modal-fade">
     <div v-if="modelValue" class="fixed inset-0 z-50 flex items-center justify-center">
-      <!-- backdrop -->
       <div
         class="absolute inset-0 bg-black/50 backdrop-blur-xs"
         @click="closeOnBackdrop && close()"
       ></div>
 
-      <!-- container -->
       <div
         class="relative bg-white max-w-[90vw] lg:max-w-[50vw] max-h-[90vh] lg:max-h-[75vh] w-full p-6 shadow-lg z-10 overflow-y-auto p-6 md:p-12"
         role="dialog"
         aria-modal="true"
       >
-        <!-- close button slot or default -->
         <button
           v-if="closable"
           @click="close()"
@@ -25,17 +22,14 @@
           </slot>
         </button>
 
-        <!-- header slot -->
         <header v-if="$slots.header" class="mb-4">
           <slot name="header"></slot>
         </header>
 
-        <!-- main content slot -->
         <section>
           <slot />
         </section>
 
-        <!-- footer slot -->
         <footer v-if="$slots.footer" class="mt-6">
           <slot name="footer"></slot>
         </footer>
