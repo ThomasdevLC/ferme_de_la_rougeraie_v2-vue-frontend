@@ -5,7 +5,7 @@
     <img :src="planeLogo" alt="plane logo" class="w-14 mx-auto" />
 
     <p>
-      Merci {{ userFirstName }}, votre commande a bien été envoyée !<br />
+      Merci {{ userFirstName }}, votre commande a bien été {{ action }}  !<br />
        À {{ pickup  }}.
     </p>
     <button
@@ -17,17 +17,26 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue'
+import { defineProps, defineEmits, computed } from 'vue'
 import planeLogo from '/assets/plane.png'
+import { useCartStore } from '@/stores/cart-store'
+
+const cartStore = useCartStore()
 
 const { userFirstName, pickup } = defineProps<{
   userFirstName: string
   pickup: string
 }>()
 
+const action = computed(() =>
+  cartStore.isEditing ? 'modifiée' : 'envoyée'
+)
 
 defineEmits<{
   (e: 'follow-orders'): void
 }>()
+
+
+
 
 </script>

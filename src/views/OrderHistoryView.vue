@@ -32,15 +32,17 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { getOrders } from '@/services/order-history-service.ts'
-import type { OrderHistory } from '@/models/order/order-history.ts'
+import { useOrderStore } from '@/stores/order-store'
 import OrderCard from '@/components/order/OrderCard.vue'
 import OrderPagination from '@/components/order/OrderPagination.vue'
 
-const loading = ref(true)
-const orders = ref<OrderHistory[]>([])
 const currentPage = ref(1)
 const perPage = 5
+
+const orderStore = useOrderStore()
+
+const orders = computed(() => orderStore.orders)
+const loading = computed(() => orderStore.loading)
 
 const hasOrder = computed(() => orders.value.length > 0)
 
@@ -52,10 +54,7 @@ const paginatedOrders = computed(() => {
 const totalPages = computed(() => Math.ceil(orders.value.length / perPage))
 
 onMounted(async () => {
-  loading.value = true
-  const response = await getOrders()
-  orders.value = response.data
-  loading.value = false
+  await orderStore.loadOrders()
 })
 
 function nextPage() {
@@ -66,3 +65,4 @@ function prevPage() {
   if (currentPage.value > 1) currentPage.value--
 }
 </script>
+

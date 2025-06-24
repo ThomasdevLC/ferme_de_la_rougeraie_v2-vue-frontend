@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
-import { fetchProducts } from '@/services/product-service.ts'
+import { fetchProducts } from '@/services/product/product-service.ts'
 import { useMessageStore } from '@/stores/message-store.ts'
 import type { Product } from '@/models/product/product.ts'
 import ProductCard from '@/components/product/ProductCard.vue'

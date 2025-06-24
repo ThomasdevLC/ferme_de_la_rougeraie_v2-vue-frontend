@@ -1,6 +1,6 @@
 <template>
   <div class="pickup-picker">
-    <label for="pickup">Date de retrait</label>
+
     <PvCalendar
       id="pickup"
       v-model="innerDate"

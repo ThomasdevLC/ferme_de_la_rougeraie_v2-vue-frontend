@@ -45,7 +45,7 @@
       </tfoot>
     </table>
     <button v-if ="order.isEditable"
-      class="mt-4 w-full bg-primary text-white px-4 py-2 rounded hover:bg-opacity-90 transition"
+      class="w-fit mt-4 mx-auto bg-primary text-white px-4 py-2 rounded hover:bg-opacity-90 transition cursor-pointer"
       @click="fetchOrder"
     >
       Modifier la commande
@@ -57,7 +57,7 @@
 
 <script setup lang="ts">
 import type { OrderHistory } from '@/models/order/order-history.ts'
-import { getOneOrder } from '@/services/order-single-service.ts'
+import { getOneOrder } from '@/services/order/order-single-service.ts'
 import { formatDate } from '@/utils/date-format.ts'
 import { useUIStore } from '@/stores/ui-store.ts'
 import { useCartStore } from '@/stores/cart-store.ts'

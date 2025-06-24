@@ -1,4 +1,4 @@
-import apiClient from './api-client.ts';
+import apiClient from '../api/api-client.ts';
 import type { Product } from '@/models/product/product.ts';
 
 export const fetchProducts = () => {

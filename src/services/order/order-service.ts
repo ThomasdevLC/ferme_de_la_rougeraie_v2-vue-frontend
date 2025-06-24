@@ -1,4 +1,4 @@
-import apiClient from './api-client.ts';
+import apiClient from '../api/api-client.ts';
 import type { CreateOrderPayload } from '@/models/order/create-order-payload.ts';
 
 export const createOrder = (payload: CreateOrderPayload) => {

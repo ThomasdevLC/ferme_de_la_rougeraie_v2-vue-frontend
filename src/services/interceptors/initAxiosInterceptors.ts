@@ -1,8 +1,7 @@
-// src/services/initAxiosInterceptors.ts
 import type { Router } from 'vue-router'
-import http from '@/services/api-client'
-import { useAuthStore } from '@/stores/auth-store'
-import { useUserStore } from '@/stores/user-store'
+import http from '@/services/api/api-client.ts'
+import { useAuthStore } from '@/stores/auth-store.ts'
+import { useUserStore } from '@/stores/user-store.ts'
 
 export function initAxiosInterceptors(router: Router) {
   http.interceptors.response.use(

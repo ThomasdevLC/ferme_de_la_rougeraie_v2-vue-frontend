@@ -1,8 +1,13 @@
+
 /**
- * Converts a euro price  to cents
+ * Converts a euro price to cents :
+ * 1. Fixes the price to 2 decimal
+ * 2. Removes the decimal point and parses it as an integer
  */
 export function convertPriceToCents(price: number): number {
-  return Math.round(price * 100);
+  const fixed = price.toFixed(2);
+  const digits = fixed.replace('.', '');
+  return parseInt(digits, 10);
 }
 
 /**

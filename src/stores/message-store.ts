@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { fetchMessages } from '@/services/message-service';
+import { fetchMessages } from '@/services/message/message-service.ts';
 import type { Message } from '@/models/message/message';
 
 export const useMessageStore = defineStore('messages', {

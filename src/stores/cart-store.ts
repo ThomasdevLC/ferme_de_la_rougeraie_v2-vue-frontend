@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 import type { Product } from '@/models/product/product.ts';
 import type { CartItem } from '@/models/cart/cart-item.ts';
 import { convertPriceToCents, formatPrice } from '@/utils/price'
-import { createOrder } from '@/services/order-service.ts'
+import { createOrder } from '@/services/order/order-service.ts'
 
 export const useCartStore = defineStore('cart', {
   state: () => ({

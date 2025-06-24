@@ -1,4 +1,4 @@
-import apiClient from './api-client.ts';
+import apiClient from '../api/api-client.ts';
 import type { Message } from '@/models/message/message.ts';
 
 export const fetchMessages = async () => {

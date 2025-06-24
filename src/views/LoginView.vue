@@ -94,7 +94,7 @@
 import '@/assets/css/modal-animations.css'
 import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { login } from '@/services/auth-service.ts'
+import { login } from '@/services/auth/auth-service.ts'
 import { useAuthStore } from '@/stores/auth-store.ts'
 import { useUserStore } from '@/stores/user-store.ts'
 import { useCartStore } from '@/stores/cart-store.ts'
