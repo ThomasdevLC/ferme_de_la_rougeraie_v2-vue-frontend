@@ -45,7 +45,7 @@
       </tfoot>
     </table>
     <button v-if ="order.isEditable"
-      class="mt-4 w-full bg-primary text-white px-4 py-2 rounded hover:bg-opacity-90 transition"
+      class="w-fit mt-4 mx-auto bg-primary text-white px-4 py-2 rounded hover:bg-opacity-90 transition cursor-pointer"
       @click="fetchOrder"
     >
       Modifier la commande
