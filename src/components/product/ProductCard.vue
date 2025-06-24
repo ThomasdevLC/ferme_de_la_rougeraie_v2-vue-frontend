@@ -60,11 +60,12 @@ const added = ref(false)
 function onAddToCart() {
   if (quantity.value <= 0) return
   cart.addToCart(product, quantity.value)
-  }
-
   added.value = true
   setTimeout(() => {
     added.value = false
   }, 1500)
+
+}
+
 
 </script>
