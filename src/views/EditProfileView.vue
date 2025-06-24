@@ -198,6 +198,9 @@ const updatePassword = ref(false)
 const successMessage = ref('')
 const error = ref<string>('')
 
+const FRENCH_PHONE_REGEX = /^0[1-9]\d{8}$/
+
+
 onMounted(async () => {
   if (!userStore.profile) {
     {
@@ -249,6 +252,7 @@ const schema = computed(() =>
 // VeeValidate
 const { handleSubmit, resetForm, errors } = useForm({
   validationSchema: schema,
+
 })
 
 const { value: oldPhone } = useField('oldPhone')
@@ -274,7 +278,14 @@ function togglePassword() {
   }
 }
 
+
 const onSubmit = handleSubmit(async (values) => {
+  if (updatePhone.value) {
+    if (!FRENCH_PHONE_REGEX.test(values.phone)) {
+      error.value = 'Le numéro doit être au format français (10 chiffres, commençant par 0)'
+      return
+    }
+  }
   if (!updatePhone.value && !updatePassword.value) return
 
   const payload: UserProfileUpdate = {
