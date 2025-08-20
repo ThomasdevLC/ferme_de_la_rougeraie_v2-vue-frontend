@@ -8,30 +8,36 @@
       <div
         class="flex items-center justify-center px-2 py-0.5 text-sm border-t border-b"
         :class="{
-          'w-14': unit === 'Kilo',
-          'w-10': unit !== 'Kilo',
-        }"
+        'w-14': unit === 'Kilo',
+        'w-10': unit !== 'Kilo',
+      }"
       >
         <span>{{ displayedQuantity }}</span>
         <span v-if="unit === 'Kilo'" class="text-xs ml-1">Kg</span>
       </div>
 
-      <button
-        @click="onIncrement"
-        :disabled="isMax"
-        class="cursor-pointer w-7 bg-white border text-sm px-2 py-0.5"
-      >
-        +
-      </button>
-    </div>
+      <div class="relative inline-flex">
+        <button
+          @click="onIncrement"
+          :disabled="isMax"
+          class="cursor-pointer w-7 bg-white border text-sm px-2 py-0.5"
+        >
+          +
+        </button>
 
-    <p
-      v-if="isMax"
-      class="text-xs bg-xtra-light-primary text-red-500 rounded-sm px-2 py-1 mt-2 md:mt-0 md:ml-2"
-    >
-      Stock max atteint
-    </p>
+        <p
+          v-if="isMax"
+          class="absolute bottom-full left-1 mb-1
+               text-xs bg-red-50 text-red-600 border border-red-200
+               rounded-sm px-2 py-0.5  whitespace-nowrap z-10
+               pointer-events-none"
+        >
+          Stock max atteint
+        </p>
+      </div>
+    </div>
   </div>
+
 </template>
 
 <script setup lang="ts">

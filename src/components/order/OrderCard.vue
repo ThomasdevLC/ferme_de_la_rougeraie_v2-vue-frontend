@@ -44,12 +44,15 @@
       </tr>
       </tfoot>
     </table>
+    <div class="flex justify-center">
+
     <button v-if ="order.isEditable"
-      class="w-fit mt-4 mx-auto bg-primary text-white px-4 py-2 rounded hover:bg-opacity-90 transition cursor-pointer"
+      class="w-fit mt-4  bg-primary text-white px-4 py-2 rounded hover:bg-opacity-90 transition cursor-pointer"
       @click="fetchOrder"
     >
       Modifier la commande
     </button>
+    </div>
 
   </div>
 
@@ -89,6 +92,4 @@ const fetchOrder = async () => {
     console.error('Erreur fetchOrder :', error)
   }
 }
-
-
 </script>
