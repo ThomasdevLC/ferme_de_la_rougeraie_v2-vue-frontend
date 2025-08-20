@@ -46,7 +46,6 @@ onMounted(() => {
     <Navbar />
   </header>
 
-
   <main @click="ui.closeUserMenu" class="relative min-h-screen text-text-color pt-80 md:pt-60 pb-12">
     <img src="/assets/background.png"
          alt="Background"

@@ -1,4 +1,3 @@
-// src/stores/user-store.ts
 import { defineStore } from 'pinia'
 import type { UserProfile } from '@/models/user/user-profile.ts'
 import type { UserProfileUpdate } from '@/models/user/user-profile-update.ts'
