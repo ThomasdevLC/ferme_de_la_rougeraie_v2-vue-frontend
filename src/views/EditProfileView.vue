@@ -4,22 +4,22 @@
       <h1 class="text-3xl text-center md:text-start font-bold mb-6">Votre profil</h1>
 
       <div>
-        <div class="flex flex-col md:flex-row justify-around mb-6">
+        <div class="flex flex-col md:flex-row justify-around mb-6 space-x-4">
           <div class="flex gap-2 items-center mb-2 md:mb-0">
             <IdCard class="w-12 h-12" :stroke-width="1" />
             <p class="font-bold text-2xl">
-              <span> {{ user.profile?.firstName }}&nbsp;</span
-              ><span>{{ user.profile?.lastName }}</span>
+              <span> {{ userStore.profile?.firstName }}&nbsp;</span
+              ><span>{{ userStore.profile?.lastName }}</span>
             </p>
           </div>
           <div class="flex flex-col md:flex-row gap-4">
             <div class="flex gap-2 items-center">
               <Mail class="w-7 h-7" :stroke-width="1" />
-              <p class="text-xl">{{ user.profile?.email }}</p>
+              <p class="text-xl">{{ userStore.profile?.email }}</p>
             </div>
             <div class="flex gap-2 items-center">
               <Phone class="w-7 h-7" :stroke-width="1" />
-              <p class="text-xl">{{ user.profile?.phone }}</p>
+              <p class="text-xl">{{ userStore.profile?.phone }}</p>
             </div>
           </div>
         </div>
@@ -54,15 +54,47 @@
           </button>
 
           <button
-            @click="user.logout()"
+            @click="ui.openConfirmDeleteModal()"
             class="w-full md:w-fit bg-red-500 text-white py-2 px-4 rounded-sm hover:bg-opacity-90 cursor-pointer flex items-center justify-center gap-2"
           >
             <UserRoundX class="w-5 h-5" :stroke-width="1" />
             Suppression compte
           </button>
         </div>
+
+        <ModalComponent
+          :modelValue="ui.confirmDeleteModalOpen"
+          @update:modelValue="(val) => (val ? null : ui.closeConfirmDeleteModal())"
+          :closable="false"
+          :closeOnBackdrop="false"
+        >
+          <template #header>
+            <h2 class="text-xl font-bold">Confirmation</h2>
+          </template>
+
+          <p>Êtes-vous sûr de vouloir supprimer définitivement votre compte ?</p>
+
+          <template #footer>
+            <div class="flex justify-end gap-4">
+              <button
+                @click="ui.closeConfirmDeleteModal()"
+                class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
+              >
+                Annuler
+              </button>
+              <button
+                @click="confirmDelete()"
+                class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 cursor-pointer"
+              >
+                Oui, supprimer
+              </button>
+            </div>
+          </template>
+        </ModalComponent>
       </div>
 
+
+    <div>
       <form @submit.prevent="onSubmit" class="space-y-4 md:px-8 mt-6">
         <!-- Modification téléphone -->
         <div v-if="updatePhone" class="flex flex-col gap-2">
@@ -127,34 +159,55 @@
           </button>
         </div>
 
-        <p v-if="user.error" class="mb-4 p-3 bg-red-100 text-red-800 text-center rounded">
+        <p v-if="error" class="mb-4 p-3 bg-red-100 text-red-800 text-center rounded">
           <CircleX class="inline-block mr-2" :stroke-width="1" />
-          {{ user.error }}
+          {{ error }}
         </p>
-        <p v-else-if="successMessage" class="mb-4 p-3 bg-green-100 text-green-800 text-center rounded">
+        <p
+          v-else-if="successMessage"
+          class="mb-4 p-3 bg-green-100 text-green-800 text-center rounded"
+        >
           <Check class="inline-block mr-2" :stroke-width="1" />
           {{ successMessage }}
         </p>
       </form>
     </div>
+    </div>
   </div>
+
 </template>
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
-import { useUserStore } from '@/stores/user-store'
-import { updateUserProfile } from '@/services/user/user-profile-service.ts'
 import type { UserProfileUpdate } from '@/models/user/user-profile-update'
+import { useUserStore } from '@/stores/user-store'
+import { useUIStore } from '@/stores/ui-store.ts'
 import { handleAxiosError } from '@/utils/handle-axios-error'
 import { handleAxiosSuccess } from '@/utils/handle-axios-success'
-import { IdCard, Mail, Phone, Pencil, PencilOff, UserRoundX , CircleX, Check  } from 'lucide-vue-next'
+import { IdCard, Mail, Phone, Pencil, PencilOff, UserRoundX, CircleX, Check } from 'lucide-vue-next'
+import ModalComponent from '@/components/ui/ModalComponent.vue'
 
-const user = useUserStore()
+const userStore = useUserStore()
+const ui = useUIStore()
+const router = useRouter()
 
 const updatePhone = ref(false)
 const updatePassword = ref(false)
 const successMessage = ref('')
+const error = ref<string>('')
+
+const FRENCH_PHONE_REGEX = /^0[1-9]\d{8}$/
+
+
+onMounted(async () => {
+  if (!userStore.profile) {
+    {
+      await userStore.loadProfile()
+    }
+  }
+})
 
 const schema = computed(() =>
   yup.object({
@@ -199,6 +252,7 @@ const schema = computed(() =>
 // VeeValidate
 const { handleSubmit, resetForm, errors } = useForm({
   validationSchema: schema,
+
 })
 
 const { value: oldPhone } = useField('oldPhone')
@@ -224,7 +278,14 @@ function togglePassword() {
   }
 }
 
+
 const onSubmit = handleSubmit(async (values) => {
+  if (updatePhone.value) {
+    if (!FRENCH_PHONE_REGEX.test(values.phone)) {
+      error.value = 'Le numéro doit être au format français (10 chiffres, commençant par 0)'
+      return
+    }
+  }
   if (!updatePhone.value && !updatePassword.value) return
 
   const payload: UserProfileUpdate = {
@@ -235,24 +296,43 @@ const onSubmit = handleSubmit(async (values) => {
   }
 
   try {
-    const response = await updateUserProfile(payload)
+    const response = await userStore.updateUserProfile(payload)
     successMessage.value = handleAxiosSuccess(response)
     updatePhone.value = false
     updatePassword.value = false
-    await user.loadProfile()
+    await userStore.loadProfile()
     resetForm()
     setTimeout(() => {
       successMessage.value = ''
     }, 3000)
   } catch (err) {
-    user.error = handleAxiosError(err)
+    error.value = handleAxiosError(err)
     setTimeout(() => {
-      user.error = ''
+      error.value = ''
       updatePhone.value = false
       updatePassword.value = false
       resetForm()
-    }, 3000)
-
+    }, 5000)
   }
 })
+
+async function confirmDelete() {
+  ui.closeConfirmDeleteModal()
+
+  try {
+    const { data } = await userStore.deleteUserAccount()
+    successMessage.value = data.message
+
+    setTimeout(() => {
+      successMessage.value = ''
+      router.push('/login')
+      userStore.logout()
+    }, 3000)
+  } catch (err: unknown) {
+    error.value = handleAxiosError(err)
+    setTimeout(() => {
+      error.value = ''
+    }, 3000)
+  }
+}
 </script>

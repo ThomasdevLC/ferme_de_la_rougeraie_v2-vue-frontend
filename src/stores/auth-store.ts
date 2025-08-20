@@ -1,4 +1,3 @@
-// auth-store.ts
 import { defineStore } from 'pinia'
 import { AUTH_TOKEN_KEY } from '@/constants/storageKeys'
 
