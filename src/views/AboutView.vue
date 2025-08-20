@@ -37,7 +37,7 @@
     </div>
 
     <!-- BOTTOM -->
-    <div class="flex flex-col-reverse gap-10 my-20 lg:flex-row lg:gap-[120px] lg:my-[100px]">
+    <div class="flex flex-col-reverse  lg:flex-row lg:gap-[120px] lg:my-[100px]">
       <div class="flex-1 flex justify-end lg:justify-end mx-auto lg:mx-0">
         <img :src="imageTwo" alt="photo léa au marché" class="max-w-[580px] w-full object-cover" />
       </div>
