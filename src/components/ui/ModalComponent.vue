@@ -39,7 +39,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue'
 import { X } from 'lucide-vue-next'
 
 const { modelValue, closable, closeOnBackdrop } = defineProps({
