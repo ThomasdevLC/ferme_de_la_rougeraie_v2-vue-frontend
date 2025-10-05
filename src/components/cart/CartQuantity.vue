@@ -6,10 +6,11 @@
     :onIncrement="() => cart.incrementQuantity(product.id)"
     :onDecrement="() => cart.decrementQuantity(product.id)"
   />
+
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { formatFloat } from '@/utils/number-format';
 import { useCartStore } from '@/stores/cart-store';
 import QuantityControl from '@/components/ui/common/QuantityControl.vue';
@@ -18,9 +19,26 @@ import type { Product } from '@/models/product/product';
 const props = defineProps<{ product: Product; quantity: number }>();
 const cart = useCartStore();
 
-const isMax = computed(() =>
-  props.product.stock !== null && props.quantity >= props.product.stock
-);
+const maxAllowed = ref<number | null>(null);
+
+onMounted(() => {
+  if (props.product.stock === null) {
+    maxAllowed.value = null;
+    return;
+  }
+
+  if (cart.isEditing) {
+    maxAllowed.value = props.quantity + props.product.stock;
+    return;
+  }
+
+  maxAllowed.value = props.product.stock;
+});
+
+const isMax = computed(() => {
+  if (maxAllowed.value === null) return false;
+  return props.quantity >= maxAllowed.value;
+});
 
 const formattedQuantity = computed(() =>
   props.product.unit === 'Kilo'

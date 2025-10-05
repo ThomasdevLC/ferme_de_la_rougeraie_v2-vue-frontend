@@ -79,7 +79,7 @@ export const useCartStore = defineStore('cart', {
       const step = item.product.inter ?? 1;
       const newQuantity = +(item.quantity + step).toFixed(2);
 
-      if (item.product.stock !== null && newQuantity > item.product.stock) {
+      if (item.product.stock !== null && !this.isEditing && newQuantity > item.product.stock) {
         return;
       }
 
