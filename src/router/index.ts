@@ -6,6 +6,11 @@ const router = createRouter({
   routes: [
 
     {
+      path: '/',
+      redirect: '/about'
+    },
+
+    {
       path: '/products',
       name: 'products',
       component: ProductView,
