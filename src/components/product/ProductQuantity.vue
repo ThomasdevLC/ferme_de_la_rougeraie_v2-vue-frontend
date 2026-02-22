@@ -27,8 +27,10 @@ watch(() => props.modelValue, v => quantity.value = v);
 const inCartQty = computed(() => cart.getProductQuantity(props.product.id));
 const isInCart  = computed(() => cart.isProductInCart(props.product.id));
 const displayed = computed(() => isInCart.value ? inCartQty.value : quantity.value);
-const isMax     = computed(() => props.product.stock !== null && displayed.value >= props.product.stock);
 const step      = props.product.inter ?? 1;
+const maxAllowed = computed(() => cart.getMaxAllowed(props.product));
+const isMax = computed(() => {if (maxAllowed.value === null) return false; return displayed.value >= maxAllowed.value;});
+
 
 watch(inCartQty, (newQty, oldQty) => {
   if (oldQty > 0 && newQty === 0) {
@@ -38,9 +40,15 @@ watch(inCartQty, (newQty, oldQty) => {
 });
 
 function handleIncrement() {
-  if (isInCart.value) cart.incrementQuantity(props.product.id);
-  else {
+  if (isInCart.value) {
+    cart.incrementQuantity(props.product.id);
+  } else {
     const nextQty = +(displayed.value + step).toFixed(2);
+
+    if (maxAllowed.value !== null && nextQty > maxAllowed.value) {
+      return;
+    }
+
     quantity.value = nextQty;
     emit('update:modelValue', nextQty);
   }
