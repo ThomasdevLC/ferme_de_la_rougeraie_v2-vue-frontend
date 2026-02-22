@@ -9,7 +9,6 @@
       :disabled-days="disabledDays"
       :disabled-dates="disabledDates"
       date-format="dd/mm/yy"
-      locale="fr"
       :show-icon="true"
       input-class="p-inputtext"
     />
@@ -17,12 +16,29 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { startOfWeek, addDays } from 'date-fns'
 import PvCalendar from 'primevue/calendar'
+import { usePrimeVue } from 'primevue/config'
 
 const props = defineProps<{ modelValue: Date | null }>()
 const emit  = defineEmits<{ (e: 'update:modelValue', val: Date | null): void }>()
+
+const primeVue = usePrimeVue()
+
+onMounted(() => {
+  primeVue.config.locale = {
+    dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+    dayNamesShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+    dayNamesMin: ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
+    monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+    monthNamesShort: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'],
+    today: "Aujourd'hui",
+    clear: 'Effacer',
+    weekHeader: 'Sem',
+    firstDayOfWeek: 1
+  }
+})
 
 const innerDate = ref<Date|null>(props.modelValue)
 watch(() => props.modelValue, v => innerDate.value = v)
@@ -55,7 +71,7 @@ function getPickupDateOptions(): Date[] {
 }
 
 /**
- * The exact date/time  after which next week’s
+ * The exact date/time  after which next week's
  * pickup dates become selectable.
  */
 const unlockNextWeek = computed(() => {
@@ -67,9 +83,9 @@ const unlockNextWeek = computed(() => {
 
 //const unlockNextWeek = computed(() => {
 //  const thursday = new Date(weekStart.value)
- // thursday.setDate(thursday.getDate() + 3)
- // thursday.setHours(21, 0, 0, 0)
- // return thursday
+// thursday.setDate(thursday.getDate() + 3)
+// thursday.setHours(21, 0, 0, 0)
+// return thursday
 //})
 
 /**
