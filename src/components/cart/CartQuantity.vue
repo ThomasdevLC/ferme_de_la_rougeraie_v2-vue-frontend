@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed} from 'vue';
 import { formatFloat } from '@/utils/number-format';
 import { useCartStore } from '@/stores/cart-store';
 import QuantityControl from '@/components/ui/common/QuantityControl.vue';
@@ -19,21 +19,7 @@ import type { Product } from '@/models/product/product';
 const props = defineProps<{ product: Product; quantity: number }>();
 const cart = useCartStore();
 
-const maxAllowed = ref<number | null>(null);
-
-onMounted(() => {
-  if (props.product.stock === null) {
-    maxAllowed.value = null;
-    return;
-  }
-
-  if (cart.isEditing) {
-    maxAllowed.value = props.quantity + props.product.stock;
-    return;
-  }
-
-  maxAllowed.value = props.product.stock;
-});
+const maxAllowed = computed(() => cart.getMaxAllowed(props.product));
 
 const isMax = computed(() => {
   if (maxAllowed.value === null) return false;

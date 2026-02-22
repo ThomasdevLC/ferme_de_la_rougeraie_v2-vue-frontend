@@ -81,12 +81,6 @@ const unlockNextWeek = computed(() => {
   return fridayThisWeek
 })
 
-//const unlockNextWeek = computed(() => {
-//  const thursday = new Date(weekStart.value)
-// thursday.setDate(thursday.getDate() + 3)
-// thursday.setHours(21, 0, 0, 0)
-// return thursday
-//})
 
 /**
  * Computes which dates should be disabled in the calendar:
@@ -116,4 +110,5 @@ const disabledDates = computed(() => {
   gap: 0.75rem;
   max-width: 240px;
 }
+
 </style>
