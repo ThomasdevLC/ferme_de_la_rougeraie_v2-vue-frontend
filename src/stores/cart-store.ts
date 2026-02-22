@@ -43,6 +43,18 @@ export const useCartStore = defineStore('cart', {
       return state.items.length === 0;
     },
 
+    getMaxAllowed: (state) => (product: Product): number | null => {
+
+      if (!state.isEditing) {
+        return product.stock ?? null;
+      }
+      const item = state.items.find(i => i.product.id === product.id);
+
+      if (item) {
+        return item.maxAllowed ?? item.product.stock ?? null;
+      }
+      return product.stock ?? null;
+    },
 
   },
 
@@ -60,13 +72,13 @@ export const useCartStore = defineStore('cart', {
     },
 
 
-    addToCart(product: Product, quantity: number): boolean {
+    addToCart(product: Product, quantity: number, maxAllowed?: number | null): boolean {
       if (quantity <= 0) return false;
 
       if (this.isProductInCart(product.id)) {
         return false;
       } else {
-        this.items.push({ product, quantity });
+        this.items.push({ product, quantity, maxAllowed: maxAllowed ?? null });
         this.saveCartToStorage();
         return true;
       }
@@ -79,10 +91,13 @@ export const useCartStore = defineStore('cart', {
       const step = item.product.inter ?? 1;
       const newQuantity = +(item.quantity + step).toFixed(2);
 
-      if (item.product.stock !== null && !this.isEditing && newQuantity > item.product.stock) {
+      const limit = this.isEditing
+        ? (item.maxAllowed ?? item.product.stock ?? null)  // 👈 fallback IMPORTANT
+        : (item.product.stock ?? null);
+
+      if (limit !== null && newQuantity > limit) {
         return;
       }
-
       item.quantity = newQuantity;
       this.saveCartToStorage();
     },
