@@ -52,3 +52,15 @@ onMounted(() => {
     <CartModal class="z-60" />
   </main>
 </template>
+
+<style>
+.p-button {
+  background-color: #fe8401 !important;
+  border-color: #fe8401 !important;
+  color: #ffffff !important;
+}
+
+.p-inputtext:hover {
+  border-color: #fe8401 !important;
+}
+</style>
