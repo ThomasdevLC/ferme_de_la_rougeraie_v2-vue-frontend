@@ -7,7 +7,7 @@
         <p v-if="!cart.isEmpty" class="text-gray-500">{{ cart.numberOfProducts }} article(s)</p>
       </div>
       <div
-        class="pt-4 flex flex-row justify-center items-baseline space-x-2 text-md"
+        class="pt-4 flex flex-row justify-center items-baseline space-x-2 text-base"
         v-if="cart.isEditing && !displayMessage"
       >
         <CircleAlert class="w-5 h-5 text-primary" />
@@ -31,9 +31,20 @@
 
           <p class="flex justify-end text-xl font-semibold">Total : {{ cart.cartTotal }}</p>
 
+          <router-link
+            to="/products"
+            class="text-lg text-primary font-medium flex items-center gap-1 justify-center mb-6 hover:text-primary-hover"
+            @click="ui.closeCart()"
+          >
+            Ajouter des produits
+            <shopping-bag class="ml-2 w-6 h-6" />
+          </router-link>
+
           <div v-if="user.isLoggedIn" class="flex flex-col space-y-4">
-            <label class="font-semibold">Jour de retrait&nbsp;:</label>
+            <div class="flex items-baseline space-x-4">
+            <label class="font-semibold align-baseline">Jour de retrait&nbsp;:</label>
             <CartCalendar v-model="pickupDate" />
+            </div>
             <div class="flex justify-center space-x-4 pt-4">
               <button
                 class="text-primary border-2 border-primary px-4 py-2 hover:bg-opacity-90 cursor-pointer w-fit "
@@ -66,6 +77,7 @@
               Se connecter
               <ArrowRightFromLine class="w-4 h-4" />
             </router-link>
+
           </div>
         </div>
       </div>
