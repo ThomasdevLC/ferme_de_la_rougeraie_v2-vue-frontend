@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { AUTH_TOKEN_KEY } from '@/constants/storageKeys'
+import { isJwtValid } from '@/utils/jwt'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -7,17 +8,7 @@ export const useAuthStore = defineStore('auth', {
   }),
   getters: {
     isAuthenticated: (state) => !!state.token,
-
-    isTokenValid: (state) => {
-      if (!state.token) return false
-
-      try {
-        const payload = JSON.parse(atob(state.token.split('.')[1]))
-        return payload.exp * 1000 > Date.now()
-      } catch {
-        return false
-      }
-    }
+    isTokenValid: (state) => isJwtValid(state.token),
   },
   actions: {
     setToken(token: string) {
