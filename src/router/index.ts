@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import ProductView from '@/views/ProductView.vue'
+import { useAuthStore } from '@/stores/auth-store'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -34,7 +35,8 @@ const router = createRouter({
     {
       path: '/orders',
       name: 'order-history',
-      component: () => import('@/views/OrderHistoryView.vue')
+      component: () => import('@/views/OrderHistoryView.vue'),
+      meta: { requiresAuth: true }
     },
 
     {
@@ -45,6 +47,15 @@ const router = createRouter({
     }
 
   ],
+})
+
+router.beforeEach((to) => {
+  if (to.meta.requiresAuth) {
+    const auth = useAuthStore()
+    if (!auth.isTokenValid) {
+      return { name: 'login' }
+    }
+  }
 })
 
 export default router
