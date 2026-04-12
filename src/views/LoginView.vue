@@ -86,6 +86,7 @@
 import '@/assets/css/modal-animations.css'
 import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { AxiosError } from 'axios'
 import { login } from '@/services/auth/auth-service.ts'
 import ModalComponent from '@/components/ui/ModalComponent.vue'
 import { useAuthStore } from '@/stores/auth-store.ts'
@@ -161,8 +162,12 @@ const handleLogin = async () => {
     if (!cart.isEmpty) {
       ui.openCart()
     }
-  } catch (err: any) {
-    error.value = err.response?.data?.message || 'Échec de la connexion.'
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      error.value = err.response?.data?.message || 'Échec de la connexion.'
+    } else {
+      error.value = 'Échec de la connexion.'
+    }
   }
 }
 </script>
