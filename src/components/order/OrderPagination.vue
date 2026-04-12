@@ -5,7 +5,7 @@
       :disabled="currentPage === 1"
       class="cursor-pointer hover:underline disabled:text-gray-400 "
     >
-      < Précédent
+      &lt; Précédent
     </button>
 
     <span>Page {{ currentPage }} sur {{ totalPages }}</span>
@@ -15,7 +15,7 @@
       :disabled="currentPage === totalPages"
       class="cursor-pointer hover:underline disabled:text-gray-400 "
     >
-      Suivant >
+      Suivant &gt;
     </button>
   </div>
 </template>

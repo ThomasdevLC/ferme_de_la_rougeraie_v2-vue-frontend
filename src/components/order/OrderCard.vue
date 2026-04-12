@@ -84,7 +84,7 @@ const fetchOrder = async () => {
       orderData.pickupDate.slice(0, 10)
     )
 
-    orderData.items.forEach((item: any) => {
+    orderData.items.forEach((item) => {
       cart.addToCart(item.product, item.quantity, item.availableStock ?? null)
     })
     ui.openCart()
