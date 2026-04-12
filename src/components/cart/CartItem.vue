@@ -27,7 +27,7 @@
     </div>
 
     <div class="text-center md:text-right text-base w-20 sm:w-24">
-      {{ cart.getItemTotal(item) }}
+      {{ getItemTotal(item) }}
     </div>
 
     <button
@@ -43,6 +43,7 @@
 import type { CartItem } from '@/models/cart/cart-item.ts'
 import CartQuantity from './CartQuantity.vue'
 import { useCartStore } from '@/stores/cart-store.ts'
+import { getItemTotal } from '@/utils/price'
 import { X } from 'lucide-vue-next'
 
 const cart = useCartStore()

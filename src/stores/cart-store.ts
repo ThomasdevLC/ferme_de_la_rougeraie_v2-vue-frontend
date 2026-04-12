@@ -128,12 +128,6 @@ export const useCartStore = defineStore('cart', {
       this.saveCartToStorage();
     },
 
-    getItemTotal(item: CartItem): string {
-      const unitPriceInCents = convertPriceToCents(item.product.price);
-      const totalInCents = Math.round(unitPriceInCents * item.quantity);
-      return formatPrice(totalInCents);
-    },
-
     async submitOrder(pickupDate: string) {
       if (!pickupDate) {
         throw new Error('Date de retrait manquante')

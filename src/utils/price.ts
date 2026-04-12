@@ -1,3 +1,4 @@
+import type { CartItem } from '@/models/cart/cart-item'
 
 /**
  * Converts a euro price to cents :
@@ -20,4 +21,13 @@ export function formatPrice(priceInCents: number): string {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
+}
+
+/**
+ * Computes and formats the total for a cart item (unit price × quantity).
+ */
+export function getItemTotal(item: CartItem): string {
+  const unitPriceInCents = convertPriceToCents(item.product.price)
+  const totalInCents = Math.round(unitPriceInCents * item.quantity)
+  return formatPrice(totalInCents)
 }
