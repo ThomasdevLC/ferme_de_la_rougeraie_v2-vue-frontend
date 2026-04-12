@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AUTH_TOKEN_KEY } from '@/constants/storageKeys.ts'
+import { useAuthStore } from '@/stores/auth-store';
 
 const http = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -9,9 +9,9 @@ const http = axios.create({
 });
 
 http.interceptors.request.use((config) => {
-  const token = localStorage.getItem(AUTH_TOKEN_KEY);
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  const auth = useAuthStore();
+  if (auth.token) {
+    config.headers.Authorization = `Bearer ${auth.token}`;
   }
   return config;
 });
