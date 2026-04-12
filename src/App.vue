@@ -8,11 +8,13 @@ import { useUIStore } from '@/stores/ui-store'
 import { useUserStore } from '@/stores/user-store'
 import { useAuthStore } from '@/stores/auth-store'
 import { useMessageStore } from '@/stores/message-store'
+import { useCartStore } from '@/stores/cart-store'
 
 const ui = useUIStore()
 const user = useUserStore()
 const auth = useAuthStore()
 const messageStore = useMessageStore()
+const cart = useCartStore()
 
 const router = useRouter()
 const route = router.currentRoute
@@ -36,9 +38,9 @@ async function initSession() {
 }
 
 onMounted(() => {
+  cart.loadCartFromStorage()
   initSession()
   messageStore.loadMessages()
-
 })
 </script>
 
