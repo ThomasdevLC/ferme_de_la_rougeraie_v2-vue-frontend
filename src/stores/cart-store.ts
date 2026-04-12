@@ -4,6 +4,7 @@ import type { Product } from '@/models/product/product.ts';
 import type { CartItem } from '@/models/cart/cart-item.ts';
 import { convertPriceToCents, formatPrice } from '@/utils/price'
 import { createOrder } from '@/services/order/order-service.ts'
+import { cartStorage } from '@/services/cart/cart-storage'
 
 export const useCartStore = defineStore('cart', {
   state: () => ({
@@ -61,14 +62,11 @@ export const useCartStore = defineStore('cart', {
 
   actions: {
     loadCartFromStorage() {
-      const stored = localStorage.getItem('cart');
-      if (stored) {
-        this.items = JSON.parse(stored);
-      }
+      this.items = cartStorage.load()
     },
 
     saveCartToStorage() {
-      localStorage.setItem('cart', JSON.stringify(this.items));
+      cartStorage.save(this.items)
     },
 
 
