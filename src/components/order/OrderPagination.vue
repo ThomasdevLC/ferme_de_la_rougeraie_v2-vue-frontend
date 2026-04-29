@@ -1,22 +1,24 @@
 <template>
   <div class="flex justify-between mt-4 items-center text-sm gap-4">
     <button
+      v-if="currentPage > 1"
       @click="$emit('prev')"
-      :disabled="currentPage === 1"
-      class="cursor-pointer hover:underline disabled:text-gray-400 "
+      class="cursor-pointer hover:underline"
     >
       &lt; Précédent
     </button>
+    <span v-else />
 
     <span>Page {{ currentPage }} sur {{ totalPages }}</span>
 
     <button
+      v-if="currentPage < totalPages"
       @click="$emit('next')"
-      :disabled="currentPage === totalPages"
-      class="cursor-pointer hover:underline disabled:text-gray-400 "
+      class="cursor-pointer hover:underline"
     >
       Suivant &gt;
     </button>
+    <span v-else />
   </div>
 </template>
 

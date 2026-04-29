@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full px-4 flex flex-col justify-start relative">
+  <div class="w-full px-4 flex flex-col justify-start relative pt-60">
     <div>
       <h1 class="text-3xl font-semibold mb-10 text-center">Vos commandes</h1>
 

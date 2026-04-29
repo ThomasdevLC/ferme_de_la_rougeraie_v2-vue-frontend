@@ -9,7 +9,7 @@
       </div>
       <div class="text-right">
         <span
-          class="text-sm inline-block px-2 py-1 rounded font-medium"
+          class="text-xs inline-block px-2 py-1 rounded font-medium"
           :class="order.done ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'"
         >
           {{ order.done ? 'Traitée' : 'En attente' }}
@@ -47,7 +47,7 @@
     <div class="flex justify-center">
 
     <button v-if ="order.isEditable"
-      class="w-fit mt-4  bg-primary text-white px-4 py-2 rounded hover:bg-opacity-90 transition cursor-pointer"
+      class="w-fit mt-4  bg-primary text-sm text-white px-4 py-2 rounded hover:bg-opacity-90 transition cursor-pointer"
       @click="fetchOrder"
     >
       Modifier la commande
