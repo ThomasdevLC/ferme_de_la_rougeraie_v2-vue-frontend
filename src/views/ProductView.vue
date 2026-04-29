@@ -1,8 +1,8 @@
 <template>
   <div class="relative z-10 max-w-[75rem] mx-auto pt-40 ">
-    <div v-if="loading && !closedShopMessage" class="text-center mx-auto py-8 text-gray-800 font-base text-xl">
-      <img :src="loaderSrc" alt="loader" class="mx-auto" />
-      <p class="text-3xl font-black font-titles text-gray-4">Chargement ...</p>
+    <div v-if="loading && !closedShopMessage" class="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+      <img :src="loaderSrc" alt="loader" />
+      <p class="text-2xl font-base font-black  text-gray-4">Chargement ...</p>
     </div>
 
     <p v-else-if="closedShopMessage" class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-4 text-center mt-40 px-4">{{ closedShopMessage.content }}</p>
@@ -46,7 +46,9 @@ onMounted(async () => {
   } catch (error) {
     console.error('Erreur chargement produits :', error)
   } finally {
-    loading.value = false
+    setTimeout(() => {
+      loading.value = false
+    }, 1000)
   }
 })
 </script>

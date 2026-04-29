@@ -2,7 +2,7 @@
   <div class="relative min-h-screen mx-auto px-8 md:px-0">
     <!-- TOP -->
     <div class="flex flex-col lg:flex-row">
-      <div class="w-1/2">
+      <div class="w-1/2 border-r-1 border-b border-black h-full">
         <img :src="imageOne" alt="photo léa" class="w-full h-full object-cover" />
       </div>
       <div class="w-1/2 pt-50 px-40">
@@ -36,10 +36,10 @@
     </div>
 
     <!-- BOTTOM -->
-    <div class="flex flex-col-reverse lg:flex-row">
+    <div class="flex flex-col-reverse lg:flex-row border-b border-t border-black h-full">
       <div class="flex-1 w-1/2">
         <div class="px-40 pt-20">
-          <h2 class="text-3xl font-bold  mb-3">POINTS DE VENTE</h2>
+          <h2 class="text-3xl font-bold mb-3">POINTS DE VENTE</h2>
           <p class="text-lg font-bold">LANOUEE - Ferme de la Rougeraie</p>
           <p class="font-medium text-lg mb-3">mardi et vendredi de 16h00 à 19h00</p>
 
@@ -60,14 +60,16 @@
           </div>
         </div>
       </div>
-      <div class="flex-1 flex justify-end lg:justify-end mx-auto lg:mx-0 w-1/2">
+      <div
+        class="flex-1 flex justify-end lg:justify-end mx-auto lg:mx-0 w-1/2 border-l-1 border-black h-full"
+      >
         <img :src="imageTwo" alt="photo léa au marché" class="w-full object-cover" />
       </div>
     </div>
 
     <!-- FOOTER -->
     <footer>
-      <div class="flex flex-col items-center justify-center text-center leading-none mt-20">
+      <div class="flex flex-col items-center justify-center text-center leading-none mt-10">
         <img class="h-[110px] sm:h-[130px]" :src="imageLogo" alt="logo" />
         <p class="mt-4 sm:text-sm">© Ferme de la Rougeraie - 06 83 34 13 70</p>
 

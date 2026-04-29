@@ -6,7 +6,7 @@
       </button>
 
       <div
-        class="flex items-center justify-center px-2 py-0.5 text-sm border-t border-b tracking-tight"
+        class="flex items-center justify-center px-2 py-0.5 text-sm border-t border-b font-roboto"
         :class="{
         'w-14': unit === 'Kilo',
         'w-10': unit !== 'Kilo',

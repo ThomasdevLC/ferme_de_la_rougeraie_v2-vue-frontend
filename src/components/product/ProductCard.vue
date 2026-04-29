@@ -32,8 +32,9 @@
       <p class="text-[1.8rem] font-titles truncate">
         {{ product.name }}
       </p>
-      <p class="text-md text-[0.9rem] text-gray-4 mt-1 tracking-tighter">
-        {{ product.price.toFixed(2) }} € / <span>{{ product.unit }}</span>
+      <p class="text-md text-[0.9rem] text-gray-4 mt-1">
+        <span class="font-roboto">{{ product.price.toFixed(2) }} €</span> /
+        <span class="tracking-tighter">{{ product.unit }}</span>
       </p>
 
       <ProductQuantity v-model="quantity" :product="product" />

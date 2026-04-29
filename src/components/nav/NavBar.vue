@@ -58,7 +58,7 @@
             <ShoppingBag class="w-7 h-7 transition bg-white" />
             <div
               v-if="!cart.isEmpty"
-              class="absolute bottom-7 left-9 w-[22px] h-[22px] rounded-full bg-primary text-white text-xs flex items-center justify-center z-20"
+              class="absolute bottom-7 left-6 w-[22px] h-[22px] rounded-full bg-primary text-white text-xs flex items-center justify-center z-20"
             >
               {{ cart.numberOfProducts }}
             </div>
