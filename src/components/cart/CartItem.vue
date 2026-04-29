@@ -26,7 +26,7 @@
       <CartQuantity :product="item.product" :quantity="item.quantity" />
     </div>
 
-    <div class="text-center md:text-right text-base w-20 sm:w-24">
+    <div class="text-center font-roboto md:text-right text-base w-20 sm:w-24 ">
       {{ getItemTotal(item) }}
     </div>
 
