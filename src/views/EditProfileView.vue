@@ -1,7 +1,7 @@
 <template>
-  <div class="p-4 md:p-0 relative flex justify-center">
-    <div class="w-full md:w-fit md:mt-16 p-6 bg-white border border-gray-2 rounded-sm">
-      <h1 class="text-3xl text-center md:text-start font-bold mb-6">Votre profil</h1>
+  <div class="p-4 md:p-0 relative flex justify-center items-center min-h-screen">
+    <div class="w-full md:w-fit p-6 bg-white border border-gray-2 rounded-sm">
+      <h1 class="text-2xl text-center md:text-start font-bold mb-6">Votre profil</h1>
 
       <div>
         <div class="flex flex-col md:flex-row justify-around mb-6 space-x-4">
