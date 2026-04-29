@@ -1,6 +1,32 @@
 
 @import "tailwindcss" ;
 
+@font-face {
+  font-family: "FragmentMono";
+  src: url("./fonts/FragmentMono-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "FragmentMono";
+  src: url("./fonts/FragmentMono-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "PPLettraMono";
+  src: url("./fonts/PPLettraMono-Medium.otf") format("opentype");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "PPLettraMono";
+  src: url("./fonts/PPLettraMono-Ultralight.otf") format("opentype");
+  font-weight: 300;
+}
+
 /* stylelint-disable at-rule-no-unknown */
 @theme {
     --color-xtra-light-primary: hsl(34, 100%, 85%);
@@ -13,8 +39,10 @@
     --color-gray-3: #8c8c8c;
     --color-gray-4: #555555;
     --color-text-color: #333333;
-    --font-base: "Roboto" sans-serif;
-    --font-titles: "Jacques Francois", serif;
+    --font-base: "FragmentMono", monospace;
+    --font-roboto: "Roboto", sans-serif;
+    --font-titles: "PPLettraMono", monospace;
+    --font-lettramono: "PPLettraMono", monospace;
   }
 
 html, body, #app {
@@ -22,8 +50,8 @@ html, body, #app {
 }
 
 body {
-
   min-height: 100vh;
+  font-family: "FragmentMono", monospace;
   font-weight: normal;
   line-height: 1.6;
 }
