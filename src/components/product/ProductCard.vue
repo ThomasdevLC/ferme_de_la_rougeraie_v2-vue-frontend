@@ -1,17 +1,19 @@
 <template>
   <div
     class="flex flex-col npm run devw-[260px] h-[440px] bg-white border border-gray-2 relative"
-    :title="product.discount && product.discountText ? `${product.name} - ${product.discountText}` : product.name"
+    :title="
+      product.discount && product.discountText
+        ? `${product.name} - ${product.discountText}`
+        : product.name
+    "
   >
     <div class="absolute bottom-[165px] ml-[-5px]">
-
-      <p v-if="product.limited" class="bg-primary text-white text-md font-medium px-2 py-1 mb-4 ">
+      <p v-if="product.limited" class="bg-primary text-white text-sm font-medium px-2 py-1 mb-4">
         Quantité limitée
       </p>
-
     </div>
 
-    <div class="h-[280px] overflow-hidden ">
+    <div class="h-[280px] overflow-hidden">
       <img
         :src="`${baseUrl}${product.image}`"
         :alt="`Image de ${product.name}`"
@@ -27,16 +29,16 @@
     </div>
 
     <div class="px-2 py-3 flex-1 flex flex-col justify-between text-text-color">
-      <p class="text-3xl font-titles truncate">
+      <p class="text-[1.8rem] font-titles truncate">
         {{ product.name }}
       </p>
-      <p class="text-md text-gray-4 mt-1">
+      <p class="text-md text-[0.9rem] text-gray-4 mt-1 tracking-tighter">
         {{ product.price.toFixed(2) }} € / <span>{{ product.unit }}</span>
       </p>
 
       <ProductQuantity v-model="quantity" :product="product" />
 
-      <p class="font-medium cursor-pointer hover:text-primary" @click="onAddToCart">
+      <p class="font-medium text-[0.9rem] cursor-pointer hover:text-primary" @click="onAddToCart">
         {{ added ? 'AJOUTÉ' : 'AJOUTER AU PANIER' }}
       </p>
     </div>
@@ -64,8 +66,5 @@ function onAddToCart() {
   setTimeout(() => {
     added.value = false
   }, 1500)
-
 }
-
-
 </script>

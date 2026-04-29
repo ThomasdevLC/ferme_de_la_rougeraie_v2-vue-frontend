@@ -1,5 +1,5 @@
 <template>
-  <div class="relative z-10 max-w-[75rem] mx-auto ">
+  <div class="relative z-10 max-w-[75rem] mx-auto pt-40 ">
     <div v-if="loading && !closedShopMessage" class="text-center mx-auto py-8 text-gray-800 font-base text-xl">
       <img :src="loaderSrc" alt="loader" class="mx-auto" />
       <p class="text-3xl font-black font-titles text-gray-4">Chargement ...</p>

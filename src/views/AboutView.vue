@@ -1,8 +1,11 @@
 <template>
-  <div class="relative min-h-screen max-w-[75rem] mx-auto py-10 px-8 md:px-0">
+  <div class="relative min-h-screen mx-auto px-8 md:px-0">
     <!-- TOP -->
-    <div class="flex flex-col gap-10 lg:flex-row lg:gap-[120px]">
-      <div class="flex-1">
+    <div class="flex flex-col lg:flex-row">
+      <div class="w-1/2">
+        <img :src="imageOne" alt="photo léa" class="w-full h-full object-cover" />
+      </div>
+      <div class="w-1/2 pt-50 px-40">
         <p class="text-5xl font-titles">Ferme de la Rougeraie</p>
 
         <div class="text-lg mt-6 space-y-4">
@@ -30,48 +33,41 @@
           </p>
         </div>
       </div>
-
-      <div class="flex-1 flex justify-end lg:justify-end mx-auto lg:mx-0">
-        <img :src="imageOne" alt="photo léa" class="max-w-[580px] w-full object-cover" />
-      </div>
     </div>
 
     <!-- BOTTOM -->
-    <div class="flex flex-col-reverse  lg:flex-row lg:gap-[120px] lg:my-[100px]">
-      <div class="flex-1 flex justify-end lg:justify-end mx-auto lg:mx-0">
-        <img :src="imageTwo" alt="photo léa au marché" class="max-w-[580px] w-full object-cover" />
-      </div>
+    <div class="flex flex-col-reverse lg:flex-row">
+      <div class="flex-1 w-1/2">
+        <div class="px-40 pt-20">
+          <h2 class="text-3xl font-bold  mb-3">POINTS DE VENTE</h2>
+          <p class="text-lg font-bold">LANOUEE - Ferme de la Rougeraie</p>
+          <p class="font-medium text-lg mb-3">mardi et vendredi de 16h00 à 19h00</p>
 
-      <div class="flex-1">
-        <h2 class="text-3xl font-bold border-b-2 border-primary mb-3">POINTS DE VENTE</h2>
-        <p class="text-lg font-bold ">
-          LANOUEE - Ferme de la Rougeraie
-        </p>
-        <p class="font-medium text-lg  mb-3 ">mardi et vendredi de 16h00 à 19h00</p>
-
-        <div class="text-lg space-y-4 ">
-          <p>
-            Les ventes ont lieu les mardis et vendredis de 16H à 19H. <br />
-            La liste des légumes disponibles avec leur prix est mise à jour chaque début de semaine.
-            Vous avez jusqu'à 21h la veille du jour de vente pour passer une pré-commande. Le
-            montant est indicatif et peut légèrement être ajusté à la réalité du poids des légumes.
-            Le règlement se fait à la réception, les jours de vente où il est possible de modifier
-            ou de compléter sa commande. Venir avec son panier.
-          </p>
-          <p>
-            Nos légumes sont également servis à la cantine scolaire de Lanouée, dans les plats du
-            restaurant « Chez Simon » à Josselin ainsi que sur les pizzas de Mowgli Pizz' à Lanouée,
-            chaque vendredi.
-          </p>
+          <div class="text-lg space-y-4">
+            <p>
+              Les ventes ont lieu les mardis et vendredis de 16H à 19H. <br />
+              La liste des légumes disponibles avec leur prix est mise à jour chaque début de
+              semaine. Vous avez jusqu'à 21h la veille du jour de vente pour passer une
+              pré-commande. Le montant est indicatif et peut légèrement être ajusté à la réalité du
+              poids des légumes. Le règlement se fait à la réception, les jours de vente où il est
+              possible de modifier ou de compléter sa commande. Venir avec son panier.
+            </p>
+            <p>
+              Nos légumes sont également servis à la cantine scolaire de Lanouée, dans les plats du
+              restaurant « Chez Simon » à Josselin ainsi que sur les pizzas de Mowgli Pizz' à
+              Lanouée, chaque vendredi.
+            </p>
+          </div>
         </div>
+      </div>
+      <div class="flex-1 flex justify-end lg:justify-end mx-auto lg:mx-0 w-1/2">
+        <img :src="imageTwo" alt="photo léa au marché" class="w-full object-cover" />
       </div>
     </div>
 
     <!-- FOOTER -->
     <footer>
-      <div
-        class="flex flex-col items-center justify-center text-center leading-none"
-      >
+      <div class="flex flex-col items-center justify-center text-center leading-none mt-20">
         <img class="h-[110px] sm:h-[130px]" :src="imageLogo" alt="logo" />
         <p class="mt-4 sm:text-sm">© Ferme de la Rougeraie - 06 83 34 13 70</p>
 
