@@ -23,7 +23,8 @@
     </div>
   </ModalComponent>
 
-  <div class="max-w-md mx-auto p-6 bg-white shadow rounded relative">
+  <div class="min-h-screen flex items-center justify-center">
+  <div class="max-w-md w-full p-6 bg-white shadow rounded relative">
     <h2 class="text-xl font-bold mb-4 text-center">Connexion</h2>
 
     <form @submit.prevent="handleLogin" class="space-y-4">
@@ -70,15 +71,17 @@
         Se connecter
       </button>
     </form>
-    <div class="text-center mt-4">
+    <div class="text-sm text-center mt-4">
       <span>Pas encore inscrit ? </span>
-      <a :href="registerUrl" class="text-primary font-medium hover:underline"> Créer un compte </a>
+      <a :href="registerUrl" class="text-primary font-medium hover:underline"> Créer un compte </a> <br>
+      <a :href="resetPasswordUrl" class="text-primary font-medium hover:underline">Mot de passe oublié ?</a>
+      <div class="mt-3">
+        <RouterLink to="/products" class="inline-flex items-center gap-1 text-gray-4 font-medium hover:underline">
+          Retour à la boutique <ArrowRight class="w-4 h-4" />
+        </RouterLink>
+      </div>
     </div>
-    <div class="text-center mt-4">
-      <a :href="resetPasswordUrl" class="text-primary font-medium hover:underline"
-        >Mot de passe oublié ?</a
-      >
-    </div>
+  </div>
   </div>
 </template>
 
@@ -94,7 +97,7 @@ import { useUserStore } from '@/stores/user-store.ts'
 import { useCartStore } from '@/stores/cart-store.ts'
 import { useUIStore } from '@/stores/ui-store.ts'
 import { CircleCheckBig } from 'lucide-vue-next'
-import { Eye, EyeOff, Loader } from 'lucide-vue-next'
+import { Eye, EyeOff, Loader, ArrowRight } from 'lucide-vue-next'
 
 const email = ref('')
 const password = ref('')
@@ -168,6 +171,7 @@ const handleLogin = async () => {
     } else {
       error.value = 'Échec de la connexion.'
     }
+    loading.value = false
   }
 }
 </script>
