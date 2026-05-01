@@ -1,13 +1,17 @@
 <template>
-  <div class="p-4 md:p-0 relative flex justify-center items-center min-h-screen">
+  <div class="p-4 md:p-0 flex justify-center min-h-screen">
+    <div class="flex flex-col gap-4 w-full md:w-fit pt-60">
+    <div class="flex items-center gap-4 mb-6">
+      <h1 class="text-2xl font-bold whitespace-nowrap">Votre profil</h1>
+      <div class="flex-1 h-px bg-black"></div>
+    </div>
     <div class="w-full md:w-fit p-6 bg-white border border-gray-2 rounded-sm">
-      <h1 class="text-2xl text-center md:text-start font-bold mb-6">Votre profil</h1>
 
       <div>
-        <div class="flex flex-col md:flex-row justify-around mb-6 space-x-4">
+        <div class="flex flex-col text-md md:flex-row justify-around mb-6 space-x-4">
           <div class="flex gap-2 items-center mb-2 md:mb-0">
             <IdCard class="w-12 h-12" :stroke-width="1" />
-            <p class="font-bold text-2xl">
+            <p class="font-bold">
               <span> {{ userStore.profile?.firstName }}&nbsp;</span
               ><span>{{ userStore.profile?.lastName }}</span>
             </p>
@@ -15,16 +19,16 @@
           <div class="flex flex-col md:flex-row gap-4">
             <div class="flex gap-2 items-center">
               <Mail class="w-7 h-7" :stroke-width="1" />
-              <p class="text-xl">{{ userStore.profile?.email }}</p>
+              <p class="">{{ userStore.profile?.email }}</p>
             </div>
             <div class="flex gap-2 items-center">
-              <Phone class="w-7 h-7" :stroke-width="1" />
-              <p class="text-xl">{{ userStore.profile?.phone }}</p>
+              <Phone class="w-6 h-6" :stroke-width="1" />
+              <p class="">{{ userStore.profile?.phone }}</p>
             </div>
           </div>
         </div>
 
-        <div class="flex flex-col sm:flex-row justify-center gap-4 text-sm">
+        <div class="flex flex-col sm:flex-row justify-center gap-4 text-xs">
           <button
             @click="togglePhone"
             class="w-full md:w-40 bg-primary text-white py-2 px-4 rounded-sm hover:bg-opacity-90 cursor-pointer flex items-center justify-center gap-2"
@@ -75,7 +79,7 @@
           <p>Êtes-vous sûr de vouloir supprimer définitivement votre compte ?</p>
 
           <template #footer>
-            <div class="flex justify-end gap-4">
+            <div class="text-sm flex justify-end gap-4">
               <button
                 @click="ui.closeConfirmDeleteModal()"
                 class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
@@ -153,7 +157,7 @@
           <button
             v-if="updatePhone || updatePassword"
             type="submit"
-            class="cursor-pointer w-fit bg-primary text-white py-2 px-4 rounded-sm hover:bg-opacity-90"
+            class="cursor-pointer w-fit bg-primary text-sm text-white py-2 px-4 rounded-sm hover:bg-opacity-90"
           >
             Enregistrer
           </button>
@@ -171,6 +175,7 @@
           {{ successMessage }}
         </p>
       </form>
+    </div>
     </div>
     </div>
   </div>
@@ -266,6 +271,11 @@ function togglePhone() {
   if (!updatePhone.value) {
     oldPhone.value = ''
     phone.value = ''
+  } else {
+    updatePassword.value = false
+    oldPassword.value = ''
+    newPassword.value = ''
+    confirmPassword.value = ''
   }
 }
 
@@ -275,6 +285,10 @@ function togglePassword() {
     oldPassword.value = ''
     newPassword.value = ''
     confirmPassword.value = ''
+  } else {
+    updatePhone.value = false
+    oldPhone.value = ''
+    phone.value = ''
   }
 }
 
