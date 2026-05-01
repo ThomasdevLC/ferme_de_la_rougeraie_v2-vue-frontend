@@ -8,7 +8,7 @@
 
     <div class="relative z-10 flex items-center justify-between mx-auto py-8">
 
-      <ul class="flex items-center md:space-x-8 text-[1.4rem] font-semibold text-gray-700">
+      <ul class="flex items-center md:space-x-8 text-[1.3rem] font-semibold text-gray-700">
         <li class="md:w-auto sm:mr-14" @click="ui.closeUserMenu">
           <RouterLink
             to="/about"

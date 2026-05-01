@@ -3,7 +3,7 @@
     <div class="flex flex-row justify-between mb-4">
       <div>
         <p class="text-sm text-gray-500">Commande n°{{ order.id }}</p>
-        <p class="text-lg font-semibold">
+        <p class="text-md font-semibold">
           {{ formatDate(order.createdAt) }}
         </p>
       </div>

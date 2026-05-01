@@ -1,7 +1,10 @@
 <template>
   <div class="w-full px-4 flex flex-col justify-start relative pt-60">
     <div>
-      <h1 class="text-3xl font-semibold mb-10 text-center">Vos commandes</h1>
+      <div class="flex items-center gap-4 mb-10 max-w-120 mx-auto">
+        <h1 class="text-2xl font-semibold whitespace-nowrap">Vos commandes</h1>
+        <div class="flex-1 h-px bg-black"></div>
+      </div>
 
       <div v-if="loading" class="text-center py-10 text-gray-500">Chargement des commandes...</div>
 
