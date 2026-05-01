@@ -1,14 +1,14 @@
 <template>
   <div class="relative min-h-screen mx-auto px-8 md:px-0">
     <!-- TOP -->
-    <div class="flex flex-col lg:flex-row">
+    <div class="text-black flex flex-col lg:flex-row">
       <div class="w-1/2 border-r-1 border-b border-black h-full">
         <img :src="imageOne" alt="photo léa" class="w-full h-full object-cover" />
       </div>
       <div class="w-1/2 pt-50 px-40">
         <p class="text-5xl font-titles">Ferme de la Rougeraie</p>
 
-        <div class="text-lg mt-6 space-y-4">
+        <div class="text-md mt-6 space-y-4">
           <p>
             Notre ferme familiale possède deux activités de production : un atelier d'une trentaine
             de vaches laitières en circuit long (lait livré à Biolait) et un atelier de maraîchage
@@ -37,15 +37,19 @@
 
     <!-- BOTTOM -->
     <div class="flex flex-col-reverse lg:flex-row border-b border-t border-black h-full">
-      <div class="flex-1 w-1/2">
+      <div class="text-black text-md flex-1 w-1/2">
         <div class="px-40 pt-20">
-          <h2 class="text-3xl font-bold mb-3">POINTS DE VENTE</h2>
-          <p class="text-lg font-bold">LANOUEE - Ferme de la Rougeraie</p>
-          <p class="font-medium text-lg mb-3">mardi et vendredi de 16h00 à 19h00</p>
+          <div class="flex items-center gap-4 mb-3">
+            <h2 class="text-2xl font-bold whitespace-nowrap">POINTS DE VENTE</h2>
+            <div class="flex-1 h-px bg-black"></div>
+          </div>
+          <p class="font-medium">LANOUEE - Ferme de la Rougeraie</p>
+          <p class="font-medium text-md mb-3">
+            Mardi et Vendredi de <span class="font-roboto"> 16h00 à 19h00</span>
+          </p>
 
-          <div class="text-lg space-y-4">
+          <div class="text-md space-y-4">
             <p>
-              Les ventes ont lieu les mardis et vendredis de 16H à 19H. <br />
               La liste des légumes disponibles avec leur prix est mise à jour chaque début de
               semaine. Vous avez jusqu'à 21h la veille du jour de vente pour passer une
               pré-commande. Le montant est indicatif et peut légèrement être ajusté à la réalité du
