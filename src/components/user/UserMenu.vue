@@ -42,7 +42,7 @@
 import { useUserStore } from '@/stores/user-store'
 import { useUIStore } from '@/stores/ui-store'
 import { useRouter } from 'vue-router'
-import { ReceiptText, UserRoundPen, PowerOff, Power, Hand } from 'lucide-vue-next'
+import { ReceiptText, UserRoundPen, PowerOff, Power } from 'lucide-vue-next'
 
 const user = useUserStore()
 const ui = useUIStore()
