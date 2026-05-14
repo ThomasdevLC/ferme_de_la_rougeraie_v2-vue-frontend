@@ -5,7 +5,7 @@
   >
     <template v-if="user.isLoggedIn">
       <p class="mb-6">
-        <Hand class="w-5 h-5 inline-block mr-2 rotate-45" />
+        <Hand class="wave-hand w-5 h-5 inline-block mr-2" />
         Bonjour {{ user.firstName }}
       </p>
 
@@ -55,3 +55,17 @@ function logout() {
   router.push('/products')
 }
 </script>
+
+<style scoped>
+.wave-hand {
+  transform-origin: bottom center;
+  animation: wave 0.6s ease-in-out 3;
+}
+
+@keyframes wave {
+  0%   { transform: rotate(35deg); }
+  25%  { transform: rotate(10deg); }
+  75%  { transform: rotate(55deg); }
+  100% { transform: rotate(35deg); }
+}
+</style>

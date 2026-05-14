@@ -49,7 +49,7 @@ onMounted(() => {
     <Navbar />
   </header>
 
-  <main @click="ui.closeUserMenu" class="relative min-h-screen text-text-color pt-80 md:pt-60 pb-12" :style="{ 'background-image': `url(${image})` }">
+  <main @click="ui.closeUserMenu" class="relative min-h-screen text-text-color pt-80 md:pt-0 pb-12" :style="{ 'background-image': `url(${image})` }">
     <RouterView />
     <CartModal class="z-60" />
   </main>

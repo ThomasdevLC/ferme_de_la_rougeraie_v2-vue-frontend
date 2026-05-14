@@ -29,11 +29,13 @@
         <div v-else class="flex flex-col space-y-4">
           <CartItem v-for="item in cart.items" :key="item.product.id" :item="item" />
 
-          <p class="flex justify-end text-xl font-semibold">Total : {{ cart.cartTotal }}</p>
+          <p class="flex justify-end  text-xl font-semibold">
+            Total : <span class="font-roboto">{{ cart.cartTotal }}</span>
+          </p>
 
           <router-link
             to="/products"
-            class="text-lg text-primary font-medium flex items-center gap-1 justify-center mb-6 hover:text-primary-hover"
+            class="text-md text-primary font-medium flex items-center gap-1 justify-center mb-6 hover:text-primary-hover"
             @click="ui.closeCart()"
           >
             Ajouter des produits
@@ -42,12 +44,14 @@
 
           <div v-if="user.isLoggedIn" class="flex flex-col space-y-4">
             <div class="flex items-baseline space-x-4">
-            <label class="font-semibold align-baseline">Jour de retrait&nbsp;:</label>
-            <CartCalendar v-model="pickupDate" />
+              <label class="font-semibold font-roboto-mono align-baseline"
+                >Jour de retrait&nbsp;:</label
+              >
+              <CartCalendar v-model="pickupDate" />
             </div>
             <div class="flex justify-center space-x-4 pt-4">
               <button
-                class="text-primary border-2 border-primary px-4 py-2 hover:bg-opacity-90 cursor-pointer w-fit "
+                class="text-primary text-sm border-2 border-primary px-4 py-2 hover:bg-opacity-90 cursor-pointer w-fit"
                 v-if="cart.isEditing"
                 @click="abortUpdate"
               >
@@ -55,7 +59,7 @@
               </button>
 
               <button
-                class="bg-primary text-white px-4 py-2 hover:bg-opacity-90 cursor-pointer w-fit "
+                class="bg-primary text-sm text-white font-roboto-mono px-4 py-2 hover:bg-opacity-90 cursor-pointer w-fit"
                 @click="onSubmit"
               >
                 {{ cart.isEditing ? 'Mettre à jour la commande' : 'Valider commande' }}
@@ -77,7 +81,6 @@
               Se connecter
               <ArrowRightFromLine class="w-4 h-4" />
             </router-link>
-
           </div>
         </div>
       </div>
