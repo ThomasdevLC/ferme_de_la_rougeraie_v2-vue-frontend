@@ -1,5 +1,5 @@
 <template>
-  <nav class="border-b border-blue-2 bg-white px-13 py-4 relative w-full">
+  <nav class="border-b border-black bg-white px-13 py-4 relative w-full">
     <!--    <img-->
     <!--      src="/assets/header.png"-->
     <!--      alt="Background"-->
