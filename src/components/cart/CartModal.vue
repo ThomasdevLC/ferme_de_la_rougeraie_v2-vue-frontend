@@ -3,7 +3,7 @@
     <template #header>
       <div class="flex gap-3 items-center" v-if="!displayMessage">
         <ShoppingBag class="w-8 h-8" />
-        <h1 class="text-2xl font-bold">Panier</h1>
+        <h1 class="text-xl font-bold self-end">Panier</h1>
         <p v-if="!cart.isEmpty" class="text-gray-500">{{ cart.numberOfProducts }} article(s)</p>
       </div>
       <div
@@ -29,7 +29,7 @@
         <div v-else class="flex flex-col space-y-4">
           <CartItem v-for="item in cart.items" :key="item.product.id" :item="item" />
 
-          <p class="flex justify-end  text-xl font-semibold">
+          <p class="flex justify-end text-xl font-semibold">
             Total : <span class="font-roboto">{{ cart.cartTotal }}</span>
           </p>
 

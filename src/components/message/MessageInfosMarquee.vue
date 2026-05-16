@@ -4,10 +4,10 @@
     class="flex items-center overflow-hidden bg-gray-1 sm:bg-black/20 border-b border-black text-text-color py-2 sm:py-3"
   >
     <div class="flex animate-marquee whitespace-nowrap">
-      <span v-for="i in 8" :key="'a' + i" class="inline-flex items-center uppercase text-xl sm:text-[1.5rem] font-black mx-6">
+      <span v-for="i in 8" :key="'a' + i" class="inline-flex items-center uppercase text-2xl sm:text-2xl font-black mx-6">
         {{ marqueeMessage.content }} &nbsp; <img :src="tomatoeSrc" alt="" class="w-10 h-10 inline mx-2 rotate-12" /> &nbsp;
       </span>
-      <span v-for="i in 8" :key="'b' + i" class="inline-flex items-center uppercase text-xl sm:text-[1.5rem] font-black mx-6">
+      <span v-for="i in 8" :key="'b' + i" class="inline-flex items-center uppercase text-2xl sm:text-2xl font-black mx-6">
         {{ marqueeMessage.content }} &nbsp; <img :src="tomatoeSrc" alt="" class="w-10 h-10 inline mx-2 rotate-12" /> &nbsp;
       </span>
     </div>
@@ -31,6 +31,6 @@ const tomatoeSrc = tomatoe
 }
 
 .animate-marquee {
-  animation: marquee 40s linear infinite;
+  animation: marquee 90s linear infinite;
 }
 </style>

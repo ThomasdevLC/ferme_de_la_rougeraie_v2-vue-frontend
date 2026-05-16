@@ -1,11 +1,10 @@
 <template>
   <div
     v-if="ui.userMenuOpen"
-    class="absolute right-7 sm:right-0 mt-4 w-fit bg-white border border-gray-2 rounded-sm shadow-md z-[9999] py-4 px-6 flex flex-col items-start space-y-4 text-xl"
+    class="fixed top-[132px] right-0 w-fit bg-white border-b border-l border-black z-[9999] py-4 px-6 flex flex-col items-start space-y-4 text-lg"
   >
     <template v-if="user.isLoggedIn">
       <p class="mb-6">
-        <Hand class="wave-hand w-5 h-5 inline-block mr-2" />
         Bonjour {{ user.firstName }}
       </p>
 
@@ -26,7 +25,7 @@
 
       <p v-if="user.isLoggedIn" @click="logout()" class="cursor-pointer block hover:text-primary">
         <PowerOff class="w-5 h-5 inline-block mr-2" />
-        Se déconnecter
+        Déconnexion
       </p>
     </template>
 
@@ -43,7 +42,7 @@
 import { useUserStore } from '@/stores/user-store'
 import { useUIStore } from '@/stores/ui-store'
 import { useRouter } from 'vue-router'
-import { ReceiptText, UserRoundPen, PowerOff, Power, Hand } from 'lucide-vue-next'
+import { ReceiptText, UserRoundPen, PowerOff, Power } from 'lucide-vue-next'
 
 const user = useUserStore()
 const ui = useUIStore()
@@ -56,16 +55,3 @@ function logout() {
 }
 </script>
 
-<style scoped>
-.wave-hand {
-  transform-origin: bottom center;
-  animation: wave 0.6s ease-in-out 3;
-}
-
-@keyframes wave {
-  0%   { transform: rotate(35deg); }
-  25%  { transform: rotate(10deg); }
-  75%  { transform: rotate(55deg); }
-  100% { transform: rotate(35deg); }
-}
-</style>
