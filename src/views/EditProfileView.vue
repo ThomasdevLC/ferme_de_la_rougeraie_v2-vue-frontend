@@ -1,6 +1,6 @@
 <template>
   <div class="p-4 md:p-0 flex justify-center min-h-screen">
-    <div class="flex flex-col gap-4 w-full md:w-fit pt-60">
+    <div class="flex flex-col gap-4 w-full md:w-fit md:max-w-2xl pt-60">
     <div class="flex items-center gap-4 mb-6">
       <h1 class="text-2xl font-bold whitespace-nowrap">Votre profil</h1>
       <div class="flex-1 h-px bg-black"></div>
@@ -104,14 +104,14 @@
         <div v-if="updatePhone" class="flex flex-col gap-2">
           <div>
             <label class="block text-sm font-medium">Ancien téléphone</label>
-            <input v-model="oldPhone" type="text" class="w-full border rounded px-3 py-2 mt-1" />
+            <input v-model="oldPhone" type="text" class="w-full border rounded px-3 py-2 mt-1" @focus="setErrors({})" />
             <div v-if="errors.oldPhone" class="text-red-600 text-sm mt-1">
               {{ errors.oldPhone }}
             </div>
           </div>
           <div>
             <label class="block text-sm font-medium">Nouveau téléphone</label>
-            <input v-model="phone" type="text" class="w-full border rounded px-3 py-2 mt-1" />
+            <input v-model="phone" type="text" class="w-full border rounded px-3 py-2 mt-1" @focus="setErrors({})" />
             <div v-if="errors.phone" class="text-red-600 text-sm mt-1">{{ errors.phone }}</div>
           </div>
         </div>
@@ -124,6 +124,7 @@
               v-model="oldPassword"
               type="password"
               class="w-full border rounded px-3 py-2 mt-1"
+              @focus="setErrors({})"
             />
             <div v-if="errors.oldPassword" class="text-red-600 text-sm mt-1">
               {{ errors.oldPassword }}
@@ -135,6 +136,7 @@
               v-model="newPassword"
               type="password"
               class="w-full border rounded px-3 py-2 mt-1"
+              @focus="setErrors({})"
             />
             <div v-if="errors.newPassword" class="text-red-600 text-sm mt-1">
               {{ errors.newPassword }}
@@ -146,6 +148,7 @@
               v-model="confirmPassword"
               type="password"
               class="w-full border rounded px-3 py-2 mt-1"
+              @focus="setErrors({})"
             />
             <div v-if="errors.confirmPassword" class="text-red-600 text-sm mt-1">
               {{ errors.confirmPassword }}
@@ -163,7 +166,7 @@
           </button>
         </div>
 
-        <p v-if="error" class="mb-4 p-3 bg-red-100 text-red-800 text-center rounded">
+        <p v-if="error" class="mb-4 p-3 bg-red-100 text-red-800 text-center rounded text-sm max-w-sm mx-auto">
           <CircleX class="inline-block mr-2" :stroke-width="1" />
           {{ error }}
         </p>
@@ -182,7 +185,7 @@
 
 </template>
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
@@ -255,16 +258,20 @@ const schema = computed(() =>
 )
 
 // VeeValidate
-const { handleSubmit, resetForm, errors } = useForm({
+const { handleSubmit, resetForm, setErrors, errors } = useForm({
   validationSchema: schema,
-
+  validateOnMount: false,
 })
 
-const { value: oldPhone } = useField('oldPhone')
-const { value: phone } = useField('phone')
-const { value: oldPassword } = useField('oldPassword')
-const { value: newPassword } = useField('newPassword')
-const { value: confirmPassword } = useField('confirmPassword')
+const { value: oldPhone } = useField('oldPhone', undefined, { validateOnMount: false, validateOnValueUpdate: false })
+const { value: phone } = useField('phone', undefined, { validateOnMount: false, validateOnValueUpdate: false })
+const { value: oldPassword } = useField('oldPassword', undefined, { validateOnMount: false, validateOnValueUpdate: false })
+const { value: newPassword } = useField('newPassword', undefined, { validateOnMount: false, validateOnValueUpdate: false })
+const { value: confirmPassword } = useField('confirmPassword', undefined, { validateOnMount: false, validateOnValueUpdate: false })
+
+watch([oldPhone, phone, oldPassword, newPassword, confirmPassword], () => {
+  error.value = ''
+})
 
 function togglePhone() {
   updatePhone.value = !updatePhone.value
