@@ -69,6 +69,7 @@ describe('cartStorage', () => {
     })
 
     it('persists an empty array', () => {
+      vi.setSystemTime(new Date('2026-05-17T10:00:00.000Z'))
       cartStorage.save([])
       expect(JSON.parse(localStorage.getItem(CART_KEY)!)).toEqual({
         savedAt: Date.now(),
