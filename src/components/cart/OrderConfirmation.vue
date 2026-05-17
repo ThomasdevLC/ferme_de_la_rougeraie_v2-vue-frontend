@@ -1,15 +1,15 @@
 <template>
   <div
-    class="text-center  text-xl flex flex-col justify-center space-y-8 min-h-48 p-8"
+    class="text-center flex flex-col justify-center space-y-8 min-h-48 p-8"
   >
     <img :src="planeLogo" alt="plane logo" class="w-14 mx-auto" />
 
-    <p>
+    <p class="text-lg">
       Merci {{ userFirstName }}, votre commande a bien été {{ action }}  !<br />
        À {{ pickup  }}.
     </p>
     <button
-      class="w-fit mx-auto cursor-pointer rounded-xs bg-primary text-white test-sm font-medium px-4 py-2 hover:bg-opacity-90 "
+      class="w-fit mx-auto cursor-pointer rounded-xs bg-primary text-white text-sm font-medium px-4 py-2 hover:bg-opacity-90 "
       @click="$emit('follow-orders')"    >
       Suivre vos commandes
     </button>
