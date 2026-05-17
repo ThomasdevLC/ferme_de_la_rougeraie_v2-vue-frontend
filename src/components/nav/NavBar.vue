@@ -99,7 +99,7 @@ const route = router.currentRoute
 
 const scrolled = ref(false)
 const lastLogoClick = ref(0)
-const ADMIN_LOGIN_URL = 'http://localhost:8000/login'
+const ADMIN_LOGIN_URL = `${import.meta.env.VITE_API_BASE_URL}/login`
 const DOUBLE_TAP_DELAY_MS = 350
 
 function handleScroll() {
