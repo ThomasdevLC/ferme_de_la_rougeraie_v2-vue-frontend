@@ -10,7 +10,7 @@
 
       <div
         v-else-if="!hasOrder"
-        class="flex flex-1 items-center justify-center text-2xl font-semibold text-center"
+        class="flex flex-1 items-center justify-center font-semibold text-center"
       >
         Vous n'avez pas encore de commande en cours
       </div>

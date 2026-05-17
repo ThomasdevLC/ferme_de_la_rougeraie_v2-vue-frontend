@@ -1,11 +1,22 @@
 <template>
-  <div class="relative z-10 max-w-[75rem] mx-auto pt-40 ">
-    <div v-if="loading && !closedShopMessage" class="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+  <div class="relative z-10 max-w-[75rem] mx-auto pt-40">
+    <div
+      v-if="loading && !closedShopMessage"
+      class="flex flex-col items-center justify-center min-h-[60vh] gap-4"
+    >
       <img :src="loaderSrc" alt="loader" />
-      <p class="text-2xl font-base font-black  text-gray-4">Chargement ...</p>
+      <p class="text-xl font-roboto font-medium text-gray-4 flex items-center gap-2">
+        Chargement
+        <Shell class="w-5 h-5 animate-spin" />
+      </p>
     </div>
 
-    <p v-else-if="closedShopMessage" class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-4 text-center mt-40 px-4">{{ closedShopMessage.content }}</p>
+    <p
+      v-else-if="closedShopMessage"
+      class="text-2xl sm:text-3xl md:text-4xl font-roboto font-medium text-gray-4 text-center mt-40 px-4 whitespace-pre-line"
+    >
+      {{ closedShopMessage.content }}
+    </p>
 
     <Transition
       name="slide-up"
@@ -29,6 +40,7 @@ import { fetchProducts } from '@/services/product/product-service.ts'
 import { useMessageStore } from '@/stores/message-store.ts'
 import type { Product } from '@/models/product/product.ts'
 import ProductCard from '@/components/product/ProductCard.vue'
+import { Shell } from 'lucide-vue-next'
 import loaderImg from '/assets/tomatoe.png'
 
 const products = ref<Product[]>([])

@@ -4,6 +4,11 @@ import { useAuthStore } from '@/stores/auth-store'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+  scrollBehavior(to) {
+    if (to.name === 'about') {
+      return { top: 0, left: 0 }
+    }
+  },
   routes: [
 
     {
