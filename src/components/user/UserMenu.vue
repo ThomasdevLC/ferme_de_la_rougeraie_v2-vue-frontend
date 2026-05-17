@@ -1,7 +1,8 @@
 <template>
   <div
     v-if="ui.userMenuOpen"
-    class="fixed top-[132px] right-0 w-fit bg-white border-b border-l border-black z-[9999] py-4 px-6 flex flex-col items-start space-y-4 text-lg"
+    :style="{ top: headerHeight + 'px' }"
+    class="fixed right-0 w-fit bg-white border-b border-l border-black z-[9999] py-4 px-6 flex flex-col items-start space-y-4 text-lg"
   >
     <template v-if="user.isLoggedIn">
       <p class="mb-6">
@@ -42,11 +43,29 @@
 import { useUserStore } from '@/stores/user-store'
 import { useUIStore } from '@/stores/ui-store'
 import { useRouter } from 'vue-router'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { ReceiptText, UserRoundPen, PowerOff, Power } from 'lucide-vue-next'
 
 const user = useUserStore()
 const ui = useUIStore()
 const router = useRouter()
+
+const headerHeight = ref(0)
+
+function updateHeaderHeight() {
+  const header = document.querySelector('header')
+  if (header) headerHeight.value = header.offsetHeight
+}
+
+const observer = new ResizeObserver(updateHeaderHeight)
+
+onMounted(() => {
+  updateHeaderHeight()
+  const header = document.querySelector('header')
+  if (header) observer.observe(header)
+})
+
+onBeforeUnmount(() => observer.disconnect())
 
 function logout() {
   user.logout()
