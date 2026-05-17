@@ -23,8 +23,9 @@
     </div>
   </ModalComponent>
 
-  <div class="min-h-screen flex items-center justify-center">
-  <div class="max-w-md w-full p-6 bg-white shadow rounded relative">
+  <div class="login-page min-h-screen flex items-center justify-center">
+  <div class="max-w-md w-full p-6 bg-white/90 shadow relative">
+    <img :src="logoSrc" alt="Ferme de la Rougeraie" class="h-24 mx-auto mb-4" />
     <h2 class="text-xl font-bold mb-4 text-center">Connexion</h2>
 
     <form @submit.prevent="handleLogin" class="space-y-4">
@@ -98,6 +99,7 @@ import { useCartStore } from '@/stores/cart-store.ts'
 import { useUIStore } from '@/stores/ui-store.ts'
 import { CircleCheckBig } from 'lucide-vue-next'
 import { Eye, EyeOff, Loader, ArrowRight } from 'lucide-vue-next'
+import logoSrc from '/assets/logo.png'
 
 const email = ref('')
 const password = ref('')
@@ -175,3 +177,50 @@ const handleLogin = async () => {
   }
 }
 </script>
+
+<style scoped>
+.login-page {
+  --base: #8c9da4;
+  --bg-blend: overlay;
+  --blur: 0px;
+  --fg-blend: color-burn;
+  --foreground: #fe8401;
+  --opacity: 0.5;
+  background-color: #8c9da4;
+  height: 100vh;
+  isolation: isolate;
+  overflow: hidden;
+  position: relative;
+}
+
+.login-page::before,
+.login-page::after {
+  bottom: 0;
+  content: '';
+  left: 0;
+  pointer-events: none;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: -1;
+}
+
+.login-page::before {
+  background-image: url('/assets/login/register-lettuce.jpg');
+  background-position: center;
+  background-size: cover;
+  filter: grayscale(100%) contrast(1) blur(var(--blur));
+  mix-blend-mode: var(--bg-blend);
+  opacity: var(--opacity);
+}
+
+.login-page::after {
+  background-color: var(--foreground);
+  background-image: url('/assets/background.png');
+  background-position: center;
+  background-size: cover;
+  background-blend-mode: multiply;
+  mix-blend-mode: var(--fg-blend);
+  opacity: 0.5;
+}
+</style>
