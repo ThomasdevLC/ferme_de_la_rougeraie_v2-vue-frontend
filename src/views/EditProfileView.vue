@@ -120,36 +120,52 @@
         <div v-if="updatePassword" class="flex flex-col gap-2">
           <div>
             <label class="block text-sm font-medium">Mot de passe actuel</label>
-            <input
-              v-model="oldPassword"
-              type="password"
-              class="w-full border rounded px-3 py-2 mt-1"
-              @focus="setErrors({})"
-            />
+            <div class="relative mt-1">
+              <input
+                v-model="oldPassword"
+                :type="showOldPassword ? 'text' : 'password'"
+                autocomplete="new-password"
+                class="w-full border rounded px-3 py-2 pr-10"
+                @focus="setErrors({})"
+              />
+              <button type="button" @click="showOldPassword = !showOldPassword" class="cursor-pointer absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700">
+                <component :is="showOldPassword ? EyeOff : Eye" class="w-4 h-4" stroke-width="1.5" />
+              </button>
+            </div>
             <div v-if="errors.oldPassword" class="text-red-600 text-sm mt-1">
               {{ errors.oldPassword }}
             </div>
           </div>
           <div>
             <label class="block text-sm font-medium">Nouveau mot de passe</label>
-            <input
-              v-model="newPassword"
-              type="password"
-              class="w-full border rounded px-3 py-2 mt-1"
-              @focus="setErrors({})"
-            />
+            <div class="relative mt-1">
+              <input
+                v-model="newPassword"
+                :type="showNewPassword ? 'text' : 'password'"
+                class="w-full border rounded px-3 py-2 pr-10"
+                @focus="setErrors({})"
+              />
+              <button type="button" @click="showNewPassword = !showNewPassword" class="cursor-pointer absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700">
+                <component :is="showNewPassword ? EyeOff : Eye" class="w-4 h-4" stroke-width="1.5" />
+              </button>
+            </div>
             <div v-if="errors.newPassword" class="text-red-600 text-sm mt-1">
               {{ errors.newPassword }}
             </div>
           </div>
           <div>
             <label class="block text-sm font-medium">Confirmer le mot de passe</label>
-            <input
-              v-model="confirmPassword"
-              type="password"
-              class="w-full border rounded px-3 py-2 mt-1"
-              @focus="setErrors({})"
-            />
+            <div class="relative mt-1">
+              <input
+                v-model="confirmPassword"
+                :type="showConfirmPassword ? 'text' : 'password'"
+                class="w-full border rounded px-3 py-2 pr-10"
+                @focus="setErrors({})"
+              />
+              <button type="button" @click="showConfirmPassword = !showConfirmPassword" class="cursor-pointer absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700">
+                <component :is="showConfirmPassword ? EyeOff : Eye" class="w-4 h-4" stroke-width="1.5" />
+              </button>
+            </div>
             <div v-if="errors.confirmPassword" class="text-red-600 text-sm mt-1">
               {{ errors.confirmPassword }}
             </div>
@@ -194,7 +210,7 @@ import { useUserStore } from '@/stores/user-store'
 import { useUIStore } from '@/stores/ui-store.ts'
 import { handleAxiosError } from '@/utils/handle-axios-error'
 import { handleAxiosSuccess } from '@/utils/handle-axios-success'
-import { IdCard, Mail, Phone, Pencil, PencilOff, UserRoundX, CircleX, Check } from 'lucide-vue-next'
+import { IdCard, Mail, Phone, Pencil, PencilOff, UserRoundX, CircleX, Check, Eye, EyeOff } from 'lucide-vue-next'
 import ModalComponent from '@/components/ui/ModalComponent.vue'
 
 const userStore = useUserStore()
@@ -202,6 +218,9 @@ const ui = useUIStore()
 const router = useRouter()
 
 const updatePhone = ref(false)
+const showOldPassword = ref(false)
+const showNewPassword = ref(false)
+const showConfirmPassword = ref(false)
 const updatePassword = ref(false)
 const successMessage = ref('')
 const error = ref<string>('')
@@ -275,6 +294,7 @@ watch([oldPhone, phone, oldPassword, newPassword, confirmPassword], () => {
 
 function togglePhone() {
   updatePhone.value = !updatePhone.value
+  setErrors({})
   if (!updatePhone.value) {
     oldPhone.value = ''
     phone.value = ''
@@ -288,6 +308,7 @@ function togglePhone() {
 
 function togglePassword() {
   updatePassword.value = !updatePassword.value
+  setErrors({})
   if (!updatePassword.value) {
     oldPassword.value = ''
     newPassword.value = ''
