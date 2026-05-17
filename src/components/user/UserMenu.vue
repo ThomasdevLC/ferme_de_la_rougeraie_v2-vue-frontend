@@ -7,6 +7,7 @@
     <template v-if="user.isLoggedIn">
       <p class="mb-6">
         Bonjour {{ user.firstName }}
+        <Hand class="wave-hand w-6 h-6 inline-block " />
       </p>
 
       <RouterLink to="/orders" class="block hover:text-primary" @click="ui.closeUserMenu">
@@ -44,7 +45,7 @@ import { useUserStore } from '@/stores/user-store'
 import { useUIStore } from '@/stores/ui-store'
 import { useRouter } from 'vue-router'
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { ReceiptText, UserRoundPen, PowerOff, Power } from 'lucide-vue-next'
+import { ReceiptText, UserRoundPen, PowerOff, Power, Hand } from 'lucide-vue-next'
 
 const user = useUserStore()
 const ui = useUIStore()
@@ -74,3 +75,19 @@ function logout() {
 }
 </script>
 
+<style scoped>
+.wave-hand {
+  transform-origin: bottom center;
+  transform: rotate(35deg);
+  animation: wave 0.5s ease-in-out 2;
+  animation-fill-mode: forwards;
+}
+
+@keyframes wave {
+  0%   { transform: rotate(35deg); }
+  25%  { transform: rotate(10deg); }
+  75%  { transform: rotate(55deg); }
+  90%  { transform: rotate(37deg); }
+  100% { transform: rotate(35deg); }
+}
+</style>
