@@ -29,11 +29,18 @@
         </li>
       </ul>
 
-      <img
-        src="/assets/logo.png"
-        alt="logo"
-        class="w-26 absolute left-1/2 -translate-x-1/2"
-      />
+      <button
+        type="button"
+        class="absolute left-1/2 -translate-x-1/2"
+        aria-label="Accès administrateur"
+        @click="handleLogoClick"
+      >
+        <img
+          src="/assets/logo.png"
+          alt="logo"
+          class="w-26"
+        />
+      </button>
 
       <ul class="flex items-center gap-8">
         <li
@@ -91,10 +98,24 @@ const router = useRouter()
 const route = router.currentRoute
 
 const scrolled = ref(false)
+const lastLogoClick = ref(0)
+const ADMIN_LOGIN_URL = 'http://localhost:8000/login'
+const DOUBLE_TAP_DELAY_MS = 350
 
 function handleScroll() {
   scrolled.value =
     window.innerWidth >= 768 && route.value.path === '/products' && window.scrollY >= 75
+}
+
+function handleLogoClick() {
+  const now = Date.now()
+
+  if (now - lastLogoClick.value <= DOUBLE_TAP_DELAY_MS) {
+    window.location.href = ADMIN_LOGIN_URL
+    return
+  }
+
+  lastLogoClick.value = now
 }
 
 onMounted(() => {
