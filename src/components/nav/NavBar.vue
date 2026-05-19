@@ -98,9 +98,7 @@ const router = useRouter()
 const route = router.currentRoute
 
 const scrolled = ref(false)
-const lastLogoClick = ref(0)
 const ADMIN_LOGIN_URL = `${import.meta.env.VITE_API_BASE_URL}/login`
-const DOUBLE_TAP_DELAY_MS = 350
 
 function handleScroll() {
   scrolled.value =
@@ -108,14 +106,7 @@ function handleScroll() {
 }
 
 function handleLogoClick() {
-  const now = Date.now()
-
-  if (now - lastLogoClick.value <= DOUBLE_TAP_DELAY_MS) {
-    window.location.href = ADMIN_LOGIN_URL
-    return
-  }
-
-  lastLogoClick.value = now
+  window.open(ADMIN_LOGIN_URL, '_blank', 'noopener,noreferrer')
 }
 
 onMounted(() => {
