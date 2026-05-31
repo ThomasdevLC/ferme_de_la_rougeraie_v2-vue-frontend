@@ -3,8 +3,8 @@
     <template #header>
       <div class="flex gap-3 items-center" v-if="!displayMessage">
         <ShoppingBag class="w-8 h-8" />
-        <h1 class="text-xl font-bold self-end">Panier</h1>
-        <p v-if="!cart.isEmpty" class="text-gray-500">{{ cart.numberOfProducts }} article(s)</p>
+        <h1 class="text-xl font-bold">Panier</h1>
+        <span v-if="!cart.isEmpty" class="text-sm text-gray-500">{{ cart.numberOfProducts }} article(s)</span>
       </div>
       <div
         class="pt-4 flex flex-row justify-center items-baseline space-x-2 text-base"

@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col w-[260px] h-[440px] bg-white border border-gray-2 relative">
     <div class="absolute bottom-[165px] ml-[-5px]">
-      <p v-if="product.limited" class="bg-primary text-white text-sm font-medium px-2 py-1 mb-4">
+      <p v-if="product.limited" class="bg-primary text-white text-sm font-medium px-2 py-1 mb-4 uppercase">
         Quantité limitée
       </p>
     </div>
@@ -40,14 +40,12 @@
             class="pointer-events-none absolute right-0 top-7 z-20 hidden w-56 border border-gray-2 bg-white px-3 py-2 text-sm leading-snug text-text-color shadow-lg group-hover:block group-focus-within:block"
           >
             <p>{{ product.name }}</p>
-            <p v-if="product.discount && product.discountText" class="mt-1 font-medium text-primary">
-              {{ product.discountText }}
-            </p>
+            <p v-if="product.discount && product.discountText" class="mt-1 font-medium text-primary" v-html="highlightNumbers(product.discountText)"></p>
           </div>
         </div>
       </div>
       <p class="text-md text-[0.9rem] text-gray-4 mt-1">
-        <span class="font-roboto">{{ product.price.toFixed(2) }} €</span> /
+        <span class="font-roboto">{{ product.price.toFixed(2) }}</span> € /
         <span class="tracking-tighter">{{ product.unit }}</span>
       </p>
 
@@ -99,6 +97,10 @@ onBeforeUnmount(() => {
 })
 
 watch(() => product.name, () => nextTick(updateNameTruncation))
+
+function highlightNumbers(text: string): string {
+  return text.replace(/\d+([.,]\d+)?/g, '<span class="font-roboto font-normal">$&</span>')
+}
 
 function onAddToCart() {
   if (quantity.value <= 0) return

@@ -32,7 +32,7 @@
                rounded-sm px-2 py-0.5  whitespace-nowrap z-10
                pointer-events-none"
         >
-          Stock max atteint
+          Article épuisé
         </p>
       </div>
     </div>

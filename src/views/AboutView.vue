@@ -6,7 +6,7 @@
         <img :src="imageOne" alt="photo léa" class="w-full h-full object-cover" />
       </div>
       <div class="w-1/2 pt-[7.5rem] px-20 min-[1024px]:pt-40 min-[1024px]:px-20 min-[1920px]:pt-[12.5rem] min-[1920px]:px-40">
-        <p class="text-xl lg:text-[2.5rem] min-[1920px]:text-[3.5rem] font-titles">
+        <p class="text-xl lg:text-[3rem] min-[1920px]:text-[3.5rem] font-titles">
           Ferme de la Rougeraie
         </p>
         <div class="text-[0.88rem] min-[1920px]:text-lg mt-6 space-y-4">
@@ -17,7 +17,7 @@
             en prairies permanentes et entourées de haies anciennes ou plantées par nos soins. En
             effet, la préservation et l'amélioration de la biodiversité font partie de nos
             préoccupations. L'ensemble de la surface est certifiée en agriculture biologique depuis
-            2008.
+            <span class="font-roboto">2008</span>.
           </p>
 
           <p>
@@ -46,7 +46,7 @@
           </div>
           <p class="font-bold text-base min-[1920px]:text-lg">LANOUEE - Ferme de la Rougeraie</p>
           <p class="font-bold text-base min-[1920px]:text-lg mb-3">
-            Mardi et Vendredi de <span class="font-roboto font-medium"> 16h à 19h</span>
+            Mardi et Vendredi de <span class="font-roboto font-medium">16</span>h à <span class="font-roboto font-medium">19</span>h
           </p>
 
           <div class="text-[0.88rem] min-[1920px]:text-lg space-y-4">
