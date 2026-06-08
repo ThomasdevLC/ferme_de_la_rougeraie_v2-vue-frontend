@@ -24,9 +24,9 @@
   </ModalComponent>
 
   <div class="login-page min-h-screen flex items-center justify-center">
-  <div class="max-w-md w-full p-6 bg-white/90 shadow relative">
-    <img :src="logoSrc" alt="Ferme de la Rougeraie" class="h-24 mx-auto mb-4" />
-    <h2 class="text-xl font-bold mb-4 text-center">Connexion</h2>
+  <div class="max-w-md w-full mx-4 sm:mx-auto p-5 sm:p-6 bg-white/90 shadow relative">
+    <img :src="logoSrc" alt="Ferme de la Rougeraie" class="h-18 sm:h-24 mx-auto mb-3 sm:mb-4" />
+    <h2 class="text-lg sm:text-xl font-bold mb-4 text-center">Connexion</h2>
 
     <form @submit.prevent="handleLogin" class="space-y-4">
       <div>

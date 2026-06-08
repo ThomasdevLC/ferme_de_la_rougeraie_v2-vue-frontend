@@ -7,7 +7,7 @@
     <template v-if="user.isLoggedIn">
       <p class="mb-6">
         Bonjour {{ user.firstName }}
-        <Hand class="wave-hand w-6 h-6 inline-block " />
+        <Hand class="wave-hand w-6 h-6 inline-block" :stroke-width="1.5" />
       </p>
 
       <RouterLink to="/orders" class="block hover:text-primary" @click="ui.closeUserMenu">

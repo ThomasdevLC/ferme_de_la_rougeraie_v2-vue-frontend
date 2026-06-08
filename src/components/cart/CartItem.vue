@@ -1,13 +1,13 @@
 <template>
-  <div
-    class="flex flex-col md:flex-row items-center justify-between gap-4 border-b border-gray-200 py-5 px-4 sm:px-12"
-  >
-    <div class="flex items-center">
-      <div class="relative">
+  <div class="border-b border-gray-200 py-3 px-4 md:flex md:flex-row md:items-center md:justify-between md:gap-4 md:py-5 md:px-12">
+
+    <!-- Ligne 1 : image + nom + X (mobile) -->
+    <div class="flex items-center gap-3">
+      <div class="relative shrink-0">
         <img
           :src="`${baseUrl}${item.product.image}`"
           :alt="item.product.name"
-          class="w-10 h-10 rounded-full object-cover mr-4"
+          class="w-10 h-10 rounded-full object-cover"
         />
         <div
           v-if="item.product.limited"
@@ -15,27 +15,41 @@
         />
       </div>
 
-      <div class="flex-1 sm:w-48 text-center sm:text-left">
-        <p class="font-medium leading-5">{{ item.product.name }}</p>
-        <p class="text-xs text-gray-500 mt-1 hidden sm:block">
+      <div class="flex-1 min-w-0 md:w-48">
+        <p class="font-medium leading-5 text-sm">{{ item.product.name }}</p>
+        <p class="text-xs text-gray-500 mt-1 hidden md:block">
           {{ item.product.price.toFixed(2) }} € / {{ item.product.unit }}
         </p>
       </div>
+
+      <button
+        class="ml-auto md:hidden text-gray-4 hover:text-black cursor-pointer transition"
+        @click="cart.removeFromCart(item.product.id)"
+      >
+        <X class="w-5 h-5" :stroke-width="1.5" />
+      </button>
     </div>
-    <div class="flex items-center mb-1 sm:mb-0">
+
+    <!-- Ligne 2 : quantité + prix (mobile) -->
+    <div class="flex items-center justify-between mt-2 md:hidden">
+      <CartQuantity :product="item.product" :quantity="item.quantity" />
+      <span class="font-roboto text-base">{{ getItemTotal(item) }}</span>
+    </div>
+
+    <!-- Desktop : quantité, prix, X séparés -->
+    <div class="hidden md:flex items-center">
       <CartQuantity :product="item.product" :quantity="item.quantity" />
     </div>
-
-    <div class="text-center font-roboto md:text-right text-base w-20 sm:w-24 ">
+    <div class="hidden md:block text-right font-roboto text-base w-20">
       {{ getItemTotal(item) }}
     </div>
-
     <button
+      class="hidden md:block text-gray-4 hover:text-black cursor-pointer transition"
       @click="cart.removeFromCart(item.product.id)"
-      class="text-gray-4 hover:text-black text-sm cursor-pointer transition"
     >
       <X class="w-5 h-5" :stroke-width="1.5" />
     </button>
+
   </div>
 </template>
 

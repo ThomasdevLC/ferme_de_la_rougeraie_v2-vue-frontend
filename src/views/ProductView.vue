@@ -1,5 +1,5 @@
 <template>
-  <div class="relative z-10 max-w-[75rem] mx-auto pt-40">
+  <div class="relative z-10 max-w-[75rem] mx-auto pt-6 md:pt-40">
     <div
       v-if="loading && !closedShopMessage"
       class="flex flex-col items-center justify-center min-h-[60vh] gap-4"

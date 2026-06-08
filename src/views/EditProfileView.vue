@@ -1,6 +1,6 @@
 <template>
   <div class="p-4 md:p-0 flex justify-center min-h-screen">
-    <div class="flex flex-col gap-4 w-full md:w-fit md:max-w-2xl pt-60">
+    <div class="flex flex-col gap-4 w-full md:w-fit md:max-w-2xl pt-6 md:pt-60">
     <div class="flex items-center gap-4 mb-6">
       <h1 class="text-2xl font-bold whitespace-nowrap">Votre profil</h1>
       <div class="flex-1 h-px bg-black"></div>
@@ -76,10 +76,10 @@
             <h2 class="text-xl font-bold">Confirmation</h2>
           </template>
 
-          <p>Êtes-vous sûr de vouloir supprimer définitivement votre compte ?</p>
+          <p class="text-xs md:text-base">Êtes-vous sûr de vouloir supprimer définitivement votre compte ?</p>
 
           <template #footer>
-            <div class="text-sm flex justify-end gap-4">
+            <div class="text-xs md:text-sm flex justify-end gap-4">
               <button
                 @click="ui.closeConfirmDeleteModal()"
                 class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
@@ -103,14 +103,14 @@
         <!-- Modification téléphone -->
         <div v-if="updatePhone" class="flex flex-col gap-2">
           <div>
-            <label class="block text-sm font-medium">Ancien téléphone</label>
+            <label class="block text-xs md:text-sm font-medium">Ancien téléphone</label>
             <input v-model="oldPhone" type="text" class="w-full border rounded px-3 py-2 mt-1" @focus="setErrors({})" />
             <div v-if="errors.oldPhone" class="text-red-600 text-sm mt-1">
               {{ errors.oldPhone }}
             </div>
           </div>
           <div>
-            <label class="block text-sm font-medium">Nouveau téléphone</label>
+            <label class="block text-xs md:text-sm font-medium">Nouveau téléphone</label>
             <input v-model="phone" type="text" class="w-full border rounded px-3 py-2 mt-1" @focus="setErrors({})" />
             <div v-if="errors.phone" class="text-red-600 text-sm mt-1">{{ errors.phone }}</div>
           </div>
@@ -119,7 +119,7 @@
         <!-- Modification mot de passe -->
         <div v-if="updatePassword" class="flex flex-col gap-2">
           <div>
-            <label class="block text-sm font-medium">Mot de passe actuel</label>
+            <label class="block text-xs md:text-sm font-medium">Mot de passe actuel</label>
             <div class="relative mt-1">
               <input
                 v-model="oldPassword"
@@ -137,7 +137,7 @@
             </div>
           </div>
           <div>
-            <label class="block text-sm font-medium">Nouveau mot de passe</label>
+            <label class="block text-xs md:text-sm font-medium">Nouveau mot de passe</label>
             <div class="relative mt-1">
               <input
                 v-model="newPassword"
@@ -154,7 +154,7 @@
             </div>
           </div>
           <div>
-            <label class="block text-sm font-medium">Confirmer le mot de passe</label>
+            <label class="block text-xs md:text-sm font-medium">Confirmer le mot de passe</label>
             <div class="relative mt-1">
               <input
                 v-model="confirmPassword"

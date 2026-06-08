@@ -1,15 +1,20 @@
 <template>
-  <nav class="border-b border-black bg-white px-13 py-4 relative w-full">
-    <!--    <img-->
-    <!--      src="/assets/header.png"-->
-    <!--      alt="Background"-->
-    <!--      class="absolute inset-0 w-full h-full object-cover pointer-events-none z-0 opacity-95"-->
-    <!--    />-->
+  <nav class="border-b border-black bg-white px-4 md:px-13 py-3 md:py-4 relative w-full">
+    <div class="relative z-10 flex items-center justify-between mx-auto py-4 md:py-8">
 
-    <div class="relative z-10 flex items-center justify-between mx-auto py-8">
+      <!-- Burger button — mobile only -->
+      <button
+        class="md:hidden cursor-pointer"
+        aria-label="Menu"
+        @click="mobileMenuOpen = !mobileMenuOpen"
+      >
+        <Menu v-if="!mobileMenuOpen" class="w-6 h-6" />
+        <X v-else class="w-6 h-6" />
+      </button>
 
-      <ul class="flex items-center md:space-x-8 text-[1.3rem] font-semibold text-gray-700">
-        <li class="md:w-auto sm:mr-14" @click="ui.closeUserMenu">
+      <!-- Nav links — desktop only -->
+      <ul class="hidden md:flex items-center space-x-8 text-[1.3rem] font-semibold text-gray-700">
+        <li @click="ui.closeUserMenu">
           <RouterLink
             to="/about"
             class="hover:text-primary transition"
@@ -18,7 +23,7 @@
             À propos
           </RouterLink>
         </li>
-        <li class="md:w-auto sm:mr-20">
+        <li>
           <RouterLink
             to="/products"
             class="hover:text-primary transition"
@@ -29,43 +34,35 @@
         </li>
       </ul>
 
+      <!-- Logo (centered) -->
       <button
         type="button"
         class="absolute left-1/2 -translate-x-1/2"
         aria-label="Accès administrateur"
         @click="handleLogoClick"
       >
-        <img
-          src="/assets/logo.png"
-          alt="logo"
-          class="w-26"
-        />
+        <img src="/assets/logo.png" alt="logo" class="w-16 md:w-26" />
       </button>
 
-      <ul class="flex items-center gap-8">
-        <li
-          class="w-1/2 text-center pt-4 pl-12 md:w-auto md:ml-auto md:p-0"
-          :class="['order-last md:order-none']"
-        >
+      <!-- Right icons -->
+      <ul class="flex items-center gap-4 md:gap-8">
+        <li>
           <button @click="ui.toggleUserMenu" aria-label="Compte utilisateur" class="cursor-pointer">
             <span v-if="user.isLoggedIn">
-              <UserRoundCheck class="w-7 h-7 text-primary transition" />
+              <UserRoundCheck class="w-6 h-6 md:w-7 md:h-7 text-primary transition" />
             </span>
             <span v-else>
-              <UserRound class="w-7 h-7 transition md:p-0" />
+              <UserRound class="w-6 h-6 md:w-7 md:h-7 transition" />
             </span>
           </button>
           <UserMenu />
         </li>
-        <li
-          class="w-1/2 flex justify-center pt-4 pr-12 md:w-auto md:p-0"
-          :class="['order-last md:order-none']"
-        >
+        <li>
           <div class="relative cursor-pointer hover:text-black transition" @click="ui.openCart">
-            <ShoppingBag class="w-7 h-7 transition bg-white" />
+            <ShoppingBag class="w-6 h-6 md:w-7 md:h-7 transition bg-white" />
             <div
               v-if="!cart.isEmpty"
-              class="absolute bottom-7 left-6 w-[22px] h-[22px] rounded-full bg-primary text-white text-xs flex items-center justify-center z-20"
+              class="absolute -top-2 -right-2 w-[18px] h-[18px] md:w-[20px] md:h-[20px] rounded-full bg-primary text-white text-xs flex items-center justify-center z-20"
             >
               {{ cart.numberOfProducts }}
             </div>
@@ -75,18 +72,51 @@
 
     </div>
   </nav>
-  <div class="">
+
+  <!-- Mobile menu dropdown -->
+  <Transition
+    enter-active-class="transition-all duration-200 ease-out"
+    enter-from-class="opacity-0 -translate-y-2"
+    enter-to-class="opacity-100 translate-y-0"
+    leave-active-class="transition-all duration-150 ease-in"
+    leave-from-class="opacity-100 translate-y-0"
+    leave-to-class="opacity-0 -translate-y-2"
+  >
+    <div
+      v-if="mobileMenuOpen"
+      class="md:hidden relative z-10 bg-white border-b border-black px-6 py-4 flex flex-col gap-4 text-base font-semibold text-gray-700"
+    >
+      <RouterLink
+        to="/about"
+        class="hover:text-primary transition py-1"
+        active-class="text-primary border-b border-primary w-fit"
+        @click="mobileMenuOpen = false"
+      >
+        À propos
+      </RouterLink>
+      <RouterLink
+        to="/products"
+        class="hover:text-primary transition py-1"
+        active-class="text-primary border-b border-primary w-fit"
+        @click="mobileMenuOpen = false"
+      >
+        Produits
+      </RouterLink>
+    </div>
+  </Transition>
+
+  <div>
     <MessageInfosMarquee v-if="displayMarquee" class="w-full" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, ref, computed } from 'vue'
+import { onMounted, onBeforeUnmount, ref, computed, watch } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useUIStore } from '@/stores/ui-store.ts'
 import { useUserStore } from '@/stores/user-store.ts'
 import { useCartStore } from '@/stores/cart-store.ts'
-import { UserRoundCheck, UserRound, ShoppingBag } from 'lucide-vue-next'
+import { UserRoundCheck, UserRound, ShoppingBag, Menu, X } from 'lucide-vue-next'
 import UserMenu from '@/components/user/UserMenu.vue'
 import MessageInfosMarquee from '@/components/message/MessageInfosMarquee.vue'
 
@@ -98,7 +128,13 @@ const router = useRouter()
 const route = router.currentRoute
 
 const scrolled = ref(false)
+const mobileMenuOpen = ref(false)
 const ADMIN_LOGIN_URL = `${import.meta.env.VITE_API_BASE_URL}/login`
+
+watch(
+  () => route.value.path,
+  () => { mobileMenuOpen.value = false },
+)
 
 function handleScroll() {
   scrolled.value =
@@ -119,6 +155,6 @@ onBeforeUnmount(() => {
 })
 
 const displayMarquee = computed(
-  () => route.value.path === '/products' && !scrolled.value && !ui.cartOpen,
+  () => route.value.path === '/products' && !scrolled.value && !ui.cartOpen && !mobileMenuOpen.value,
 )
 </script>

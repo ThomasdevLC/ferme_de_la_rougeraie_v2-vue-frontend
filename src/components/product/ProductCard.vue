@@ -32,24 +32,29 @@
             type="button"
             class="flex h-5 w-5 items-center justify-center text-gray-4 hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             :aria-label="infoLabel"
+            @click.stop="tooltipOpen = !tooltipOpen"
           >
             <Info class="h-4 w-4" stroke-width="2" />
           </button>
 
           <div
-            class="pointer-events-none absolute right-0 top-7 z-20 hidden w-56 border border-gray-2 bg-white px-3 py-2 text-sm leading-snug text-text-color shadow-lg group-hover:block group-focus-within:block"
+            :class="[
+              'absolute right-0 top-7 z-20 w-56 border border-gray-2 bg-white px-3 py-2 text-sm leading-snug text-text-color shadow-lg',
+              tooltipOpen ? 'block' : 'hidden group-hover:block group-focus-within:block'
+            ]"
           >
             <p>{{ product.name }}</p>
             <p v-if="product.discount && product.discountText" class="mt-1 font-medium text-primary" v-html="highlightNumbers(product.discountText)"></p>
           </div>
         </div>
       </div>
-      <p class="text-md text-[0.9rem] text-gray-4 mt-1">
+      <p class="text-[0.9rem] text-gray-4 mt-1">
         <span class="font-roboto">{{ product.price.toFixed(2) }}</span> € /
         <span class="tracking-tighter">{{ product.unit }}</span>
       </p>
-
-      <ProductQuantity v-model="quantity" :product="product" />
+      <div class="flex justify-start">
+        <ProductQuantity v-model="quantity" :product="product" />
+      </div>
 
       <p class="font-medium text-[0.9rem] cursor-pointer hover:text-primary" @click="onAddToCart">
         {{ added ? 'AJOUTÉ' : 'AJOUTER AU PANIER' }}
@@ -74,6 +79,7 @@ const quantity = ref(0)
 const added = ref(false)
 const nameElement = ref<HTMLElement | null>(null)
 const isNameTruncated = ref(false)
+const tooltipOpen = ref(false)
 
 const hasDiscountInfo = computed(() => Boolean(product.discount && product.discountText))
 const showInfoButton = computed(() => hasDiscountInfo.value || isNameTruncated.value)
@@ -87,13 +93,19 @@ function updateNameTruncation() {
   isNameTruncated.value = element.scrollWidth > element.clientWidth
 }
 
+function handleOutsideClick() {
+  tooltipOpen.value = false
+}
+
 onMounted(() => {
   nextTick(updateNameTruncation)
   window.addEventListener('resize', updateNameTruncation)
+  window.addEventListener('click', handleOutsideClick)
 })
 
 onBeforeUnmount(() => {
   window.removeEventListener('resize', updateNameTruncation)
+  window.removeEventListener('click', handleOutsideClick)
 })
 
 watch(() => product.name, () => nextTick(updateNameTruncation))

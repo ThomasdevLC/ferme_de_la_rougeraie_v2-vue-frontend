@@ -1,7 +1,7 @@
 <template>
-  <div class="w-full px-4 flex flex-col justify-start relative pt-60">
+  <div class="w-full px-4 flex flex-col justify-start relative pt-6 md:pt-60">
     <div>
-      <div class="flex items-center gap-4 mb-10 max-w-120 mx-auto">
+      <div class="flex items-center gap-4 mb-6 md:mb-10 max-w-120 mx-auto">
         <h1 class="text-2xl font-semibold whitespace-nowrap">Vos commandes</h1>
         <div class="flex-1 h-px bg-black"></div>
       </div>
