@@ -1,12 +1,12 @@
 <template>
-  <div class="relative min-h-screen mx-auto px-8 md:px-0">
+  <div class="relative min-h-screen mx-auto md:px-0 -mt-24 md:mt-0">
     <!-- TOP -->
     <div class="text-black flex flex-col lg:flex-row">
-      <div class="w-1/2 border-r-1 border-b border-black h-full">
+      <div class="w-full lg:w-1/2 lg:border-r-1 lg:border-b lg:border-black h-full">
         <img :src="imageOne" alt="photo léa" class="w-full h-full object-cover" />
       </div>
-      <div class="w-1/2 pt-[7.5rem] px-20 min-[1024px]:pt-40 min-[1024px]:px-20 min-[1920px]:pt-[12.5rem] min-[1920px]:px-40">
-        <p class="text-xl lg:text-[3rem] min-[1920px]:text-[3.5rem] font-titles">
+      <div class="w-full lg:w-1/2 pt-6 px-5 min-[1024px]:pt-40 min-[1024px]:px-20 min-[1920px]:pt-[12.5rem] min-[1920px]:px-40">
+        <p class="text-4xl md:text-xl lg:text-[2.4rem] min-[1920px]:text-[3.5rem] font-titles">
           Ferme de la Rougeraie
         </p>
         <div class="text-[0.88rem] min-[1920px]:text-lg mt-6 space-y-4">
@@ -37,11 +37,11 @@
     </div>
 
     <!-- BOTTOM -->
-    <div class="flex flex-col-reverse lg:flex-row border-b border-t border-black h-full">
-      <div class="text-black text-base flex-1 w-1/2">
-        <div class="pt-20 px-20 min-[1024px]:pt-10 min-[1024px]:px-20 min-[1920px]:pt-20 min-[1920px]:px-40">
+    <div class="flex flex-col-reverse lg:flex-row border-b border-t border-black h-full mt-8 lg:mt-0">
+      <div class="text-black text-base flex-1 w-full lg:w-1/2">
+        <div class="pt-6 px-5 pb-6 lg:pb-0 min-[1024px]:pt-10 min-[1024px]:px-20 min-[1920px]:pt-20 min-[1920px]:px-40">
           <div class="flex items-center gap-4 mb-3">
-            <h2 class="text-2xl font-bold whitespace-nowrap">POINTS DE VENTE</h2>
+            <h2 class="text-lg lg:text-2xl font-bold whitespace-nowrap">POINTS DE VENTE</h2>
             <div class="flex-1 h-px bg-black"></div>
           </div>
           <p class="font-bold text-base min-[1920px]:text-lg">LANOUEE - Ferme de la Rougeraie</p>
@@ -66,7 +66,7 @@
         </div>
       </div>
       <div
-        class="flex-1 flex justify-end lg:justify-end mx-auto lg:mx-0 w-1/2 border-l-1 border-black h-full"
+        class="flex-1 flex justify-end lg:justify-end mx-auto lg:mx-0 w-full lg:w-1/2 lg:border-l-1 lg:border-black h-full"
       >
         <img :src="imageTwo" alt="photo léa au marché" class="w-full object-cover" />
       </div>
@@ -74,9 +74,9 @@
 
     <!-- FOOTER -->
     <footer>
-      <div class="flex flex-col items-center justify-center text-center leading-none mt-10">
-        <img class="h-[110px] sm:h-[130px]" :src="imageLogo" alt="logo" />
-        <p class="mt-4 sm:text-sm">© Ferme de la Rougeraie - 06 83 34 13 70</p>
+      <div class="flex flex-col items-center justify-center text-center leading-none mt-4 lg:mt-10">
+        <img class="h-[70px] sm:h-[110px] lg:h-[130px]" :src="imageLogo" alt="logo" />
+        <p class="mt-3 text-xs sm:text-sm">© Ferme de la Rougeraie - 06 83 34 13 70</p>
 
         <div class="mt-2">
           <AboutInformations />
