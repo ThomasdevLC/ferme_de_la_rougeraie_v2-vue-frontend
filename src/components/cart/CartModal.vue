@@ -7,7 +7,7 @@
         <span v-if="!cart.isEmpty" class="text-sm text-gray-500">{{ cart.numberOfProducts }} article(s)</span>
       </div>
       <div
-        class="pt-4 flex flex-row justify-center items-baseline space-x-2 text-base"
+        class="pt-4 flex flex-row justify-center items-baseline space-x-2 text-xs md:text-base"
         v-if="cart.isEditing && !displayMessage"
       >
         <CircleAlert class="w-5 h-5 text-primary" />
@@ -29,29 +29,29 @@
         <div v-else class="flex flex-col space-y-4">
           <CartItem v-for="item in cart.items" :key="item.product.id" :item="item" />
 
-          <p class="flex justify-end text-xl font-semibold">
+          <p class="flex justify-end text-base font-semibold">
             Total : <span class="font-roboto">{{ cart.cartTotal }}</span>
           </p>
 
           <router-link
             to="/products"
-            class="text-md text-primary font-medium flex items-center gap-1 justify-center mb-6 hover:text-primary-hover"
+            class="text-base text-primary font-medium flex items-center gap-1 justify-center mt-4 mb-6 hover:text-primary-hover"
             @click="ui.closeCart()"
           >
             Ajouter des produits
-            <shopping-bag class="ml-2 w-6 h-6" />
+            <shopping-bag class="ml-2 w-5 h-5" />
           </router-link>
 
-          <div v-if="user.isLoggedIn" class="flex flex-col space-y-4">
-            <div class="flex items-baseline space-x-4">
-              <label class="font-semibold font-roboto-mono align-baseline"
+          <div v-if="user.isLoggedIn" class="flex flex-col space-y-4 mt-4">
+            <div class="flex items-center gap-3">
+              <label class="text-sm font-semibold font-roboto-mono whitespace-nowrap shrink-0"
                 >Jour de retrait&nbsp;:</label
               >
               <CartCalendar v-model="pickupDate" />
             </div>
             <div class="flex justify-center space-x-4 pt-4">
               <button
-                class="text-primary text-sm border-2 border-primary px-4 py-2 hover:bg-opacity-90 cursor-pointer w-fit"
+                class="text-primary text-xs md:text-sm border-2 border-primary px-4 py-2 hover:bg-opacity-90 cursor-pointer w-fit"
                 v-if="cart.isEditing"
                 @click="abortUpdate"
               >
@@ -59,7 +59,7 @@
               </button>
 
               <button
-                class="bg-primary text-sm text-white font-roboto-mono px-4 py-2 hover:bg-opacity-90 cursor-pointer w-fit"
+                class="bg-primary text-xs md:text-sm text-white font-roboto-mono px-4 py-2 hover:bg-opacity-90 cursor-pointer w-fit"
                 @click="onSubmit"
               >
                 {{ cart.isEditing ? 'Mettre à jour la commande' : 'Valider commande' }}
@@ -72,7 +72,7 @@
           </p>
 
           <div v-else-if="!user.isLoggedIn" class="mt-6 text-center">
-            <p class="text-gray-500 mb-4">Veuillez vous connecter pour passer une commande.</p>
+            <p class="text-xs text-gray-500 mb-4">Veuillez vous connecter pour passer une commande.</p>
             <router-link
               to="/login"
               class="text-primary font-medium flex items-center gap-1 justify-center"

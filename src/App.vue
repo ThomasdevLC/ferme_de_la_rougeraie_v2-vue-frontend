@@ -52,7 +52,7 @@ onMounted(() => {
   <main
     @click="ui.closeUserMenu"
     class="relative min-h-screen text-text-color"
-    :class="displayNavbar ? 'pt-80 md:pt-0 pb-12' : ''"
+    :class="displayNavbar ? 'pt-24 md:pt-0 pb-12' : ''"
     :style="{ 'background-image': `url(${image})` }"
   >
     <RouterView />
@@ -69,5 +69,14 @@ onMounted(() => {
 
 .p-inputtext:hover {
   border-color: #fe8401 !important;
+}
+
+.p-datepicker table td > span {
+  width: 1.85rem !important;
+  height: 1.85rem !important;
+}
+
+.p-datepicker table td {
+  padding: 0.3rem !important;
 }
 </style>

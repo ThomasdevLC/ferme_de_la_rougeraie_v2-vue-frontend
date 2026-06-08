@@ -4,7 +4,7 @@
   >
     <img :src="planeLogo" alt="plane logo" class="w-14 mx-auto" />
 
-    <p class="text-lg">
+    <p class="text-sm md:text-lg">
       Merci {{ userFirstName }}, votre commande a bien été {{ action }}  !<br />
        À {{ pickup  }}.
     </p>
