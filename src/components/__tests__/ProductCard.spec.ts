@@ -1,8 +1,7 @@
-import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createTestingPinia } from '@pinia/testing'
 import ProductCard from '@/components/product/ProductCard.vue'
-import { useCartStore } from '@/stores/cart-store'
 import type { Product } from '@/models/product/product'
 
 const makeProduct = (overrides: Partial<Product> = {}): Product => ({
@@ -27,8 +26,7 @@ function factory(product: Product) {
       stubs: {
         ProductQuantity: {
           name: 'ProductQuantity',
-          props: ['modelValue', 'product'],
-          emits: ['update:modelValue'],
+          props: ['product'],
           template: '<div class="product-quantity-stub" />',
         },
       },
@@ -39,10 +37,6 @@ function factory(product: Product) {
 describe('ProductCard', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-  })
-
-  afterEach(() => {
-    vi.useRealTimers()
   })
 
   it('renders product name, formatted price and unit', () => {
@@ -73,43 +67,14 @@ describe('ProductCard', () => {
     expect(wrapper.find('img[alt="Promotion"]').exists()).toBe(false)
   })
 
-  it('does not call cart.addToCart when quantity is 0', async () => {
+  it('renders the quantity control', () => {
     const wrapper = factory(makeProduct())
-    const cart = useCartStore()
-    await wrapper.find('p.font-medium.cursor-pointer').trigger('click')
-    expect(cart.addToCart).not.toHaveBeenCalled()
-    expect(wrapper.text()).toContain('AJOUTER AU PANIER')
+    expect(wrapper.find('.product-quantity-stub').exists()).toBe(true)
   })
 
-  it('calls cart.addToCart and shows "AJOUTÉ" when quantity > 0', async () => {
-    const wrapper = factory(makeProduct({ id: 1 }))
-    const cart = useCartStore()
-
-    wrapper.findComponent({ name: 'ProductQuantity' }).vm.$emit('update:modelValue', 3)
-    await wrapper.vm.$nextTick()
-
-    await wrapper.find('p.font-medium.cursor-pointer').trigger('click')
-
-    expect(cart.addToCart).toHaveBeenCalledTimes(1)
-    expect(cart.addToCart).toHaveBeenCalledWith(
-      expect.objectContaining({ id: 1 }),
-      3,
-    )
-    expect(wrapper.text()).toContain('AJOUTÉ')
-  })
-
-  it('resets "AJOUTÉ" back to "AJOUTER AU PANIER" after 1500ms', async () => {
-    vi.useFakeTimers()
+  it('does not render the "AJOUTER AU PANIER" call to action anymore', () => {
     const wrapper = factory(makeProduct())
-
-    wrapper.findComponent({ name: 'ProductQuantity' }).vm.$emit('update:modelValue', 1)
-    await wrapper.vm.$nextTick()
-
-    await wrapper.find('p.font-medium.cursor-pointer').trigger('click')
-    expect(wrapper.text()).toContain('AJOUTÉ')
-
-    vi.advanceTimersByTime(1500)
-    await wrapper.vm.$nextTick()
-    expect(wrapper.text()).toContain('AJOUTER AU PANIER')
+    expect(wrapper.text()).not.toContain('AJOUTER AU PANIER')
+    expect(wrapper.text()).not.toContain('AJOUTÉ')
   })
 })

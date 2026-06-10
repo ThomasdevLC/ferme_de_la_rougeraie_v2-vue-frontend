@@ -53,12 +53,8 @@
         <span class="tracking-tighter">{{ product.unit }}</span>
       </p>
       <div class="flex justify-start">
-        <ProductQuantity v-model="quantity" :product="product" />
+        <ProductQuantity :product="product" />
       </div>
-
-      <p class="font-medium text-[0.9rem] cursor-pointer hover:text-primary" @click="onAddToCart">
-        {{ added ? 'AJOUTÉ' : 'AJOUTER AU PANIER' }}
-      </p>
     </div>
   </div>
 </template>
@@ -67,16 +63,12 @@
 import type { Product } from '@/models/product/product.ts'
 import ProductQuantity from '@/components/product/ProductQuantity.vue'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { useCartStore } from '@/stores/cart-store.ts'
 import { Info } from 'lucide-vue-next'
 
 const { product } = defineProps<{ product: Product }>()
-const cart = useCartStore()
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL
 
-const quantity = ref(0)
-const added = ref(false)
 const nameElement = ref<HTMLElement | null>(null)
 const isNameTruncated = ref(false)
 const tooltipOpen = ref(false)
@@ -112,14 +104,5 @@ watch(() => product.name, () => nextTick(updateNameTruncation))
 
 function highlightNumbers(text: string): string {
   return text.replace(/\d+([.,]\d+)?/g, '<span class="font-roboto font-normal">$&</span>')
-}
-
-function onAddToCart() {
-  if (quantity.value <= 0) return
-  cart.addToCart(product, quantity.value)
-  added.value = true
-  setTimeout(() => {
-    added.value = false
-  }, 1500)
 }
 </script>
