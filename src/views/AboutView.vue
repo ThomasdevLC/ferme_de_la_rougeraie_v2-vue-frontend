@@ -6,10 +6,10 @@
         <img :src="imageOne" alt="photo léa" class="w-full h-full object-cover" />
       </div>
       <div class="w-full lg:w-1/2 pt-6 px-5 min-[1024px]:pt-40 min-[1024px]:px-20 min-[1920px]:pt-[12.5rem] min-[1920px]:px-40">
-        <p class="text-4xl md:text-xl lg:text-[2.4rem] min-[1920px]:text-[3.5rem] font-titles">
+        <p class="text-4xl lg:text-[2.4rem] min-[1150px]:text-[3rem] min-[1920px]:text-[5rem] font-titles">
           Ferme de la Rougeraie
         </p>
-        <div class="text-[0.88rem] min-[1920px]:text-lg mt-6 space-y-4">
+        <div class="text-[0.88rem] min-[1150px]:text-[0.97rem] min-[1920px]:text-[1.05rem] mt-6 space-y-4">
           <p>
             Notre ferme familiale possède deux activités de production : un atelier d'une trentaine
             de vaches laitières en circuit long (lait livré à Biolait) et un atelier de maraîchage
@@ -44,12 +44,12 @@
             <h2 class="text-lg lg:text-2xl font-bold whitespace-nowrap">POINTS DE VENTE</h2>
             <div class="flex-1 h-px bg-black"></div>
           </div>
-          <p class="font-bold text-base min-[1920px]:text-lg">LANOUEE - Ferme de la Rougeraie</p>
-          <p class="font-bold text-base min-[1920px]:text-lg mb-3">
+          <p class="font-bold text-base min-[1920px]:text-[1.05rem]">LANOUEE - Ferme de la Rougeraie</p>
+          <p class="font-bold text-base min-[1920px]:text-[1.05rem] mb-3">
             Mardi et Vendredi de <span class="font-roboto font-medium">16</span>h à <span class="font-roboto font-medium">19</span>h
           </p>
 
-          <div class="text-[0.88rem] min-[1920px]:text-lg space-y-4">
+          <div class="text-[0.88rem] min-[1150px]:text-[0.97rem] min-[1920px]:text-[1.05rem] space-y-4">
             <p>
               La liste des légumes disponibles avec leur prix est mise à jour chaque début de
               semaine. Vous avez jusqu'à 21h la veille du jour de vente pour passer une

@@ -21,7 +21,7 @@
       />
     </div>
 
-    <div class="px-2 py-3 flex-1 flex flex-col justify-between text-text-color">
+    <div class="px-3 py-3 flex-1 flex flex-col justify-between text-text-color">
       <div class="flex items-start gap-1">
         <p ref="nameElement" class="min-w-0 flex-1 text-[1.8rem] font-titles truncate">
           {{ product.name }}
@@ -48,9 +48,8 @@
           </div>
         </div>
       </div>
-      <p class="text-[0.9rem] text-gray-4 mt-1">
-        <span class="font-roboto">{{ product.price.toFixed(2) }}</span> € /
-        <span class="tracking-tighter">{{ product.unit }}</span>
+      <p class="text-[1rem] text-gray-4 mt-1">
+        <span class="font-roboto">{{ product.price.toFixed(2) }}</span> €<span class="mx-0.5">/</span><span class="tracking-tighter">{{ product.unit }}</span>
       </p>
       <div class="flex justify-start">
         <ProductQuantity :product="product" />
