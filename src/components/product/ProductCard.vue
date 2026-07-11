@@ -21,7 +21,7 @@
       />
     </div>
 
-    <div class="px-3 py-3 flex-1 flex flex-col justify-between text-text-color">
+    <div class="px-3 py-3 flex-1 flex flex-col justify-between text-[#222222]">
       <div class="flex items-start gap-1">
         <p ref="nameElement" class="min-w-0 flex-1 text-[1.8rem] font-titles truncate">
           {{ product.name }}
@@ -39,7 +39,7 @@
 
           <div
             :class="[
-              'absolute right-0 top-7 z-20 w-56 border border-gray-2 bg-white px-3 py-2 text-sm leading-snug text-text-color shadow-lg',
+              'absolute right-0 top-7 z-20 w-56 border border-gray-2 bg-white px-3 py-2 text-sm leading-snug text-black shadow-lg',
               tooltipOpen ? 'block' : 'hidden group-hover:block group-focus-within:block'
             ]"
           >
@@ -49,7 +49,7 @@
         </div>
       </div>
       <p class="text-[1rem] text-gray-4 mt-1">
-        <span class="font-roboto">{{ product.price.toFixed(2) }}</span> €<span class="mx-0.5">/</span><span class="tracking-tighter">{{ product.unit }}</span>
+        <span class="font-roboto">{{ product.price.toFixed(2) }}</span><span class="mx-1">€</span><span class="mx-0.5">/</span><span class="tracking-tighter">{{ product.unit }}</span>
       </p>
       <div class="flex justify-start">
         <ProductQuantity :product="product" />
