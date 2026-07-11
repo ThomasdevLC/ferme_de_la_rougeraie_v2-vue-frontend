@@ -5,6 +5,7 @@ import type { CartItem } from '@/models/cart/cart-item'
 
 const makeItem = (id: number, quantity = 1): CartItem => ({
   product: { id, price: 2.5 } as CartItem['product'],
+  variant: null,
   quantity,
   maxAllowed: null,
 })

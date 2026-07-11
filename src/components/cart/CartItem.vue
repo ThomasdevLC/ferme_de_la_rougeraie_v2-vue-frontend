@@ -18,7 +18,7 @@
       <div class="flex-1 min-w-0 md:w-48">
         <p class="font-medium leading-5 text-sm">{{ item.product.name }}</p>
         <p class="text-xs text-gray-500 mt-1 hidden md:block">
-          {{ item.product.price.toFixed(2) }} € / {{ item.product.unit }}
+          {{ getUnitPrice(item).toFixed(2) }} € / {{ item.product.unit }}
         </p>
       </div>
 
@@ -57,7 +57,7 @@
 import type { CartItem } from '@/models/cart/cart-item.ts'
 import CartQuantity from './CartQuantity.vue'
 import { useCartStore } from '@/stores/cart-store.ts'
-import { getItemTotal } from '@/utils/price'
+import { getItemTotal, getUnitPrice } from '@/utils/price'
 import { X } from 'lucide-vue-next'
 
 const cart = useCartStore()

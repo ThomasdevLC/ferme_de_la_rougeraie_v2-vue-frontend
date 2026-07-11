@@ -24,10 +24,18 @@ export function formatPrice(priceInCents: number): string {
 }
 
 /**
+ * Returns the unit price (€) of a cart item : variant price if any,
+ * product price otherwise.
+ */
+export function getUnitPrice(item: CartItem): number {
+  return item.variant?.price ?? item.product.price ?? 0
+}
+
+/**
  * Computes and formats the total for a cart item (unit price × quantity).
  */
 export function getItemTotal(item: CartItem): string {
-  const unitPriceInCents = convertPriceToCents(item.product.price)
+  const unitPriceInCents = convertPriceToCents(getUnitPrice(item))
   const totalInCents = Math.round(unitPriceInCents * item.quantity)
   return formatPrice(totalInCents)
 }

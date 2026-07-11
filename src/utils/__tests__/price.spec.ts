@@ -39,6 +39,7 @@ describe('formatPrice', () => {
 describe('getItemTotal', () => {
   const makeItem = (price: number, quantity: number): CartItem => ({
     product: { id: 1, price } as CartItem['product'],
+    variant: null,
     quantity,
     maxAllowed: null,
   })

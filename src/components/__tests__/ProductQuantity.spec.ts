@@ -12,10 +12,13 @@ const makeProduct = (overrides: Partial<Product> = {}): Product => ({
   unit: 'kg',
   inter: 1,
   image: 'pomme.jpg',
+  hasStock: true,
   stock: 10,
   limited: false,
   discount: false,
   discountText: null,
+  hasVariants: false,
+  variants: [],
   ...overrides,
 })
 

@@ -48,7 +48,7 @@
           </div>
         </div>
       </div>
-      <p class="text-[1rem] text-gray-4 mt-1">
+      <p v-if="product.price !== null" class="text-[1rem] text-gray-4 mt-1">
         <span class="font-roboto">{{ product.price.toFixed(2) }}</span><span class="mx-1">€</span><span class="mx-0.5">/</span><span class="tracking-tighter">{{ product.unit }}</span>
       </p>
       <div class="flex justify-start">

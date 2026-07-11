@@ -6,4 +6,6 @@ export interface OrderHistoryItem {
   unitPrice: number;
   lineTotal: number;
   availableStock?: number | null;
+  variantId?: number | null;
+  variantLabel?: string | null;
 }
