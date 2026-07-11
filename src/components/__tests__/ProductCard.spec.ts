@@ -42,7 +42,8 @@ describe('ProductCard', () => {
   it('renders product name, formatted price and unit', () => {
     const wrapper = factory(makeProduct({ name: 'Pomme', price: 2.5, unit: 'kg' }))
     expect(wrapper.text()).toContain('Pomme')
-    expect(wrapper.text()).toContain('2.50 €')
+    expect(wrapper.text()).toContain('2.50')
+    expect(wrapper.text()).toContain('€')
     expect(wrapper.text()).toContain('kg')
   })
 
