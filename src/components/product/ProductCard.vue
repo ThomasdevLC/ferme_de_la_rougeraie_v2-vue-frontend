@@ -48,11 +48,21 @@
           </div>
         </div>
       </div>
-      <p v-if="product.price !== null" class="text-[1rem] text-gray-4 mt-1">
-        <span class="font-roboto">{{ product.price.toFixed(2) }}</span><span class="mx-1">€</span><span class="mx-0.5">/</span><span class="tracking-tighter">{{ product.unit }}</span>
+      <p v-if="displayedPrice !== null" class="text-[1rem] text-gray-4 mt-1">
+        <span class="font-roboto">{{ displayedPrice.toFixed(2) }}</span><span class="mx-1">€</span><span class="mx-0.5">/</span><span class="tracking-tighter">{{ product.unit }}</span>
       </p>
-      <div class="flex justify-start">
+      <div class="flex items-center justify-between gap-2">
         <ProductQuantity :product="product" />
+        <select
+          v-if="product.hasVariants"
+          v-model="selectedVariantId"
+          class="h-[29px] cursor-pointer rounded-none border bg-white px-4 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          :aria-label="`Choisir une déclinaison de ${product.name}`"
+        >
+          <option v-for="variant in product.variants" :key="variant.id" :value="variant.id">
+            {{ variant.label }}
+          </option>
+        </select>
       </div>
     </div>
   </div>
@@ -67,6 +77,13 @@ import { Info } from 'lucide-vue-next'
 const { product } = defineProps<{ product: Product }>()
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL
+
+// Variants : le back garantit variants non vide (et trié) quand hasVariants = true
+const selectedVariantId = ref<number | null>(product.variants[0]?.id ?? null)
+const selectedVariant = computed(
+  () => product.variants.find((v) => v.id === selectedVariantId.value) ?? null,
+)
+const displayedPrice = computed(() => selectedVariant.value?.price ?? product.price)
 
 const nameElement = ref<HTMLElement | null>(null)
 const isNameTruncated = ref(false)
