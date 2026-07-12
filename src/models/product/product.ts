@@ -5,6 +5,11 @@ export interface ProductVariant {
   stock: number | null;
 }
 
+export interface ProductCategory {
+  key: string;
+  label: string;
+}
+
 export interface Product {
   id: number;
   name: string;
@@ -19,4 +24,5 @@ export interface Product {
   discountText: string | null;
   hasVariants: boolean;
   variants: ProductVariant[];
+  category: ProductCategory | null;
 }
