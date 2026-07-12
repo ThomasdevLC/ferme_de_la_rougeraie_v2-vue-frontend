@@ -29,7 +29,9 @@
       </thead>
       <tbody>
       <tr v-for="(item, i) in order.items" :key="i" class="border-b">
-        <td class="px-2 py-1.5 md:px-3 md:py-2">{{ item.product.name }}</td>
+        <td class="px-2 py-1.5 md:px-3 md:py-2">
+          {{ item.product.name }}<span v-if="item.variantLabel"> — {{ item.variantLabel }}</span>
+        </td>
         <td class="px-2 py-1.5 md:px-3 md:py-2 text-right">{{ item.quantity }}</td>
         <td class="px-2 py-1.5 md:px-3 md:py-2 text-right">{{ item.unitPrice.toFixed(2) }} €</td>
         <td class="px-2 py-1.5 md:px-3 md:py-2 text-right">
@@ -120,7 +122,19 @@ const fetchOrder = async () => {
     )
 
     orderData.items.forEach((item) => {
-      cart.addToCart(item.product, item.quantity, item.availableStock ?? null)
+      // Reconstruit le variant depuis la ligne de commande (le back n'expose pas
+      // product.variants ici) : prix figé de la commande, stock dispo recalculé.
+      const variant =
+        item.variantId != null
+          ? {
+              id: item.variantId,
+              label: item.variantLabel ?? '',
+              price: item.unitPrice,
+              stock: item.availableStock ?? null,
+            }
+          : null
+
+      cart.addToCart(item.product, item.quantity, item.availableStock ?? null, variant)
     })
     ui.openCart()
   } catch (error) {

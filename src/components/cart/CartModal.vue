@@ -105,6 +105,7 @@ import { useUserStore } from '@/stores/user-store'
 import { useOrderStore } from '@/stores/order-store'
 import { handleAxiosError } from '@/utils/handle-axios-error'
 import { updateOrder } from '@/services/order/order-edit-service.ts'
+import type { OrderItem } from '@/models/order/order-item.ts'
 
 const ui = useUIStore()
 const cart = useCartStore()
@@ -118,17 +119,14 @@ const lastPickupLabel = ref<string>('')
 const isoPickupRef = toRef(cart, 'editPickupDate')
 const pickupDate = useSyncedDate(isoPickupRef)
 const originalPickup = ref<string>('')
-const originalItems = ref<{ productId: number; quantity: number }[]>([])
+const originalItems = ref<OrderItem[]>([])
 
 watch(
   () => cart.isEditing,
   (isEditing) => {
     if (isEditing) {
       originalPickup.value = cart.editPickupDate
-      originalItems.value = cart.items.map((i) => ({
-        productId: i.product.id,
-        quantity: i.quantity,
-      }))
+      originalItems.value = cart.orderItems
     }
   },
 )
@@ -154,12 +152,8 @@ async function onSubmit() {
   const isoDate = format(pickupDate.value, 'yyyy-MM-dd')
 
   if (cart.isEditing) {
-    const currentItems = cart.items.map((i) => ({
-      productId: i.product.id,
-      quantity: i.quantity,
-    }))
     const sameDate = isoDate === originalPickup.value
-    const sameItems = JSON.stringify(currentItems) === JSON.stringify(originalItems.value)
+    const sameItems = JSON.stringify(cart.orderItems) === JSON.stringify(originalItems.value)
     if (sameDate && sameItems) {
       return
     }
@@ -169,10 +163,7 @@ async function onSubmit() {
     if (cart.isEditing) {
       const payload = {
         pickupDate: isoDate,
-        items: cart.items.map((item) => ({
-          productId: item.product.id,
-          quantity: item.quantity,
-        })),
+        items: cart.orderItems,
       }
       await updateOrder(cart.currentOrderId!, payload)
       lastPickupLabel.value = displayPickupLabel.value
