@@ -18,6 +18,28 @@
       {{ closedShopMessage.content }}
     </p>
 
+    <div
+      v-if="!loading && !closedShopMessage?.content && categories.length"
+      class="flex flex-wrap justify-center gap-3 md:px-24 lg:px-0"
+      :class="hasMarquee ? 'pt-16' : 'pt-8'"
+    >
+      <button
+        v-for="category in categories"
+        :key="category.key"
+        type="button"
+        :aria-pressed="isSelected(category.key)"
+        class="border px-4 py-2 text-sm font-medium uppercase cursor-pointer transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        :class="
+          isSelected(category.key)
+            ? 'bg-primary text-white border-primary'
+            : 'bg-white text-gray-4 border-gray-2 hover:border-primary'
+        "
+        @click="toggleCategory(category.key)"
+      >
+        {{ category.label }}
+      </button>
+    </div>
+
     <Transition
       name="slide-up"
       enter-active-class="transition duration-400"
@@ -26,9 +48,9 @@
     >
       <div
         v-if="!loading && !closedShopMessage?.content"
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 place-items-center gap-6 py-20 md:px-24 lg:px-0"
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 place-items-center gap-6 pt-10 pb-20 md:px-24 lg:px-0"
       >
-        <ProductCard v-for="product in products" :key="product.id" :product="product" />
+        <ProductCard v-for="product in filteredProducts" :key="product.id" :product="product" />
       </div>
     </Transition>
   </div>
@@ -39,6 +61,7 @@ import { ref, onMounted, computed } from 'vue'
 import { fetchProducts } from '@/services/product/product-service.ts'
 import { useMessageStore } from '@/stores/message-store.ts'
 import type { Product } from '@/models/product/product.ts'
+import { deriveCategories } from '@/utils/product-category.ts'
 import ProductCard from '@/components/product/ProductCard.vue'
 import { Shell } from 'lucide-vue-next'
 import loaderImg from '/assets/tomatoe.png'
@@ -49,6 +72,26 @@ const loading = ref(true)
 const loaderSrc = loaderImg
 
 const closedShopMessage = computed(() => messageStore.closedShopMessage)
+const hasMarquee = computed(() => Boolean(messageStore.marqueeMessage))
+
+const selectedKeys = ref<string[]>([])
+const categories = computed(() => deriveCategories(products.value))
+
+function isSelected(key: string) {
+  return selectedKeys.value.includes(key)
+}
+
+function toggleCategory(key: string) {
+  selectedKeys.value = isSelected(key)
+    ? selectedKeys.value.filter((k) => k !== key)
+    : [...selectedKeys.value, key]
+}
+
+const filteredProducts = computed(() =>
+  selectedKeys.value.length === 0
+    ? products.value
+    : products.value.filter((p) => p.category && selectedKeys.value.includes(p.category.key)),
+)
 
 onMounted(async () => {
   window.scrollTo({ top: 0 })
