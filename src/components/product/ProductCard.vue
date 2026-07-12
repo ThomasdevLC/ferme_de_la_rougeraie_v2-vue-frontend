@@ -1,12 +1,12 @@
 <template>
-  <div class="flex flex-col w-[260px] h-[440px] bg-white border border-gray-2 relative">
+  <div class="flex flex-col w-[260px] h-[440px] bg-white border border-black relative">
     <div class="absolute bottom-[165px] ml-[-5px]">
       <p v-if="product.limited" class="bg-primary text-white text-sm font-medium px-2 py-1 mb-4 uppercase">
         Quantité limitée
       </p>
     </div>
 
-    <div class="h-[280px] overflow-hidden">
+    <div class="h-[280px] overflow-hidden border-b border-black">
       <img
         :src="`${baseUrl}${product.image}`"
         :alt="`Image de ${product.name}`"

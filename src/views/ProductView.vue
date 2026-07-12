@@ -31,7 +31,7 @@
         class="border px-4 py-2 text-sm font-medium uppercase cursor-pointer transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         :class="
           isSelected(category.key)
-            ? 'bg-primary text-white border-primary'
+            ? 'bg-[#FE9C34] text-white border-[#FE9C34]'
             : 'bg-white text-gray-4 border-gray-2 hover:border-primary'
         "
         @click="toggleCategory(category.key)"
