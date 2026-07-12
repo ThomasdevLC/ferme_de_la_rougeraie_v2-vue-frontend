@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
-import { convertPriceToCents, formatPrice, getItemTotal } from '@/utils/price'
+import { convertPriceToCents, formatPrice, getItemTotal, getUnitPrice } from '@/utils/price'
 import type { CartItem } from '@/models/cart/cart-item'
+import type { ProductVariant } from '@/models/product/product'
 
 describe('convertPriceToCents', () => {
   it('converts an integer euro price to cents', () => {
@@ -54,5 +55,48 @@ describe('getItemTotal', () => {
 
   it('returns 0 € for a zero quantity', () => {
     expect(getItemTotal(makeItem(5, 0))).toMatch(/0,00\s?€/)
+  })
+
+  it('uses the variant price when the line carries a variant', () => {
+    const variant: ProductVariant = { id: 2, label: 'Gros', price: 1.8, stock: 20 }
+    const item = {
+      product: { id: 50, price: null } as CartItem['product'],
+      variant,
+      quantity: 2,
+      maxAllowed: null,
+    }
+    expect(getItemTotal(item)).toMatch(/3,60\s?€/)
+  })
+})
+
+describe('getUnitPrice', () => {
+  it('returns the variant price when present', () => {
+    const item = {
+      product: { id: 50, price: null } as CartItem['product'],
+      variant: { id: 2, label: 'Gros', price: 1.8, stock: 20 } as ProductVariant,
+      quantity: 1,
+      maxAllowed: null,
+    }
+    expect(getUnitPrice(item)).toBe(1.8)
+  })
+
+  it('falls back to the product price for a simple product', () => {
+    const item: CartItem = {
+      product: { id: 1, price: 2.5 } as CartItem['product'],
+      variant: null,
+      quantity: 1,
+      maxAllowed: null,
+    }
+    expect(getUnitPrice(item)).toBe(2.5)
+  })
+
+  it('returns 0 when both prices are null', () => {
+    const item: CartItem = {
+      product: { id: 1, price: null } as CartItem['product'],
+      variant: null,
+      quantity: 1,
+      maxAllowed: null,
+    }
+    expect(getUnitPrice(item)).toBe(0)
   })
 })

@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia';
 import type { Product, ProductVariant } from '@/models/product/product.ts';
 import type { CartItem } from '@/models/cart/cart-item.ts';
+import type { OrderItem } from '@/models/order/order-item.ts';
 import { convertPriceToCents, formatPrice, getUnitPrice } from '@/utils/price'
 import { createOrder } from '@/services/order/order-service.ts'
 import { cartStorage } from '@/services/cart/cart-storage'
@@ -50,6 +51,15 @@ export const useCartStore = defineStore('cart', {
 
     numberOfProducts(state): number {
       return state.items.length;
+    },
+
+    /** Items du panier au format attendu par l'API commande (variantId si la ligne porte un variant). */
+    orderItems(state): OrderItem[] {
+      return state.items.map(item => ({
+        productId: item.product.id,
+        ...(item.variant && { variantId: item.variant.id }),
+        quantity: item.quantity,
+      }));
     },
 
     isEmpty(state): boolean {
@@ -150,10 +160,7 @@ export const useCartStore = defineStore('cart', {
       }
       const payload = {
         pickupDate,
-        items: this.items.map(item => ({
-          productId: item.product.id,
-          quantity: item.quantity,
-        })),
+        items: this.orderItems,
       };
 
         const response = await createOrder(payload);
