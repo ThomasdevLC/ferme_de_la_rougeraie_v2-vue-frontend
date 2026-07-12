@@ -12,17 +12,18 @@
 import { computed } from 'vue'
 import { formatFloat } from '@/utils/number-format'
 import { useCartStore } from '@/stores/cart-store'
-import type { Product } from '@/models/product/product'
+import type { Product, ProductVariant } from '@/models/product/product'
 import QuantityControl from '@/components/ui/common/QuantityControl.vue'
 
-const props = defineProps<{ product: Product }>()
+const props = defineProps<{ product: Product; variant?: ProductVariant | null }>()
 const cart = useCartStore()
 
-const inCartQty = computed(() => cart.getProductQuantity(props.product.id))
-const isInCart = computed(() => cart.isProductInCart(props.product.id))
+const variantId = computed(() => props.variant?.id ?? null)
+const inCartQty = computed(() => cart.getProductQuantity(props.product.id, variantId.value))
+const isInCart = computed(() => cart.isProductInCart(props.product.id, variantId.value))
 const displayed = computed(() => inCartQty.value)
 const step = props.product.inter ?? 1
-const maxAllowed = computed(() => cart.getMaxAllowed(props.product))
+const maxAllowed = computed(() => cart.getMaxAllowed(props.product, props.variant ?? null))
 const isMax = computed(() => {
   if (maxAllowed.value === null) return false
   return displayed.value >= maxAllowed.value
@@ -30,14 +31,14 @@ const isMax = computed(() => {
 
 function handleIncrement() {
   if (isInCart.value) {
-    cart.incrementQuantity(props.product.id)
+    cart.incrementQuantity(props.product.id, variantId.value)
   } else {
-    cart.addToCart(props.product, step)
+    cart.addToCart(props.product, step, null, props.variant ?? null)
   }
 }
 
 function handleDecrement() {
-  if (isInCart.value) cart.decrementQuantity(props.product.id)
+  if (isInCart.value) cart.decrementQuantity(props.product.id, variantId.value)
 }
 
 const formattedQuantity = computed(() =>

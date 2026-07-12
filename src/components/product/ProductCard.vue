@@ -52,7 +52,7 @@
         <span class="font-roboto">{{ displayedPrice.toFixed(2) }}</span><span class="mx-1">€</span><span class="mx-0.5">/</span><span class="tracking-tighter">{{ product.unit }}</span>
       </p>
       <div class="flex items-center justify-between gap-2">
-        <ProductQuantity :product="product" />
+        <ProductQuantity :product="product" :variant="selectedVariant" />
         <select
           v-if="product.hasVariants"
           v-model="selectedVariantId"

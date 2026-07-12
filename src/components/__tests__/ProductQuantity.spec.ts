@@ -53,6 +53,8 @@ describe('ProductQuantity', () => {
     expect(addToCartSpy).toHaveBeenCalledWith(
       expect.objectContaining({ id: 1 }),
       0.5,
+      null,
+      null,
     )
     expect(incrementSpy).not.toHaveBeenCalled()
   })
@@ -67,7 +69,7 @@ describe('ProductQuantity', () => {
 
     await wrapper.findAll('button')[1].trigger('click')
 
-    expect(incrementSpy).toHaveBeenCalledWith(3)
+    expect(incrementSpy).toHaveBeenCalledWith(3, null)
     expect(addToCartSpy).not.toHaveBeenCalled()
   })
 })

@@ -73,7 +73,7 @@ describe('CartItem', () => {
     const wrapper = factory(makeItem({ product: makeProduct({ id: 42 }) }))
     const cart = useCartStore()
     await wrapper.find('button').trigger('click')
-    expect(cart.removeFromCart).toHaveBeenCalledWith(42)
+    expect(cart.removeFromCart).toHaveBeenCalledWith(42, null)
   })
 
   it('passes product and quantity to the CartQuantity child', () => {

@@ -1,10 +1,22 @@
 
 import { defineStore } from 'pinia';
-import type { Product } from '@/models/product/product.ts';
+import type { Product, ProductVariant } from '@/models/product/product.ts';
 import type { CartItem } from '@/models/cart/cart-item.ts';
 import { convertPriceToCents, formatPrice, getUnitPrice } from '@/utils/price'
 import { createOrder } from '@/services/order/order-service.ts'
 import { cartStorage } from '@/services/cart/cart-storage'
+
+/**
+ * Une ligne de panier est identifiée par le couple (productId, variantId) :
+ * deux variants d'un même produit = deux lignes distinctes.
+ * Produit simple → variantId = null.
+ */
+const isSameLine = (item: CartItem, productId: number, variantId: number | null): boolean =>
+  item.product.id === productId && (item.variant?.id ?? null) === variantId;
+
+/** Stock de référence d'une ligne : celui du variant s'il y en a un, sinon celui du produit. */
+const getLineStock = (item: CartItem): number | null =>
+  item.variant ? item.variant.stock : (item.product.stock ?? null);
 
 export const useCartStore = defineStore('cart', {
   state: () => ({
@@ -18,12 +30,12 @@ export const useCartStore = defineStore('cart', {
 
   getters: {
 
-    isProductInCart: (state) => (productId: number): boolean => {
-      return state.items.some(item => item.product.id === productId);
+    isProductInCart: (state) => (productId: number, variantId: number | null = null): boolean => {
+      return state.items.some(item => isSameLine(item, productId, variantId));
     },
 
-    getProductQuantity: (state) => (productId: number): number => {
-      const item = state.items.find(item => item.product.id === productId);
+    getProductQuantity: (state) => (productId: number, variantId: number | null = null): number => {
+      const item = state.items.find(item => isSameLine(item, productId, variantId));
       return item ? item.quantity : 0;
     },
 
@@ -44,17 +56,18 @@ export const useCartStore = defineStore('cart', {
       return state.items.length === 0;
     },
 
-    getMaxAllowed: (state) => (product: Product): number | null => {
+    getMaxAllowed: (state) => (product: Product, variant: ProductVariant | null = null): number | null => {
+      const baseStock = variant ? variant.stock : (product.stock ?? null);
 
       if (!state.isEditing) {
-        return product.stock ?? null;
+        return baseStock;
       }
-      const item = state.items.find(i => i.product.id === product.id);
+      const item = state.items.find(i => isSameLine(i, product.id, variant?.id ?? null));
 
       if (item) {
-        return item.maxAllowed ?? item.product.stock ?? null;
+        return item.maxAllowed ?? getLineStock(item);
       }
-      return product.stock ?? null;
+      return baseStock;
     },
 
   },
@@ -70,28 +83,33 @@ export const useCartStore = defineStore('cart', {
     },
 
 
-    addToCart(product: Product, quantity: number, maxAllowed?: number | null): boolean {
+    addToCart(
+      product: Product,
+      quantity: number,
+      maxAllowed: number | null = null,
+      variant: ProductVariant | null = null,
+    ): boolean {
       if (quantity <= 0) return false;
 
-      if (this.isProductInCart(product.id)) {
+      if (this.isProductInCart(product.id, variant?.id ?? null)) {
         return false;
       } else {
-        this.items.push({ product, variant: null, quantity, maxAllowed: maxAllowed ?? null });
+        this.items.push({ product, variant, quantity, maxAllowed });
         this.saveCartToStorage();
         return true;
       }
     },
 
-    incrementQuantity(productId: number) {
-      const item = this.items.find(i => i.product.id === productId);
+    incrementQuantity(productId: number, variantId: number | null = null) {
+      const item = this.items.find(i => isSameLine(i, productId, variantId));
       if (!item) return;
 
       const step = item.product.inter ?? 1;
       const newQuantity = +(item.quantity + step).toFixed(2);
 
       const limit = this.isEditing
-        ? (item.maxAllowed ?? item.product.stock ?? null)  // 👈 fallback IMPORTANT
-        : (item.product.stock ?? null);
+        ? (item.maxAllowed ?? getLineStock(item))  // 👈 fallback IMPORTANT
+        : getLineStock(item);
 
       if (limit !== null && newQuantity > limit) {
         return;
@@ -100,8 +118,8 @@ export const useCartStore = defineStore('cart', {
       this.saveCartToStorage();
     },
 
-    decrementQuantity(productId: number) {
-      const item = this.items.find(i => i.product.id === productId);
+    decrementQuantity(productId: number, variantId: number | null = null) {
+      const item = this.items.find(i => isSameLine(i, productId, variantId));
       if (!item) return;
 
       const step = item.product.inter ?? 1;
@@ -110,14 +128,14 @@ export const useCartStore = defineStore('cart', {
       item.quantity = newQuantity >= 0 ? newQuantity : 0;
 
       if (item.quantity === 0) {
-        this.removeFromCart(productId);
+        this.removeFromCart(productId, variantId);
       }
 
       this.saveCartToStorage();
     },
 
-    removeFromCart(productId: number) {
-      this.items = this.items.filter(item => item.product.id !== productId);
+    removeFromCart(productId: number, variantId: number | null = null) {
+      this.items = this.items.filter(item => !isSameLine(item, productId, variantId));
       this.saveCartToStorage();
     },
 
