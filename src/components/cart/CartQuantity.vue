@@ -3,8 +3,8 @@
     :displayedQuantity="formattedQuantity"
     :unit="product.unit"
     :isMax="isMax"
-    :onIncrement="() => cart.incrementQuantity(product.id)"
-    :onDecrement="() => cart.decrementQuantity(product.id)"
+    :onIncrement="() => cart.incrementQuantity(product.id, variantId)"
+    :onDecrement="() => cart.decrementQuantity(product.id, variantId)"
   />
 
 </template>
@@ -14,12 +14,14 @@ import { computed} from 'vue';
 import { formatFloat } from '@/utils/number-format';
 import { useCartStore } from '@/stores/cart-store';
 import QuantityControl from '@/components/ui/common/QuantityControl.vue';
-import type { Product } from '@/models/product/product';
+import type { Product, ProductVariant } from '@/models/product/product';
 
-const props = defineProps<{ product: Product; quantity: number }>();
+const props = defineProps<{ product: Product; variant?: ProductVariant | null; quantity: number }>();
 const cart = useCartStore();
 
-const maxAllowed = computed(() => cart.getMaxAllowed(props.product));
+const variantId = computed(() => props.variant?.id ?? null);
+
+const maxAllowed = computed(() => cart.getMaxAllowed(props.product, props.variant ?? null));
 
 const isMax = computed(() => {
   if (maxAllowed.value === null) return false;

@@ -2,7 +2,23 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createTestingPinia } from '@pinia/testing'
 import ProductCard from '@/components/product/ProductCard.vue'
-import type { Product } from '@/models/product/product'
+import type { Product, ProductVariant } from '@/models/product/product'
+
+const makeVariantProduct = (overrides: Partial<Product> = {}): Product =>
+  makeProduct({
+    id: 50,
+    name: 'Concombres',
+    price: null,
+    unit: 'Pièce',
+    hasStock: false,
+    stock: null,
+    hasVariants: true,
+    variants: [
+      { id: 1, label: 'Petit', price: 1.2, stock: 10 },
+      { id: 2, label: 'Gros', price: 1.8, stock: 20 },
+    ] as ProductVariant[],
+    ...overrides,
+  })
 
 const makeProduct = (overrides: Partial<Product> = {}): Product => ({
   id: 1,
@@ -11,10 +27,13 @@ const makeProduct = (overrides: Partial<Product> = {}): Product => ({
   unit: 'kg',
   inter: 1,
   image: 'pomme.jpg',
+  hasStock: true,
   stock: 10,
   limited: false,
   discount: false,
   discountText: null,
+  hasVariants: false,
+  variants: [],
   ...overrides,
 })
 
@@ -26,7 +45,7 @@ function factory(product: Product) {
       stubs: {
         ProductQuantity: {
           name: 'ProductQuantity',
-          props: ['product'],
+          props: ['product', 'variant'],
           template: '<div class="product-quantity-stub" />',
         },
       },
@@ -77,5 +96,42 @@ describe('ProductCard', () => {
     const wrapper = factory(makeProduct())
     expect(wrapper.text()).not.toContain('AJOUTER AU PANIER')
     expect(wrapper.text()).not.toContain('AJOUTÉ')
+  })
+
+  describe('variants', () => {
+    it('does not render a variant selector for a simple product', () => {
+      const wrapper = factory(makeProduct())
+      expect(wrapper.find('select').exists()).toBe(false)
+    })
+
+    it('renders a selector with all variant labels in order', () => {
+      const wrapper = factory(makeVariantProduct())
+      const options = wrapper.findAll('option')
+      expect(options).toHaveLength(2)
+      expect(options[0].text()).toBe('Petit')
+      expect(options[1].text()).toBe('Gros')
+    })
+
+    it('preselects the first variant and shows its price', () => {
+      const wrapper = factory(makeVariantProduct())
+      const select = wrapper.find('select').element as HTMLSelectElement
+      expect(select.value).toBe('1')
+      expect(wrapper.text()).toContain('1.20')
+    })
+
+    it('updates the displayed price when another variant is selected', async () => {
+      const wrapper = factory(makeVariantProduct())
+      await wrapper.find('select').setValue('2')
+      expect(wrapper.text()).toContain('1.80')
+      expect(wrapper.text()).not.toContain('1.20')
+    })
+
+    it('passes the selected variant to ProductQuantity', async () => {
+      const wrapper = factory(makeVariantProduct())
+      const stub = wrapper.findComponent({ name: 'ProductQuantity' })
+      expect(stub.props('variant')).toMatchObject({ id: 1, label: 'Petit' })
+      await wrapper.find('select').setValue('2')
+      expect(stub.props('variant')).toMatchObject({ id: 2, label: 'Gros' })
+    })
   })
 })

@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useCartStore } from '@/stores/cart-store'
-import type { Product } from '@/models/product/product'
+import type { Product, ProductVariant } from '@/models/product/product'
 
 vi.mock('@/services/order/order-service', () => ({
   createOrder: vi.fn(async () => ({ id: 99 })),
@@ -16,12 +16,39 @@ const makeProduct = (overrides: Partial<Product> = {}): Product => ({
   unit: 'kg',
   inter: 1,
   image: '',
+  hasStock: true,
   stock: 10,
   limited: false,
   discount: false,
   discountText: null,
+  hasVariants: false,
+  variants: [],
   ...overrides,
 })
+
+const makeVariant = (overrides: Partial<ProductVariant> = {}): ProductVariant => ({
+  id: 1,
+  label: 'Petit',
+  price: 1.2,
+  stock: 10,
+  ...overrides,
+})
+
+const smallVariant = makeVariant({ id: 1, label: 'Petit', price: 1.2, stock: 10 })
+const bigVariant = makeVariant({ id: 2, label: 'Gros', price: 1.8, stock: 20 })
+
+const makeVariantProduct = (overrides: Partial<Product> = {}): Product =>
+  makeProduct({
+    id: 50,
+    name: 'Concombres',
+    price: null,
+    unit: 'Pièce',
+    hasStock: false,
+    stock: null,
+    hasVariants: true,
+    variants: [smallVariant, bigVariant],
+    ...overrides,
+  })
 
 describe('cart-store', () => {
   beforeEach(() => {
@@ -199,6 +226,92 @@ describe('cart-store', () => {
       })
       expect(response).toEqual({ id: 99 })
       expect(cart.items).toEqual([])
+    })
+  })
+
+  describe('variants', () => {
+    it('adds two variants of the same product as distinct lines', () => {
+      const cart = useCartStore()
+      const product = makeVariantProduct()
+      expect(cart.addToCart(product, 1, null, smallVariant)).toBe(true)
+      expect(cart.addToCart(product, 1, null, bigVariant)).toBe(true)
+      expect(cart.items).toHaveLength(2)
+    })
+
+    it('refuses to add the same variant twice', () => {
+      const cart = useCartStore()
+      const product = makeVariantProduct()
+      cart.addToCart(product, 1, null, smallVariant)
+      expect(cart.addToCart(product, 2, null, smallVariant)).toBe(false)
+      expect(cart.items).toHaveLength(1)
+    })
+
+    it('tracks quantity independently per variant line', () => {
+      const cart = useCartStore()
+      const product = makeVariantProduct()
+      cart.addToCart(product, 3, null, smallVariant)
+      cart.addToCart(product, 5, null, bigVariant)
+      expect(cart.getProductQuantity(product.id, smallVariant.id)).toBe(3)
+      expect(cart.getProductQuantity(product.id, bigVariant.id)).toBe(5)
+      expect(cart.getProductQuantity(product.id)).toBe(0)
+    })
+
+    it('cartTotal uses the variant price when product price is null', () => {
+      const cart = useCartStore()
+      const product = makeVariantProduct()
+      cart.addToCart(product, 2, null, smallVariant) // 1.20 × 2 = 2.40
+      cart.addToCart(product, 1, null, bigVariant) // 1.80 × 1 = 1.80
+      expect(cart.cartTotal).toMatch(/4,20\s?€/)
+    })
+
+    it('getMaxAllowed returns the variant stock, not the product stock', () => {
+      const cart = useCartStore()
+      const product = makeVariantProduct()
+      expect(cart.getMaxAllowed(product, smallVariant)).toBe(10)
+      expect(cart.getMaxAllowed(product, bigVariant)).toBe(20)
+    })
+
+    it('incrementQuantity caps on the selected variant stock', () => {
+      const cart = useCartStore()
+      const product = makeVariantProduct()
+      cart.addToCart(product, 10, null, smallVariant)
+      cart.addToCart(product, 10, null, bigVariant)
+
+      cart.incrementQuantity(product.id, smallVariant.id) // capped at 10
+      expect(cart.getProductQuantity(product.id, smallVariant.id)).toBe(10)
+
+      cart.incrementQuantity(product.id, bigVariant.id) // still room up to 20
+      expect(cart.getProductQuantity(product.id, bigVariant.id)).toBe(11)
+    })
+
+    it('removeFromCart only removes the targeted variant line', () => {
+      const cart = useCartStore()
+      const product = makeVariantProduct()
+      cart.addToCart(product, 1, null, smallVariant)
+      cart.addToCart(product, 1, null, bigVariant)
+      cart.removeFromCart(product.id, smallVariant.id)
+      expect(cart.items).toHaveLength(1)
+      expect(cart.items[0].variant?.id).toBe(bigVariant.id)
+    })
+
+    it('orderItems includes variantId only for variant lines', () => {
+      const cart = useCartStore()
+      cart.addToCart(makeProduct({ id: 1 }), 2) // simple product
+      cart.addToCart(makeVariantProduct(), 3, null, bigVariant)
+      expect(cart.orderItems).toEqual([
+        { productId: 1, quantity: 2 },
+        { productId: 50, variantId: 2, quantity: 3 },
+      ])
+    })
+
+    it('submitOrder sends variantId in the payload', async () => {
+      const cart = useCartStore()
+      cart.addToCart(makeVariantProduct(), 3, null, smallVariant)
+      await cart.submitOrder('2026-05-01')
+      expect(createOrder).toHaveBeenCalledWith({
+        pickupDate: '2026-05-01',
+        items: [{ productId: 50, variantId: 1, quantity: 3 }],
+      })
     })
   })
 

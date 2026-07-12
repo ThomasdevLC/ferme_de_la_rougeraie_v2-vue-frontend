@@ -16,15 +16,17 @@
       </div>
 
       <div class="flex-1 min-w-0 md:w-48">
-        <p class="font-medium leading-5 text-sm">{{ item.product.name }}</p>
+        <p class="font-medium leading-5 text-sm">
+          {{ item.product.name }}<span v-if="item.variant"> — {{ item.variant.label }}</span>
+        </p>
         <p class="text-xs text-gray-500 mt-1 hidden md:block">
-          {{ item.product.price.toFixed(2) }} € / {{ item.product.unit }}
+          {{ getUnitPrice(item).toFixed(2) }} € / {{ item.product.unit }}
         </p>
       </div>
 
       <button
         class="ml-auto md:hidden text-gray-4 hover:text-black cursor-pointer transition"
-        @click="cart.removeFromCart(item.product.id)"
+        @click="cart.removeFromCart(item.product.id, item.variant?.id ?? null)"
       >
         <X class="w-5 h-5" :stroke-width="1.5" />
       </button>
@@ -32,20 +34,20 @@
 
     <!-- Ligne 2 : quantité + prix (mobile) -->
     <div class="flex items-center justify-between mt-2 md:hidden">
-      <CartQuantity :product="item.product" :quantity="item.quantity" />
+      <CartQuantity :product="item.product" :variant="item.variant" :quantity="item.quantity" />
       <span class="font-roboto text-base">{{ getItemTotal(item) }}</span>
     </div>
 
     <!-- Desktop : quantité, prix, X séparés -->
     <div class="hidden md:flex items-center">
-      <CartQuantity :product="item.product" :quantity="item.quantity" />
+      <CartQuantity :product="item.product" :variant="item.variant" :quantity="item.quantity" />
     </div>
     <div class="hidden md:block text-right font-roboto text-base w-20">
       {{ getItemTotal(item) }}
     </div>
     <button
       class="hidden md:block text-gray-4 hover:text-black cursor-pointer transition"
-      @click="cart.removeFromCart(item.product.id)"
+      @click="cart.removeFromCart(item.product.id, item.variant?.id ?? null)"
     >
       <X class="w-5 h-5" :stroke-width="1.5" />
     </button>
@@ -57,7 +59,7 @@
 import type { CartItem } from '@/models/cart/cart-item.ts'
 import CartQuantity from './CartQuantity.vue'
 import { useCartStore } from '@/stores/cart-store.ts'
-import { getItemTotal } from '@/utils/price'
+import { getItemTotal, getUnitPrice } from '@/utils/price'
 import { X } from 'lucide-vue-next'
 
 const cart = useCartStore()
