@@ -20,6 +20,9 @@ const makeProduct = (overrides: Partial<Product> = {}): Product => ({
   discountText: null,
   hasVariants: false,
   variants: [],
+  category: null,
+  isBasket: false,
+  basketItems: [],
   ...overrides,
 })
 

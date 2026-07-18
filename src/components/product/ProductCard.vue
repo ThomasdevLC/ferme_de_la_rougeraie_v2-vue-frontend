@@ -1,12 +1,12 @@
 <template>
-  <div class="flex flex-col w-[260px] h-[440px] bg-white border border-gray-2 relative">
+  <div class="flex flex-col w-[260px] h-[440px] bg-white border border-black relative">
     <div class="absolute bottom-[165px] ml-[-5px]">
       <p v-if="product.limited" class="bg-primary text-white text-sm font-medium px-2 py-1 mb-4 uppercase">
         Quantité limitée
       </p>
     </div>
 
-    <div class="h-[280px] overflow-hidden">
+    <div class="h-[280px] overflow-hidden border-b border-black">
       <img
         :src="`${baseUrl}${product.image}`"
         :alt="`Image de ${product.name}`"
@@ -44,7 +44,14 @@
             ]"
           >
             <p>{{ product.name }}</p>
-            <p v-if="product.discount && product.discountText" class="mt-1 font-medium text-primary" v-html="highlightNumbers(product.discountText)"></p>
+            <template v-if="product.isBasket">
+              <ul class="mt-1 space-y-0.5 font-light text-xs">
+                <li v-for="item in product.basketItems" :key="item.name">
+                  - {{ item.name }} : <span class="font-roboto">{{ item.quantity }}</span> {{ item.unit }}
+                </li>
+              </ul>
+            </template>
+            <p v-else-if="product.discount && product.discountText" class="mt-1 font-medium text-primary" v-html="highlightNumbers(product.discountText)"></p>
           </div>
         </div>
       </div>
@@ -90,10 +97,12 @@ const isNameTruncated = ref(false)
 const tooltipOpen = ref(false)
 
 const hasDiscountInfo = computed(() => Boolean(product.discount && product.discountText))
-const showInfoButton = computed(() => hasDiscountInfo.value || isNameTruncated.value)
-const infoLabel = computed(() =>
-  hasDiscountInfo.value ? `Voir les informations de ${product.name}` : `Voir le nom complet de ${product.name}`,
-)
+const showInfoButton = computed(() => hasDiscountInfo.value || isNameTruncated.value || product.isBasket)
+const infoLabel = computed(() => {
+  if (product.isBasket) return `Voir la composition de ${product.name}`
+  if (hasDiscountInfo.value) return `Voir les informations de ${product.name}`
+  return `Voir le nom complet de ${product.name}`
+})
 
 function updateNameTruncation() {
   const element = nameElement.value

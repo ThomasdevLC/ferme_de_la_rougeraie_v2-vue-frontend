@@ -5,6 +5,17 @@ export interface ProductVariant {
   stock: number | null;
 }
 
+export interface ProductCategory {
+  key: string;
+  label: string;
+}
+
+export interface BasketItem {
+  name: string;
+  quantity: number;
+  unit: string;
+}
+
 export interface Product {
   id: number;
   name: string;
@@ -19,4 +30,7 @@ export interface Product {
   discountText: string | null;
   hasVariants: boolean;
   variants: ProductVariant[];
+  category: ProductCategory | null;
+  isBasket: boolean;
+  basketItems: BasketItem[];
 }
