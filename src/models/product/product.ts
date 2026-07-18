@@ -10,6 +10,12 @@ export interface ProductCategory {
   label: string;
 }
 
+export interface BasketItem {
+  name: string;
+  quantity: number;
+  unit: string;
+}
+
 export interface Product {
   id: number;
   name: string;
@@ -25,4 +31,6 @@ export interface Product {
   hasVariants: boolean;
   variants: ProductVariant[];
   category: ProductCategory | null;
+  isBasket: boolean;
+  basketItems: BasketItem[];
 }
