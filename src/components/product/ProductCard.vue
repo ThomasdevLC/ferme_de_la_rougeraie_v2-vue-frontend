@@ -47,7 +47,7 @@
             <template v-if="product.isBasket">
               <ul class="mt-1 space-y-0.5 font-light text-xs">
                 <li v-for="item in product.basketItems" :key="item.name">
-                  - {{ item.name }} : <span class="font-roboto">{{ item.quantity }}</span> {{ item.unit }}
+                  - {{ item.name }} : <span class="font-roboto font-normal">{{ item.quantity }}</span> {{ pluralizeUnit(item.unit, item.quantity) }}
                 </li>
               </ul>
             </template>
@@ -55,7 +55,7 @@
           </div>
         </div>
       </div>
-      <p v-if="displayedPrice !== null" class="text-[1rem] text-gray-4 mt-1">
+      <p v-if="displayedPrice !== null" class="text-[1rem] text-[#222222] mt-1">
         <span class="font-roboto">{{ displayedPrice.toFixed(2) }}</span><span class="mx-1">€</span><span class="mx-0.5">/</span><span class="tracking-tighter">{{ product.unit }}</span>
       </p>
       <div class="flex items-center justify-between gap-2">
@@ -129,5 +129,10 @@ watch(() => product.name, () => nextTick(updateNameTruncation))
 
 function highlightNumbers(text: string): string {
   return text.replace(/\d+([.,]\d+)?/g, '<span class="font-roboto font-normal">$&</span>')
+}
+
+// Le back envoie l'unité au singulier ; on accorde au pluriel à partir de 2.
+function pluralizeUnit(unit: string, quantity: number): string {
+  return quantity > 1 ? `${unit}s` : unit
 }
 </script>

@@ -5,7 +5,7 @@
       class="flex flex-col items-center justify-center min-h-[60vh] gap-4"
     >
       <img :src="loaderSrc" alt="loader" />
-      <p class="text-xl font-roboto font-medium text-gray-4 flex items-center gap-2">
+      <p class="text-xl font-roboto font-medium text-[#222222] flex items-center gap-2">
         Chargement
         <Shell class="w-5 h-5 animate-spin" />
       </p>
@@ -13,7 +13,7 @@
 
     <p
       v-else-if="closedShopMessage"
-      class="text-2xl sm:text-3xl md:text-4xl font-roboto font-medium text-gray-4 text-center mt-40 px-4 whitespace-pre-line"
+      class="text-2xl sm:text-3xl md:text-4xl font-roboto font-medium text-[#222222] text-center mt-40 px-4 whitespace-pre-line"
     >
       {{ closedShopMessage.content }}
     </p>
@@ -32,7 +32,7 @@
         :class="
           isSelected(category.key)
             ? 'bg-[#FE9C34] text-white border-[#FE9C34]'
-            : 'bg-white text-gray-4 border-gray-2 hover:border-primary'
+            : 'bg-white text-[#222222] border-gray-2 hover:border-primary'
         "
         @click="toggleCategory(category.key)"
       >
