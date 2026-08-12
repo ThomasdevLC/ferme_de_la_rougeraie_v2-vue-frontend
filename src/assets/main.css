@@ -27,20 +27,6 @@
   font-weight: 300;
 }
 
-@font-face {
-  font-family: "FTBureau";
-  src: url("./fonts/FTBureauTrial-Semibold.otf") format("opentype");
-  font-weight: 600;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "FTBureau";
-  src: url("./fonts/FTBureauTrial-Bold.otf") format("opentype");
-  font-weight: 700;
-  font-style: normal;
-}
-
 /* stylelint-disable at-rule-no-unknown */
 @theme {
     --color-xtra-light-primary: hsl(34, 100%, 85%);
@@ -58,7 +44,6 @@
     --font-roboto: "Roboto", sans-serif;
     --font-titles: "PPLettraMono", monospace;
     --font-lettramono: "PPLettraMono", monospace;
-    --font-ftbureau: "FTBureau", sans-serif;
   }
 
 html, body, #app {

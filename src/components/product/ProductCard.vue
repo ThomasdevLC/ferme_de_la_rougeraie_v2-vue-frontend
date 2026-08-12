@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col w-[260px] h-[440px] bg-white border border-black relative">
+  <div class="flex flex-col w-[260px] h-[400px] bg-white border border-black relative">
     <div class="absolute bottom-[165px] ml-[-5px]">
       <p v-if="product.limited" class="bg-primary text-white text-sm font-medium px-2 py-1 mb-4 uppercase">
         Quantité limitée
@@ -21,7 +21,7 @@
       />
     </div>
 
-    <div class="px-3 py-3 flex-1 flex flex-col justify-between text-[#222222]">
+    <div class="px-3 py-1 pt-2 flex-1 flex flex-col justify-start gap-1 text-[#222222]">
       <div class="flex items-start gap-1">
         <p ref="nameElement" class="min-w-0 flex-1 text-[1.8rem] font-titles truncate">
           {{ product.name }}
@@ -55,7 +55,7 @@
           </div>
         </div>
       </div>
-      <p v-if="displayedPrice !== null" class="text-[1rem] text-[#222222] mt-1">
+      <p v-if="displayedPrice !== null" class="text-[1rem] text-[#222222]">
         <span class="font-roboto">{{ displayedPrice.toFixed(2) }}</span><span class="mx-1">€</span><span class="mx-0.5">/</span><span class="tracking-tighter">{{ product.unit }}</span>
       </p>
       <div class="flex items-center justify-between gap-2">
