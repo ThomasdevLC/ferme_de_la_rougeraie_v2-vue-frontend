@@ -48,7 +48,7 @@
     >
       <div
         v-if="!loading && !closedShopMessage?.content"
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 place-items-center gap-6 pt-10 pb-20 md:px-24 lg:px-0"
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 place-items-center gap-x-6 gap-y-10 pt-10 pb-20 md:px-24 lg:px-0"
       >
         <ProductCard v-for="product in filteredProducts" :key="product.id" :product="product" />
       </div>
