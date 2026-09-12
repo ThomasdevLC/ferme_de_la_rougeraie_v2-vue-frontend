@@ -59,11 +59,11 @@
         <span class="font-roboto">{{ displayedPrice.toFixed(2) }}</span><span class="mx-1">€</span><span class="mx-0.5">/</span><span class="tracking-tighter">{{ product.unit }}</span>
       </p>
       <div class="flex items-center justify-between gap-2">
-        <ProductQuantity :product="product" :variant="selectedVariant" />
+        <ProductQuantity class="shrink-0" :product="product" :variant="selectedVariant" />
         <select
           v-if="product.hasVariants"
           v-model="selectedVariantId"
-          class="h-[29px] cursor-pointer rounded-none border bg-white px-4 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          class="h-[29px] min-w-0 flex-1 cursor-pointer truncate rounded-none border bg-white px-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           :aria-label="`Choisir une déclinaison de ${product.name}`"
         >
           <option v-for="variant in product.variants" :key="variant.id" :value="variant.id">
