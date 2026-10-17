@@ -24,7 +24,44 @@
       />
 
       <div v-else class="p-4 space-y-4">
-        <div v-if="cart.isEmpty" class="text-gray-500 text-center">Votre panier est vide.</div>
+        <!-- Édition d'une commande dont on a retiré tous les articles : on propose de l'annuler -->
+        <div v-if="cart.isEmpty && cart.isEditing" class="flex flex-col space-y-4">
+          <p class="text-gray-500 text-center">
+            Votre commande ne contient plus d'article. Vous pouvez l'annuler ou abandonner la modification.
+          </p>
+
+          <router-link
+            to="/products"
+            class="text-base text-primary font-medium flex items-center gap-1 justify-center mt-4 mb-6 hover:text-primary-hover"
+            @click="ui.closeCart()"
+          >
+            Ajouter des produits
+            <shopping-bag class="ml-2 w-5 h-5" />
+          </router-link>
+
+          <div class="flex justify-center space-x-4 pt-4">
+            <button
+              class="text-primary text-xs md:text-sm border-2 border-primary px-4 py-2 hover:bg-opacity-90 cursor-pointer w-fit"
+              @click="abortUpdate"
+            >
+              Abandonner la modification
+            </button>
+
+            <button
+              class="bg-red-500 text-xs md:text-sm text-white font-roboto-mono px-4 py-2 hover:bg-red-600 cursor-pointer w-fit disabled:opacity-50 disabled:cursor-not-allowed"
+              :disabled="isCancelling"
+              @click="showCancelConfirm = true"
+            >
+              {{ isCancelling ? 'Annulation…' : 'Annuler ma commande' }}
+            </button>
+          </div>
+
+          <p v-if="errorMessage" class="text-red-500 text-center font-semibold">
+            {{ errorMessage }}
+          </p>
+        </div>
+
+        <div v-else-if="cart.isEmpty" class="text-gray-500 text-center">Votre panier est vide.</div>
 
         <div v-else class="flex flex-col space-y-4">
           <CartItem v-for="item in cart.items" :key="item.product.id" :item="item" />
@@ -84,6 +121,33 @@
           </div>
         </div>
       </div>
+
+      <Modal v-model="showCancelConfirm" :closable="false" :closeOnBackdrop="false">
+        <template #header>
+          <h2 class="text-xl font-bold">Confirmation</h2>
+        </template>
+
+        <p class="text-xs md:text-base">
+          Êtes-vous sûr de vouloir annuler votre commande n° {{ cart.currentOrderId }} ? Cette action est définitive.
+        </p>
+
+        <template #footer>
+          <div class="text-xs md:text-sm flex justify-end gap-4">
+            <button
+              @click="showCancelConfirm = false"
+              class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
+            >
+              Non, la garder
+            </button>
+            <button
+              @click="confirmCancel"
+              class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 cursor-pointer"
+            >
+              Oui, annuler
+            </button>
+          </div>
+        </template>
+      </Modal>
     </template>
   </Modal>
 </template>
@@ -91,6 +155,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, toRef } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
 import { format } from 'date-fns'
 import { ShoppingBag, ArrowRightFromLine, CircleAlert } from 'lucide-vue-next'
 import Modal from '@/components/ui/ModalComponent.vue'
@@ -105,7 +170,9 @@ import { useUserStore } from '@/stores/user-store'
 import { useOrderStore } from '@/stores/order-store'
 import { handleAxiosError } from '@/utils/handle-axios-error'
 import { updateOrder } from '@/services/order/order-edit-service.ts'
+import { cancelOrder } from '@/services/order/order-cancel-service.ts'
 import type { OrderItem } from '@/models/order/order-item.ts'
+import type { OrderNotice } from '@/models/order/order-notice.ts'
 
 const ui = useUIStore()
 const cart = useCartStore()
@@ -120,6 +187,8 @@ const isoPickupRef = toRef(cart, 'editPickupDate')
 const pickupDate = useSyncedDate(isoPickupRef)
 const originalPickup = ref<string>('')
 const originalItems = ref<OrderItem[]>([])
+const showCancelConfirm = ref(false)
+const isCancelling = ref(false)
 
 watch(
   () => cart.isEditing,
@@ -145,6 +214,42 @@ const displayPickupLabel = computed(() => {
 function goToOrders() {
   router.push('/orders')
   ui.closeCart()
+}
+
+async function confirmCancel() {
+  showCancelConfirm.value = false
+  if (cart.currentOrderId === null || isCancelling.value) return
+
+  isCancelling.value = true
+  errorMessage.value = null
+  try {
+    await cancelOrder(cart.currentOrderId)
+    await leaveEditToOrders({ type: 'success', text: 'Votre commande a bien été annulée.' })
+  } catch (err) {
+    const status = axios.isAxiosError(err) ? err.response?.status : undefined
+    // 403 : déjà annulée ou introuvable, 409 : heure limite dépassée → l'édition n'a plus de sens
+    if (status === 403 || status === 409) {
+      await leaveEditToOrders({ type: 'error', text: handleAxiosError(err) })
+    } else {
+      errorMessage.value = handleAxiosError(err)
+    }
+  } finally {
+    isCancelling.value = false
+  }
+}
+
+async function leaveEditToOrders(notice: OrderNotice) {
+  cart.stopEditing()
+  cart.clearCart()
+  ui.closeCart()
+  orderStore.setNotice(notice)
+
+  // Déjà sur /orders : push ne remonte pas la vue, on recharge nous-mêmes
+  if (router.currentRoute.value.name === 'order-history') {
+    await orderStore.loadOrders()
+  } else {
+    await router.push('/orders')
+  }
 }
 
 async function onSubmit() {
