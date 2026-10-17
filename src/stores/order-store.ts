@@ -1,12 +1,14 @@
 import { defineStore } from 'pinia';
 import {getOrders} from '@/services/order/order-history-service.ts';
 import type { OrderHistory } from '@/models/order/order-history.ts';
+import type { OrderNotice } from '@/models/order/order-notice.ts';
 
 export const useOrderStore = defineStore('orders', {
   state: () => ({
     orders: [] as OrderHistory[],
     loading: false,
     error: null as string | null,
+    notice: null as OrderNotice | null,
   }),
   getters: {
     activeOrders(state) {
@@ -27,6 +29,14 @@ export const useOrderStore = defineStore('orders', {
       } finally {
         this.loading = false;
       }
+    },
+
+    setNotice(notice: OrderNotice) {
+      this.notice = notice;
+    },
+
+    clearNotice() {
+      this.notice = null;
     },
   },
 });
