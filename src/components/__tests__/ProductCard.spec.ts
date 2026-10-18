@@ -32,6 +32,7 @@ const makeProduct = (overrides: Partial<Product> = {}): Product => ({
   limited: false,
   discount: false,
   discountText: null,
+  information: null,
   hasVariants: false,
   variants: [],
   category: null,
@@ -99,6 +100,65 @@ describe('ProductCard', () => {
     const wrapper = factory(makeProduct())
     expect(wrapper.text()).not.toContain('AJOUTER AU PANIER')
     expect(wrapper.text()).not.toContain('AJOUTÉ')
+  })
+
+  describe('information', () => {
+    it('does not render the info button when information is null', () => {
+      const wrapper = factory(makeProduct({ information: null }))
+      expect(wrapper.find('button[aria-label^="Voir"]').exists()).toBe(false)
+    })
+
+    it('renders the info button and the information text when provided', () => {
+      const wrapper = factory(makeProduct({ information: 'Variété ancienne, idéale en soupe' }))
+      const button = wrapper.find('button[aria-label^="Voir"]')
+      expect(button.exists()).toBe(true)
+      expect(button.attributes('aria-label')).toBe('Voir les informations de Pomme')
+      expect(wrapper.text()).toContain('Variété ancienne, idéale en soupe')
+    })
+
+    it('renders information as plain text, never as HTML', () => {
+      const wrapper = factory(makeProduct({ information: '<b>Bio</b>' }))
+      expect(wrapper.find('b').exists()).toBe(false)
+      expect(wrapper.text()).toContain('<b>Bio</b>')
+    })
+
+    it('opens the tooltip on tap', async () => {
+      const wrapper = factory(makeProduct({ information: 'Variété ancienne' }))
+      const tooltip = wrapper.find('.pointer-events-none')
+      expect(tooltip.classes()).toContain('hidden')
+      await wrapper.find('button[aria-label^="Voir"]').trigger('click')
+      expect(tooltip.classes()).toContain('block')
+      expect(tooltip.classes()).not.toContain('hidden')
+    })
+
+    it('shows both the information and the composition for a basket', () => {
+      const wrapper = factory(
+        makeProduct({
+          name: 'Panier du moment',
+          isBasket: true,
+          basketItems: [{ name: 'Carottes', quantity: 2, unit: 'botte' }],
+          information: 'Composition selon la récolte',
+        }),
+      )
+      expect(wrapper.text()).toContain('Composition selon la récolte')
+      expect(wrapper.text()).toContain('Carottes')
+    })
+
+    it('separates each tooltip section with a divider', () => {
+      const wrapper = factory(
+        makeProduct({
+          isBasket: true,
+          basketItems: [{ name: 'Carottes', quantity: 2, unit: 'botte' }],
+          information: 'Composition selon la récolte',
+        }),
+      )
+      expect(wrapper.findAll('hr')).toHaveLength(2)
+    })
+
+    it('does not render any divider when the tooltip only holds the name', () => {
+      const wrapper = factory(makeProduct({ information: null }))
+      expect(wrapper.findAll('hr')).toHaveLength(0)
+    })
   })
 
   describe('variants', () => {
