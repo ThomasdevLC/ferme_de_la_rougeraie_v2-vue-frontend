@@ -28,6 +28,7 @@ export interface Product {
   limited: boolean;
   discount: boolean;
   discountText: string | null;
+  information: string | null;
   hasVariants: boolean;
   variants: ProductVariant[];
   category: ProductCategory | null;

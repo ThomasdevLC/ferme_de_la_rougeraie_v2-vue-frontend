@@ -18,6 +18,7 @@ const makeProduct = (overrides: Partial<Product> = {}): Product => ({
   limited: false,
   discount: false,
   discountText: null,
+  information: null,
   hasVariants: false,
   variants: [],
   category: null,

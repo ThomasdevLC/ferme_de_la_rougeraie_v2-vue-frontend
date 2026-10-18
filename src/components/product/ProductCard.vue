@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col w-[260px] h-[400px] bg-white border border-black relative">
-    <div class="absolute bottom-[165px] ml-[-5px]">
+    <div class="absolute bottom-[155px] ml-[-5px]">
       <p v-if="product.limited" class="bg-primary text-white text-sm font-medium px-2 py-1 mb-4 uppercase">
         Quantité limitée
       </p>
@@ -17,7 +17,7 @@
         v-if="product.discount"
         src="/assets/promo.png"
         alt="Promotion"
-        class="absolute top-[-9px] right-[-14px] w-19 h-19"
+        class="absolute top-[-12px] right-[-14px] w-19 h-19"
       />
     </div>
 
@@ -39,19 +39,27 @@
 
           <div
             :class="[
-              'absolute right-0 top-7 z-20 w-56 border border-gray-2 bg-white px-3 py-2 text-sm leading-snug text-black shadow-lg',
+              'pointer-events-none absolute right-0 top-7 z-20 w-56 border border-gray-2 bg-white px-3 py-2 text-sm leading-snug text-black shadow-lg',
               tooltipOpen ? 'block' : 'hidden group-hover:block group-focus-within:block'
             ]"
           >
             <p>{{ product.name }}</p>
             <template v-if="product.isBasket">
-              <ul class="mt-1 space-y-0.5 font-light text-xs">
+              <hr class="mx-auto my-1.5 w-4/5 border-gray-2" />
+              <ul class="space-y-0.5 font-light text-xs">
                 <li v-for="item in product.basketItems" :key="item.name">
                   - {{ item.name }} : <span class="font-roboto font-normal">{{ item.quantity }}</span> {{ pluralizeUnit(item.unit, item.quantity) }}
                 </li>
               </ul>
             </template>
-            <p v-else-if="product.discount && product.discountText" class="mt-1 font-medium text-primary" v-html="highlightNumbers(product.discountText)"></p>
+            <template v-if="product.information">
+              <hr class="mx-auto my-1.5 w-4/5 border-gray-2" />
+              <p class="font-light text-xs">{{ product.information }}</p>
+            </template>
+            <template v-if="!product.isBasket && product.discount && product.discountText">
+              <hr class="mx-auto my-1.5 w-4/5 border-gray-2" />
+              <p class="font-medium text-primary" v-html="highlightNumbers(product.discountText)"></p>
+            </template>
           </div>
         </div>
       </div>
@@ -97,10 +105,13 @@ const isNameTruncated = ref(false)
 const tooltipOpen = ref(false)
 
 const hasDiscountInfo = computed(() => Boolean(product.discount && product.discountText))
-const showInfoButton = computed(() => hasDiscountInfo.value || isNameTruncated.value || product.isBasket)
+const hasInformation = computed(() => Boolean(product.information))
+const showInfoButton = computed(
+  () => hasInformation.value || hasDiscountInfo.value || isNameTruncated.value || product.isBasket,
+)
 const infoLabel = computed(() => {
   if (product.isBasket) return `Voir la composition de ${product.name}`
-  if (hasDiscountInfo.value) return `Voir les informations de ${product.name}`
+  if (hasInformation.value || hasDiscountInfo.value) return `Voir les informations de ${product.name}`
   return `Voir le nom complet de ${product.name}`
 })
 
